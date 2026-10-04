@@ -1056,6 +1056,12 @@
 
     // Sidebar navigation controller
     function switchSidebarTab(tabKey) {
+      const currentRole = sessionStorage.getItem('auth_role');
+      // If student tries to open ghi-chu or cai-dat, block and redirect to hoat-dong
+      if (currentRole === 'student' && (tabKey === 'ghi-chu' || tabKey === 'cai-dat')) {
+        tabKey = 'hoat-dong';
+      }
+
       playTone(550);
       const tabs = ['hoat-dong', 'mo-phong', 'bai-tap', 'kiem-tra', 'ghi-chu', 'cai-dat'];
       tabs.forEach(t => {
@@ -2141,16 +2147,26 @@
       // Update badge
       const icon = document.getElementById('user-display-icon');
       const nameEl = document.getElementById('user-display-name');
+      const navGhiChu = document.getElementById('nav-ghi-chu');
+      const navCaiDat = document.getElementById('nav-cai-dat');
+
       if (role === 'teacher') {
         if (icon) icon.innerText = '👩‍🏫';
         if (nameEl) nameEl.innerText = `${name} (Giáo viên)`;
-        // If teacher, show teacher dashboard first or notification
+        // Teacher has full access
+        if (navGhiChu) navGhiChu.classList.remove('hidden');
+        if (navCaiDat) navCaiDat.classList.remove('hidden');
         setTimeout(() => {
           switchSidebarTab('ghi-chu');
         }, 100);
       } else {
         if (icon) icon.innerText = '🎒';
         if (nameEl) nameEl.innerText = `${name} (${sClass})`;
+        // Student: STRICTLY HIDE "Ghi chú" and "Cài đặt"
+        if (navGhiChu) navGhiChu.classList.add('hidden');
+        if (navCaiDat) navCaiDat.classList.add('hidden');
+        // Ensure student lands on Hoạt động
+        switchSidebarTab('hoat-dong');
       }
     }
 
