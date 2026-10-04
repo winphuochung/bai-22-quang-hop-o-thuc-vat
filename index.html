@@ -13,6 +13,9 @@
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
   
+  <!-- Three.js for 3D Pixar Simulation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -452,93 +455,212 @@
           </button>
         </div>
 
-        <!-- Exp 1 -->
+        <!-- Exp 1: 3D Pixar Whole Tree Cycle -->
         <div id="sub-exp-1-box" class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
           <div class="card-soft p-6 rounded-3xl flex flex-col justify-between">
-            <h4 class="font-extrabold text-slate-900 mb-2">Hình 22.1. Ảnh gốc Sách Giáo Khoa KHTN 7</h4>
-            <div class="p-2 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-center">
-              <img src="hinh22_1.png" alt="Hình 22.1" class="max-h-72 object-contain rounded-xl">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Sách Giáo Khoa KHTN 7</span>
+              <span class="text-xs font-mono text-slate-400">Hình 22.1</span>
             </div>
-            <p class="text-xs text-slate-500 mt-2">Ánh sáng, CO₂, Nước từ rễ tạo Glucose và giải phóng O₂.</p>
+            <h4 class="font-extrabold text-slate-900 text-lg mb-2">Hình 22.1. Ảnh gốc Sách Giáo Khoa</h4>
+            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-center">
+              <img src="hinh22_1.png" alt="Hình 22.1" class="max-h-72 object-contain rounded-xl hover:scale-105 transition duration-300">
+            </div>
+            <p class="text-xs text-slate-600 mt-3 font-medium">Chu trình: Nắng mặt trời + CO₂ + H₂O từ rễ ➔ Glucose (tinh bột) + giải phóng O₂.</p>
           </div>
+
           <div class="card-soft p-6 rounded-3xl flex flex-col justify-between">
-            <h4 class="font-extrabold text-slate-900 mb-2">Mô phỏng vector tương tác</h4>
-            <div class="relative w-full h-72 rounded-2xl bg-emerald-50/60 border border-emerald-200 p-4 flex flex-col justify-between overflow-hidden">
-              <div class="flex justify-between items-start">
-                <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-xl">☀️ Quang năng</span>
-                <span class="text-xs font-bold text-sky-700 bg-sky-100 px-2.5 py-1 rounded-xl">💨 O₂ thoát ra ↗</span>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-black px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-emerald-400 text-slate-950 uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                <span>🌟</span> Mô Phỏng 3D Pixar Hoạt Hình
+              </span>
+              <button onclick="triggerExp1ParticleBurst()" class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-700 text-white hover:bg-emerald-800 shadow transition">
+                ⚡ Tăng tốc dòng chảy
+              </button>
+            </div>
+            <h4 class="font-extrabold text-slate-900 text-lg mb-2">Nhà Máy Cây Xanh Pixar 3D</h4>
+
+            <!-- 3D Pixar Canvas Display for Exp 1 -->
+            <div class="relative w-full h-80 rounded-2xl overflow-hidden border border-emerald-300 shadow-inner bg-gradient-to-b from-[#e0f2fe] via-[#ecfdf5] to-[#fef3c7] p-3 flex flex-col justify-between">
+              <canvas id="pixar-exp1-canvas" class="absolute inset-0 w-full h-full"></canvas>
+              
+              <!-- Floating Pixar Badges -->
+              <div class="flex justify-between items-start z-10 pointer-events-none">
+                <div class="bg-amber-100/90 border border-amber-300 px-3 py-1.5 rounded-2xl shadow-sm text-xs font-bold text-amber-900 flex items-center gap-2">
+                  <span class="text-base animate-pulse">☀️</span>
+                  <div>
+                    <span>Quang năng (Tia Sunny)</span>
+                    <span class="block text-[10px] text-amber-700">Chiếu sáng kích thích diệp lục</span>
+                  </div>
+                </div>
+
+                <div class="bg-sky-100/90 border border-sky-300 px-3 py-1.5 rounded-2xl shadow-sm text-xs font-bold text-sky-900 text-right flex items-center gap-2">
+                  <div>
+                    <span>Khí Oxygen (O₂)</span>
+                    <span class="block text-[10px] text-sky-700 font-mono">Bong bóng O₂ bay lên ↗</span>
+                  </div>
+                  <span class="text-base">💨</span>
+                </div>
               </div>
-              <div class="my-auto text-center">
-                <div class="text-5xl animate-bounce">🌳</div>
-                <span class="text-xs font-bold text-emerald-800 bg-white px-3 py-1 rounded-full shadow-sm mt-1 inline-block">Tán lá xanh</span>
-              </div>
-              <div class="flex justify-between items-end text-xs font-bold">
-                <span class="text-purple-800 bg-purple-100 px-2.5 py-1 rounded-xl">CO₂ khuếch tán vào ➔</span>
-                <span class="text-blue-800 bg-blue-100 px-2.5 py-1 rounded-xl">H₂O từ rễ ⬆</span>
+
+              <div class="flex justify-between items-end z-10 pointer-events-none mt-auto">
+                <div class="bg-purple-100/90 border border-purple-300 px-3 py-1.5 rounded-2xl shadow-sm text-xs font-bold text-purple-900 flex items-center gap-1.5">
+                  <span>🌬️</span>
+                  <div>
+                    <span>Khí CO₂ (Carby)</span>
+                    <span class="block text-[10px] text-purple-700">Hút vào tán lá ➔</span>
+                  </div>
+                </div>
+
+                <div class="bg-blue-100/90 border border-blue-300 px-3 py-1.5 rounded-2xl shadow-sm text-xs font-bold text-blue-900 text-right flex items-center gap-1.5">
+                  <div>
+                    <span>Nước H₂O (Droppy)</span>
+                    <span class="block text-[10px] text-blue-700">Rễ đẩy dâng lên ⬆</span>
+                  </div>
+                  <span>💧</span>
+                </div>
               </div>
             </div>
-            <button onclick="alert('Đã kích hoạt mô phỏng dòng vật chất Hình 22.1!')" class="mt-3 w-full py-2.5 rounded-xl bg-[#1b3a24] text-white font-bold text-xs hover:bg-[#142e1c]">
-              ▶ Chạy Mô Phỏng Chu Trình
+
+            <button onclick="triggerExp1ParticleBurst()" class="mt-3 w-full py-3 rounded-2xl bg-[#1b3a24] text-white font-bold text-xs hover:bg-[#142e1c] shadow flex items-center justify-center gap-2">
+              <span>▶</span> Kích Hoạt Phản Ứng Quang Hợp Toàn Cây (Pixar 3D)
             </button>
           </div>
         </div>
 
-        <!-- Exp 2 -->
+        <!-- Exp 2: 3D Pixar Leaf Blade Energy -->
         <div id="sub-exp-2-box" class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch hidden">
           <div class="card-soft p-6 rounded-3xl flex flex-col justify-between">
-            <h4 class="font-extrabold text-slate-900 mb-2">Hình 22.2. Trao đổi chất & chuyển hóa năng lượng</h4>
-            <div class="p-2 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-center">
-              <img src="hinh22_2.png" alt="Hình 22.2" class="max-h-72 object-contain rounded-xl">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold text-sky-800 bg-sky-100 px-3 py-1 rounded-full">Sách Giáo Khoa KHTN 7</span>
+              <span class="text-xs font-mono text-slate-400">Hình 22.2</span>
             </div>
-            <p class="text-xs text-slate-500 mt-2">Cận cảnh chuyển hóa quang năng thành hóa năng trong tinh bột.</p>
+            <h4 class="font-extrabold text-slate-900 text-lg mb-2">Hình 22.2. Trao đổi chất & Chuyển hóa năng lượng</h4>
+            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-center">
+              <img src="hinh22_2.png" alt="Hình 22.2" class="max-h-72 object-contain rounded-xl hover:scale-105 transition duration-300">
+            </div>
+            <p class="text-xs text-slate-600 mt-3 font-medium">Quang năng kích hoạt biến đổi H₂O + CO₂ thành đường Glucose và chuyển hóa thành Hóa năng dự trữ trong Tinh bột.</p>
           </div>
+
           <div class="card-soft p-6 rounded-3xl flex flex-col justify-between">
-            <h4 class="font-extrabold text-slate-900 mb-2">Mặt phiến lá hóa học</h4>
-            <div class="relative w-full h-72 rounded-2xl bg-amber-50/50 border border-amber-200 p-4 flex flex-col justify-between">
-              <span class="text-xs font-bold text-amber-800">Tia nắng chiếu vào phiến lá</span>
-              <div class="p-3 bg-white rounded-2xl shadow-sm text-center border border-slate-200 my-auto">
-                <span class="font-mono font-bold text-slate-900 text-sm">H₂O + CO₂ ➔ Glucose + O₂</span>
-                <p class="text-xs text-amber-700 font-bold mt-1">⬇ Tích lũy Hóa năng trong Tinh bột</p>
-              </div>
-              <span class="text-xs font-bold text-sky-800">Cuống lá cấp nước lên</span>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-black px-3 py-1 rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-950 uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                <span>🍃</span> Cận Cảnh Phiến Lá 3D Pixar
+              </span>
+              <button onclick="triggerExp2Reaction()" class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-700 text-white hover:bg-emerald-800 shadow transition">
+                ⚡ Tổng hợp tinh bột
+              </button>
             </div>
-            <button onclick="alert('Phản ứng quang hóa chuyển năng lượng đã hoàn tất!')" class="mt-3 w-full py-2.5 rounded-xl bg-[#1b3a24] text-white font-bold text-xs hover:bg-[#142e1c]">
-              ⚡ Kích Hoạt Phản Ứng
+            <h4 class="font-extrabold text-slate-900 text-lg mb-2">Chuyển Hóa Quang Năng ➔ Hóa Năng</h4>
+
+            <!-- 3D Pixar Canvas Display for Exp 2 -->
+            <div class="relative w-full h-80 rounded-2xl overflow-hidden border border-emerald-300 shadow-inner bg-gradient-to-br from-[#064e3b] via-[#022c22] to-[#0f172a] p-3 flex flex-col justify-between text-white">
+              <canvas id="pixar-exp2-canvas" class="absolute inset-0 w-full h-full"></canvas>
+
+              <div class="flex justify-between items-start z-10 pointer-events-none">
+                <span class="text-xs font-bold bg-amber-400/90 text-slate-950 px-3 py-1 rounded-xl shadow-md">
+                  ☀️ Chùm tia Quang năng vàng chiếu lá
+                </span>
+                <span class="text-xs font-bold bg-rose-500/90 text-white px-3 py-1 rounded-xl shadow-md">
+                  💨 Mũi tên đỏ giải phóng O₂ ↗
+                </span>
+              </div>
+
+              <!-- Center Chemical Board -->
+              <div class="p-3 bg-slate-950/85 border border-emerald-400/50 rounded-2xl text-center shadow-xl my-auto z-10 backdrop-blur-md max-w-sm mx-auto w-full">
+                <span class="text-[10px] text-emerald-300 font-bold block mb-1">Phương trình hóa học trên mặt phiến lá:</span>
+                <div class="font-mono font-black text-sm text-white">
+                  <span class="text-cyan-300">H₂O</span> + <span class="text-purple-300">CO₂</span> ➔ <span class="text-emerald-300">C₆H₁₂O₆</span> + <span class="text-rose-400">O₂</span>
+                </div>
+                <div class="text-[11px] text-amber-300 font-bold mt-1.5 pt-1 border-t border-white/10">
+                  Glucose ➔ <span class="text-amber-400 font-black">⬇ (Hóa năng) Tinh bột tích lũy</span>
+                </div>
+              </div>
+
+              <div class="flex justify-between items-end z-10 pointer-events-none">
+                <span class="text-xs font-bold bg-cyan-600/90 text-white px-3 py-1 rounded-xl shadow-md">
+                  💧 Cuống lá: Nước H₂O dẫn lên
+                </span>
+                <span class="text-xs font-bold bg-purple-600/90 text-white px-3 py-1 rounded-xl shadow-md">
+                  🌬️ CO₂ uốn lượn vào mô lá
+                </span>
+              </div>
+            </div>
+
+            <button onclick="triggerExp2Reaction()" class="mt-3 w-full py-3 rounded-2xl bg-[#1b3a24] text-white font-bold text-xs hover:bg-[#142e1c] shadow flex items-center justify-center gap-2">
+              <span>⚡</span> Kích Hoạt Phản Ứng Quang Hóa & Tổng Hợp Tinh Bột
             </button>
           </div>
         </div>
 
-        <!-- Exp 3 -->
+        <!-- Exp 3: 3D Pixar Leaf Anatomy Cross-section -->
         <div id="sub-exp-3-box" class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch hidden">
           <div class="card-soft p-6 rounded-3xl flex flex-col justify-between">
-            <h4 class="font-extrabold text-slate-900 mb-2">Hình 22.3. Sơ đồ vai trò & giải phẫu lá</h4>
-            <div class="p-2 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-center">
-              <img src="hinh22_3.png" alt="Hình 22.3" class="max-h-72 object-contain rounded-xl">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold text-purple-800 bg-purple-100 px-3 py-1 rounded-full">Sách Giáo Khoa KHTN 7</span>
+              <span class="text-xs font-mono text-slate-400">Hình 22.3</span>
             </div>
-            <p class="text-xs text-slate-500 mt-2">Cuống lá, mạch dẫn gỗ/rây, lục lạp đĩa Grana và khí khổng.</p>
+            <h4 class="font-extrabold text-slate-900 text-lg mb-2">Hình 22.3. Sơ đồ vai trò của lá với quang hợp</h4>
+            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-center">
+              <img src="hinh22_3.png" alt="Hình 22.3" class="max-h-72 object-contain rounded-xl hover:scale-105 transition duration-300">
+            </div>
+            <p class="text-xs text-slate-600 mt-3 font-medium">Bóc tách giải phẫu 4 tầng: Cuống & Gân lá (Mạch gỗ/Mạch rây), Phiến lá, Lục lạp đĩa Grana và Khí khổng biểu bì dưới.</p>
           </div>
+
           <div class="card-soft p-6 rounded-3xl flex flex-col justify-between">
-            <h4 class="font-extrabold text-slate-900 mb-2">Bóc tách 4 cấu trúc giải phẫu</h4>
-            <div class="grid grid-cols-2 gap-2 text-xs">
-              <div class="p-3 rounded-2xl bg-sky-50 border border-sky-200">
-                <b class="text-sky-900 block">1. Cuống & Gân Lá</b>
-                <span class="text-[11px] text-slate-600">• Mạch gỗ (dẫn nước)<br>• Mạch rây (dẫn đường)</span>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-black px-3 py-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 text-slate-950 uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+                <span>🔬</span> Kính Hiển Vi Cắt Lớp 3D Pixar
+              </span>
+              <span class="text-xs font-bold text-emerald-800">Bấm thẻ để soi chi tiết</span>
+            </div>
+            <h4 class="font-extrabold text-slate-900 text-lg mb-2">Giải Phẫu Bó Mạch & Bào Quan</h4>
+
+            <!-- Interactive Hotspots Grid -->
+            <div class="grid grid-cols-2 gap-2.5 text-xs">
+              <div onclick="selectAnatomyHotspot(1)" id="btn-hotspot-1" class="p-3 rounded-2xl bg-sky-50 border-2 border-sky-400 cursor-pointer hover:shadow-md transition">
+                <b class="text-sky-900 block flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping"></span> 1. Cuống & Gân Lá
+                </b>
+                <span class="text-[11px] text-slate-600 mt-1 block">
+                  • Mạch gỗ: Nước (xanh lam)<br>• Mạch rây: Đường (tím)
+                </span>
               </div>
-              <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200">
-                <b class="text-amber-900 block">2. Phiến Lá</b>
-                <span class="text-[11px] text-slate-600">Bản mỏng dẹt đón trọn tia sáng</span>
+
+              <div onclick="selectAnatomyHotspot(2)" id="btn-hotspot-2" class="p-3 rounded-2xl bg-amber-50 border border-amber-300 cursor-pointer hover:shadow-md transition">
+                <b class="text-amber-900 block flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> 2. Phiến Lá Bắt Sáng
+                </b>
+                <span class="text-[11px] text-slate-600 mt-1 block">
+                  Bản mỏng dẹt đón trọn tia sáng xuyên vào mô giậu
+                </span>
               </div>
-              <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200">
-                <b class="text-emerald-900 block">3. Lục Lạp</b>
-                <span class="text-[11px] text-slate-600">Đĩa Grana chứa diệp lục</span>
+
+              <div onclick="selectAnatomyHotspot(3)" id="btn-hotspot-3" class="p-3 rounded-2xl bg-emerald-50 border border-emerald-300 cursor-pointer hover:shadow-md transition">
+                <b class="text-emerald-900 block flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 3. Lục Lạp & Diệp Lục
+                </b>
+                <span class="text-[11px] text-slate-600 mt-1 block">
+                  Đĩa Grana thylakoid đón H₂O để tổng hợp đường
+                </span>
               </div>
-              <div class="p-3 rounded-2xl bg-purple-50 border border-purple-200">
-                <b class="text-purple-900 block">4. Khí Khổng</b>
-                <span class="text-[11px] text-slate-600">Hút CO₂ và nhả O₂</span>
+
+              <div onclick="selectAnatomyHotspot(4)" id="btn-hotspot-4" class="p-3 rounded-2xl bg-purple-50 border border-purple-300 cursor-pointer hover:shadow-md transition">
+                <b class="text-purple-900 block flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> 4. Khí Khổng Đóng Mở
+                </b>
+                <span class="text-[11px] text-slate-600 mt-1 block">
+                  2 tế bào hạt đậu: Hút CO₂ xanh, nhả O₂ đỏ
+                </span>
               </div>
             </div>
-            <div class="p-3 rounded-2xl bg-slate-100 text-xs text-slate-700 mt-2">
-              <b>Ghi nhớ SGK:</b> Mạch gỗ nằm nửa dưới, mạch rây nằm nửa trên của bó mạch gân lá.
+
+            <!-- Detail Box -->
+            <div id="hotspot-detail-box" class="p-4 rounded-2xl bg-[#1b3a24] text-white text-xs mt-3 space-y-1 shadow-lg">
+              <b class="text-emerald-300 text-sm block" id="hotspot-detail-title">🌿 1. Hệ thống bó mạch dẫn trong Cuống & Gân Lá:</b>
+              <p class="text-[11px] text-emerald-100 leading-relaxed" id="hotspot-detail-desc">
+                Gân lá có 2 bó mạch song song: Nửa dưới là <b>mạch gỗ (xanh lam)</b> vận chuyển nước và muối khoáng từ rễ đến cung cấp cho lục lạp; nửa trên là <b>mạch rây (tím)</b> vận chuyển chất hữu cơ sau quang hợp từ lá đi nuôi khắp cơ thể cây.
+              </p>
             </div>
           </div>
         </div>
@@ -781,6 +903,10 @@
       });
       if (tabKey === 'bai-tap') {
         initMiniLeafy();
+      } else if (tabKey === 'mo-phong') {
+        setTimeout(() => {
+          initPixarExp1Canvas();
+        }, 60);
       }
     }
 
@@ -806,6 +932,489 @@
           if (btn) btn.className = "flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-slate-700 hover:bg-white/60";
           if (box) box.classList.add('hidden');
         }
+      }
+      if (subId === 1) initPixarExp1Canvas();
+      if (subId === 2) initPixarExp2Canvas();
+    }
+
+    // ================= 3D PIXAR CANVASES & SIMULATION CONTROLLER =================
+    // Exp 1: 3D Pixar Tree Canvas
+    let exp1AnimId = null;
+    let exp1Particles = [];
+    let exp1SpeedBoost = 1.0;
+
+    function initPixarExp1Canvas() {
+      const cv = document.getElementById('pixar-exp1-canvas');
+      if (!cv) return;
+      const rect = cv.parentElement.getBoundingClientRect();
+      cv.width = rect.width || 480;
+      cv.height = rect.height || 320;
+      const ctx = cv.getContext('2d');
+
+      // Setup initial particles
+      if (exp1Particles.length === 0) {
+        for (let i = 0; i < 28; i++) {
+          exp1Particles.push({
+            type: 'water',
+            x: cv.width * 0.46 + (Math.random() - 0.5) * 30,
+            y: cv.height * 0.95 - Math.random() * cv.height * 0.5,
+            vy: -1.2 - Math.random() * 0.8,
+            vx: (Math.random() - 0.5) * 0.4,
+            size: 4 + Math.random() * 3,
+            pulse: Math.random() * Math.PI
+          });
+        }
+        for (let i = 0; i < 24; i++) {
+          exp1Particles.push({
+            type: 'co2',
+            x: Math.random() * cv.width * 0.35,
+            y: cv.height * 0.35 + Math.random() * cv.height * 0.4,
+            vx: 1.0 + Math.random() * 0.8,
+            vy: (Math.random() - 0.5) * 0.5,
+            size: 4.5 + Math.random() * 3,
+            pulse: Math.random() * Math.PI
+          });
+        }
+        for (let i = 0; i < 20; i++) {
+          exp1Particles.push({
+            type: 'oxygen',
+            x: cv.width * 0.45 + (Math.random() - 0.5) * 120,
+            y: cv.height * 0.35 + Math.random() * 40,
+            vx: 0.8 + Math.random() * 1.0,
+            vy: -1.0 - Math.random() * 1.2,
+            size: 4 + Math.random() * 4,
+            pulse: Math.random() * Math.PI
+          });
+        }
+      }
+
+      if (exp1AnimId) cancelAnimationFrame(exp1AnimId);
+
+      let frame = 0;
+      function animateExp1() {
+        frame++;
+        ctx.clearRect(0, 0, cv.width, cv.height);
+
+        // Ground & Soil
+        const gradSoil = ctx.createLinearGradient(0, cv.height - 45, 0, cv.height);
+        gradSoil.addColorStop(0, '#593d25');
+        gradSoil.addColorStop(1, '#382312');
+        ctx.fillStyle = gradSoil;
+        ctx.beginPath();
+        ctx.ellipse(cv.width * 0.5, cv.height + 20, cv.width * 0.7, 70, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 3D Pixar Sun with glowing rays and cute face
+        const sunX = cv.width * 0.16;
+        const sunY = cv.height * 0.22;
+        const sunR = 26;
+
+        // Sun Glow
+        const sunGlow = ctx.createRadialGradient(sunX, sunY, sunR * 0.5, sunX, sunY, sunR * 3);
+        sunGlow.addColorStop(0, 'rgba(251, 191, 36, 0.6)');
+        sunGlow.addColorStop(0.5, 'rgba(245, 158, 11, 0.25)');
+        sunGlow.addColorStop(1, 'rgba(251, 191, 36, 0)');
+        ctx.fillStyle = sunGlow;
+        ctx.beginPath();
+        ctx.arc(sunX, sunY, sunR * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Rotating Sun Beams
+        ctx.save();
+        ctx.translate(sunX, sunY);
+        ctx.rotate(frame * 0.01);
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.7)';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 8]);
+        for (let b = 0; b < 8; b++) {
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          const rad = (b * Math.PI) / 4;
+          ctx.lineTo(Math.cos(rad) * 44, Math.sin(rad) * 44);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        // Sun Body (Pixar sphere gradient)
+        const sunGrad = ctx.createRadialGradient(sunX - 7, sunY - 7, 3, sunX, sunY, sunR);
+        sunGrad.addColorStop(0, '#fffbeb');
+        sunGrad.addColorStop(0.4, '#fef08a');
+        sunGrad.addColorStop(0.9, '#f59e0b');
+        sunGrad.addColorStop(1, '#d97706');
+        ctx.fillStyle = sunGrad;
+        ctx.beginPath();
+        ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Sun cute Pixar Face
+        ctx.fillStyle = '#78350f';
+        ctx.beginPath();
+        ctx.arc(sunX - 8, sunY - 4, 3, 0, Math.PI * 2); // left eye
+        ctx.arc(sunX + 8, sunY - 4, 3, 0, Math.PI * 2); // right eye
+        ctx.fill();
+        // Catchlights
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(sunX - 9, sunY - 5, 1.2, 0, Math.PI * 2);
+        ctx.arc(sunX + 7, sunY - 5, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+        // Smile
+        ctx.strokeStyle = '#78350f';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(sunX, sunY + 3, 8, 0.2, Math.PI - 0.2);
+        ctx.stroke();
+
+        // Light Photons streaming to leaf canopy
+        ctx.strokeStyle = 'rgba(250, 204, 21, 0.45)';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([4, 6]);
+        ctx.beginPath();
+        ctx.moveTo(sunX + sunR * 0.7, sunY + sunR * 0.7);
+        ctx.quadraticCurveTo(cv.width * 0.32, cv.height * 0.25, cv.width * 0.48, cv.height * 0.38);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Tree Trunk 3D cylindrical gradient
+        const trunkGrad = ctx.createLinearGradient(cv.width * 0.45, 0, cv.width * 0.55, 0);
+        trunkGrad.addColorStop(0, '#5c3924');
+        trunkGrad.addColorStop(0.4, '#8b5a3c');
+        trunkGrad.addColorStop(0.8, '#4a2c1b');
+        ctx.fillStyle = trunkGrad;
+        ctx.beginPath();
+        ctx.moveTo(cv.width * 0.46, cv.height * 0.52);
+        ctx.quadraticCurveTo(cv.width * 0.47, cv.height * 0.78, cv.width * 0.43, cv.height - 35);
+        ctx.lineTo(cv.width * 0.57, cv.height - 35);
+        ctx.quadraticCurveTo(cv.width * 0.53, cv.height * 0.78, cv.width * 0.54, cv.height * 0.52);
+        ctx.closePath();
+        ctx.fill();
+
+        // Roots
+        ctx.strokeStyle = '#6b442a';
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(cv.width * 0.45, cv.height - 38);
+        ctx.quadraticCurveTo(cv.width * 0.38, cv.height - 25, cv.width * 0.32, cv.height - 12);
+        ctx.moveTo(cv.width * 0.5, cv.height - 38);
+        ctx.quadraticCurveTo(cv.width * 0.5, cv.height - 20, cv.width * 0.49, cv.height - 8);
+        ctx.moveTo(cv.width * 0.55, cv.height - 38);
+        ctx.quadraticCurveTo(cv.width * 0.62, cv.height - 25, cv.width * 0.68, cv.height - 12);
+        ctx.stroke();
+
+        // 3D Pixar Fluffy Canopy (multiple overlapping glossy spheres)
+        const canopies = [
+          { x: cv.width * 0.38, y: cv.height * 0.44, r: 42, c1: '#4ade80', c2: '#15803d' },
+          { x: cv.width * 0.62, y: cv.height * 0.44, r: 42, c1: '#34d399', c2: '#047857' },
+          { x: cv.width * 0.50, y: cv.height * 0.35, r: 52, c1: '#86efac', c2: '#16a34a' },
+          { x: cv.width * 0.44, y: cv.height * 0.30, r: 38, c1: '#a7f3d0', c2: '#059669' },
+          { x: cv.width * 0.56, y: cv.height * 0.30, r: 38, c1: '#6ee7b7', c2: '#15803d' }
+        ];
+
+        canopies.forEach(c => {
+          const ballGrad = ctx.createRadialGradient(c.x - c.r * 0.35, c.y - c.r * 0.35, c.r * 0.1, c.x, c.y, c.r);
+          ballGrad.addColorStop(0, c.c1);
+          ballGrad.addColorStop(0.7, c.c2);
+          ballGrad.addColorStop(1, '#064e3b');
+          ctx.fillStyle = ballGrad;
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Pixar Leafy Face on Center Canopy!
+        const fcX = cv.width * 0.50;
+        const fcY = cv.height * 0.36;
+        // Big cute eyes
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(fcX - 12, fcY - 2, 4.5, 0, Math.PI * 2);
+        ctx.arc(fcX + 12, fcY - 2, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+        // Eye reflections
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(fcX - 13.5, fcY - 3.5, 1.8, 0, Math.PI * 2);
+        ctx.arc(fcX + 10.5, fcY - 3.5, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+        // Blush pink cheeks
+        ctx.fillStyle = 'rgba(251, 113, 133, 0.45)';
+        ctx.beginPath();
+        ctx.arc(fcX - 17, fcY + 4, 4, 0, Math.PI * 2);
+        ctx.arc(fcX + 17, fcY + 4, 4, 0, Math.PI * 2);
+        ctx.fill();
+        // Smile
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(fcX, fcY + 4, 7, 0.2, Math.PI - 0.2);
+        ctx.stroke();
+
+        // Render Animated Particles
+        exp1Particles.forEach(p => {
+          p.pulse += 0.05;
+          p.x += p.vx * exp1SpeedBoost;
+          p.y += p.vy * exp1SpeedBoost;
+
+          if (p.type === 'water') {
+            // Reset to roots
+            if (p.y < cv.height * 0.42) {
+              p.y = cv.height - 35;
+              p.x = cv.width * 0.46 + (Math.random() - 0.5) * 30;
+            }
+            // Draw 3D Water droplet
+            ctx.fillStyle = 'rgba(14, 165, 233, 0.9)';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            // Droplet shine
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.beginPath();
+            ctx.arc(p.x - p.size * 0.3, p.y - p.size * 0.3, p.size * 0.35, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (p.type === 'co2') {
+            // Drift into canopy
+            if (p.x > cv.width * 0.52 || p.y < cv.height * 0.25) {
+              p.x = cv.width * 0.08 + Math.random() * 40;
+              p.y = cv.height * 0.35 + Math.random() * cv.height * 0.3;
+            }
+            // CO2 purple sphere
+            ctx.fillStyle = 'rgba(168, 85, 247, 0.85)';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            // Molecule label
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 8px monospace';
+            ctx.fillText('CO₂', p.x - 6, p.y + 3);
+          } else if (p.type === 'oxygen') {
+            // Float away up & right
+            if (p.y < 20 || p.x > cv.width * 0.95) {
+              p.x = cv.width * 0.48 + (Math.random() - 0.5) * 60;
+              p.y = cv.height * 0.38 + Math.random() * 30;
+            }
+            // O2 Glowing bubble
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.9)';
+            ctx.lineWidth = 1.5;
+            ctx.fillStyle = 'rgba(224, 242, 254, 0.6)';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            // O2 label
+            ctx.fillStyle = '#0284c7';
+            ctx.font = 'bold 9px monospace';
+            ctx.fillText('O₂', p.x - 5, p.y + 3);
+          }
+        });
+
+        // Decay boost
+        if (exp1SpeedBoost > 1.0) {
+          exp1SpeedBoost = Math.max(1.0, exp1SpeedBoost - 0.015);
+        }
+
+        exp1AnimId = requestAnimationFrame(animateExp1);
+      }
+      animateExp1();
+    }
+
+    function triggerExp1ParticleBurst() {
+      playTone(720, 0.2);
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+      exp1SpeedBoost = 3.2;
+    }
+
+    // ================= EXP 2: 3D PIXAR LEAF BLADE REACTION CANVAS =================
+    let exp2AnimId = null;
+    let exp2Chloroplasts = [];
+    let exp2Flash = 0;
+
+    function initPixarExp2Canvas() {
+      const cv = document.getElementById('pixar-exp2-canvas');
+      if (!cv) return;
+      const rect = cv.parentElement.getBoundingClientRect();
+      cv.width = rect.width || 480;
+      cv.height = rect.height || 320;
+      const ctx = cv.getContext('2d');
+
+      // Initialize 3D Chloroplast disks (grana stacks)
+      if (exp2Chloroplasts.length === 0) {
+        for (let i = 0; i < 14; i++) {
+          exp2Chloroplasts.push({
+            x: cv.width * 0.2 + (i % 5) * (cv.width * 0.15) + (Math.random() - 0.5) * 20,
+            y: cv.height * 0.22 + Math.floor(i / 5) * (cv.height * 0.26) + (Math.random() - 0.5) * 15,
+            rx: 28 + Math.random() * 8,
+            ry: 18 + Math.random() * 5,
+            rotation: (Math.random() - 0.5) * 0.3,
+            pulse: Math.random() * Math.PI * 2,
+            starch: 0.2 + Math.random() * 0.4
+          });
+        }
+      }
+
+      if (exp2AnimId) cancelAnimationFrame(exp2AnimId);
+
+      let frame = 0;
+      function animateExp2() {
+        frame++;
+        ctx.clearRect(0, 0, cv.width, cv.height);
+
+        // Dark Emerald Cellular Matrix Background
+        const bgGrad = ctx.createRadialGradient(cv.width * 0.5, cv.height * 0.5, 30, cv.width * 0.5, cv.height * 0.5, cv.width * 0.7);
+        bgGrad.addColorStop(0, '#043827');
+        bgGrad.addColorStop(0.7, '#022116');
+        bgGrad.addColorStop(1, '#01120b');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, cv.width, cv.height);
+
+        // Render Leaf Vein Highways (Cyan Water & Purple Organic)
+        ctx.strokeStyle = 'rgba(14, 165, 233, 0.4)';
+        ctx.lineWidth = 14;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(0, cv.height * 0.85);
+        ctx.quadraticCurveTo(cv.width * 0.35, cv.height * 0.65, cv.width * 0.85, cv.height * 0.5);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(168, 85, 247, 0.35)';
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.moveTo(0, cv.height * 0.89);
+        ctx.quadraticCurveTo(cv.width * 0.35, cv.height * 0.69, cv.width * 0.85, cv.height * 0.54);
+        ctx.stroke();
+
+        // 3D Chloroplast Organelles (Grana thylakoid stacks)
+        exp2Chloroplasts.forEach((ch, idx) => {
+          ch.pulse += 0.04;
+          const bounce = Math.sin(ch.pulse) * 2;
+
+          ctx.save();
+          ctx.translate(ch.x, ch.y + bounce);
+          ctx.rotate(ch.rotation);
+
+          // Chloroplast 3D Oval Body
+          const chlGrad = ctx.createRadialGradient(-ch.rx * 0.3, -ch.ry * 0.3, 3, 0, 0, ch.rx);
+          chlGrad.addColorStop(0, '#86efac');
+          chlGrad.addColorStop(0.5, '#22c55e');
+          chlGrad.addColorStop(0.85, '#15803d');
+          chlGrad.addColorStop(1, '#052e16');
+          ctx.fillStyle = chlGrad;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, ch.rx, ch.ry, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Grana Internal Thylakoid Discs
+          ctx.fillStyle = 'rgba(5, 46, 22, 0.7)';
+          for (let d = -2; d <= 2; d++) {
+            ctx.beginPath();
+            ctx.ellipse(d * (ch.rx * 0.25), 0, ch.rx * 0.12, ch.ry * 0.45, 0, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Golden Starch Granule Accumulating Inside
+          if (ch.starch > 0.1) {
+            const stR = ch.rx * 0.22 * ch.starch;
+            const stGrad = ctx.createRadialGradient(-2, -2, 1, 0, 0, stR);
+            stGrad.addColorStop(0, '#fef08a');
+            stGrad.addColorStop(0.6, '#f59e0b');
+            stGrad.addColorStop(1, '#b45309');
+            ctx.fillStyle = stGrad;
+            ctx.beginPath();
+            ctx.arc(ch.rx * 0.28, ch.ry * 0.1, stR, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Cute Pixar Chloroplast Face
+          ctx.fillStyle = '#0f172a';
+          ctx.beginPath();
+          ctx.arc(-ch.rx * 0.2, -ch.ry * 0.15, 2, 0, Math.PI * 2);
+          ctx.arc(ch.rx * 0.05, -ch.ry * 0.15, 2, 0, Math.PI * 2);
+          ctx.fill();
+          // Cute smile
+          ctx.strokeStyle = '#0f172a';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(-ch.rx * 0.08, ch.ry * 0.1, 3.5, 0.1, Math.PI - 0.1);
+          ctx.stroke();
+
+          ctx.restore();
+        });
+
+        // Sun Beam Photon Pulses Coming Down
+        const numBeams = 4;
+        for (let b = 0; b < numBeams; b++) {
+          const beamX = cv.width * 0.15 + b * (cv.width * 0.25) + Math.sin(frame * 0.03 + b) * 15;
+          const beamGrad = ctx.createLinearGradient(beamX - 10, 0, beamX + 30, cv.height);
+          beamGrad.addColorStop(0, 'rgba(250, 204, 21, 0.35)');
+          beamGrad.addColorStop(0.5, 'rgba(250, 204, 21, 0.15)');
+          beamGrad.addColorStop(1, 'rgba(250, 204, 21, 0)');
+          ctx.fillStyle = beamGrad;
+          ctx.beginPath();
+          ctx.moveTo(beamX - 25, 0);
+          ctx.lineTo(beamX + 25, 0);
+          ctx.lineTo(beamX + 45, cv.height);
+          ctx.lineTo(beamX - 5, cv.height);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        // Reaction Flash Overlay
+        if (exp2Flash > 0) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${exp2Flash * 0.4})`;
+          ctx.fillRect(0, 0, cv.width, cv.height);
+          exp2Flash = Math.max(0, exp2Flash - 0.04);
+        }
+
+        exp2AnimId = requestAnimationFrame(animateExp2);
+      }
+      animateExp2();
+    }
+
+    function triggerExp2Reaction() {
+      playTone(880, 0.25);
+      exp2Flash = 1.0;
+      confetti({ particleCount: 75, spread: 80 });
+      // Increase starch in chloroplasts
+      exp2Chloroplasts.forEach(ch => {
+        ch.starch = Math.min(1.2, ch.starch + 0.3);
+      });
+    }
+
+    // ================= EXP 3: 3D LEAF ANATOMY HOTSPOT CONTROLLER =================
+    const ANATOMY_HOTSPOTS = {
+      1: {
+        title: "🌿 1. Hệ thống bó mạch dẫn trong Cuống & Gân Lá:",
+        desc: "Gân lá có 2 bó mạch song song: Nửa dưới là <b>mạch gỗ (xanh lam)</b> vận chuyển nước và muối khoáng từ rễ đến cung cấp cho lục lạp; nửa trên là <b>mạch rây (tím)</b> vận chuyển chất hữu cơ sau quang hợp từ lá đi nuôi khắp cơ thể cây."
+      },
+      2: {
+        title: "🍃 2. Phiến Lá Bắt Sáng Tối Ưu (Hình thái & Diện tích):",
+        desc: "Phiến lá có bản dẹt, diện tích bề mặt lớn, các lá trên cây mọc so le nhau giúp đón được nhiều ánh sáng mặt trời nhất mà không bị che khuất lẫn nhau."
+      },
+      3: {
+        title: "🔬 3. Lục Lạp & Diệp Lục (Bào quan trung tâm quang hợp):",
+        desc: "Nằm dày đặc trong lớp tế bào mô giậu. Chứa các túi dẹt màng thylakoid xếp chồng thành đĩa Grana giàu diệp lục tố (chlorophyll), hấp thụ trọn vẹn năng lượng ánh sáng để quang phân ly nước và tổng hợp tinh bột."
+      },
+      4: {
+        title: "💨 4. Khí Khổng Đóng Mở (Biểu bì mặt dưới):",
+        desc: "Mỗi khí khổng tạo bởi 2 tế bào hạt đậu có vách dày trong mỏng ngoài. Khi no nước, khí khổng mở ra cho CO₂ khuếch tán vào lá làm nguyên liệu và giải phóng O₂ cùng hơi nước ra ngoài."
+      }
+    };
+
+    function selectAnatomyHotspot(id) {
+      playTone(650 + id * 50);
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`btn-hotspot-${i}`);
+        if (!btn) continue;
+        if (i === id) {
+          btn.className = "p-3 rounded-2xl bg-emerald-100 border-2 border-emerald-600 shadow-md cursor-pointer transition";
+        } else {
+          btn.className = "p-3 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:shadow-md transition opacity-80";
+        }
+      }
+      const data = ANATOMY_HOTSPOTS[id];
+      if (data) {
+        document.getElementById('hotspot-detail-title').innerHTML = data.title;
+        document.getElementById('hotspot-detail-desc').innerHTML = data.desc;
       }
     }
 
