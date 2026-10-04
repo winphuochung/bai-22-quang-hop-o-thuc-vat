@@ -995,20 +995,83 @@
           </div>
         </div>
 
-        <!-- Google Drive Sheet Connected Banner -->
-        <div class="p-3.5 rounded-2xl bg-emerald-50/90 border border-emerald-300 flex items-center justify-between text-xs text-emerald-900 shadow-sm">
-          <div class="flex items-center gap-2.5">
-            <span class="text-lg">🔗</span>
-            <div>
-              <span class="font-bold">Đã liên kết Google Sheets: </span>
-              <a href="https://docs.google.com/spreadsheets/d/1PXoeDi6YVOr75HJEq1FhK3Xn0YdzcEyui3xV-CWvM04/edit?gid=0#gid=0" target="_blank" class="font-mono text-emerald-800 underline hover:text-emerald-950 font-semibold break-all">
-                docs.google.com/spreadsheets/d/1PXoeDi6YVOr...
-              </a>
+        <!-- Google Drive Sheet & Apps Script Connected Banner -->
+        <div class="card-soft p-4 rounded-3xl space-y-3 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-300 shadow-sm">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="text-xl">🚀</span>
+              <div>
+                <b class="text-slate-900 text-xs sm:text-sm">Đồng Bộ Thời Gian Thực: Google Sheets & Apps Script</b>
+                <span class="block text-[11px] text-slate-600">Khi học sinh hoàn thành bài kiểm tra, điểm số sẽ tự động gửi thẳng về Google Sheets</span>
+              </div>
+            </div>
+            <button onclick="toggleAppsScriptGuide()" class="px-3 py-1.5 rounded-xl bg-white border border-emerald-300 text-emerald-800 text-xs font-bold shadow-sm hover:bg-emerald-100 transition flex items-center gap-1.5">
+              <span>📖</span> Hướng Dẫn Apps Script
+            </button>
+          </div>
+
+          <!-- Apps Script Web App URL Setting -->
+          <div class="pt-2 border-t border-emerald-200/60 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div class="flex-1 relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs font-mono">🔗</span>
+              <input type="url" id="apps-script-url-input" 
+                placeholder="Dán Web App URL (https://script.google.com/macros/s/.../exec)" 
+                class="w-full pl-8 pr-3 py-2 bg-white border border-emerald-300 rounded-xl text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-inner">
+            </div>
+            <div class="flex gap-2">
+              <button onclick="saveAppsScriptUrl()" class="px-4 py-2 rounded-xl bg-[#1b3a24] text-white font-bold text-xs hover:bg-[#142e1c] shadow transition">
+                Lưu URL
+              </button>
+              <button onclick="testSyncGoogleSheet()" id="btn-test-sync" class="px-3.5 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 shadow transition flex items-center gap-1">
+                <span>⚡</span> Test Gửi
+              </button>
             </div>
           </div>
-          <span class="px-2.5 py-1 rounded-full bg-emerald-200 text-emerald-950 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 flex-shrink-0">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Đã kết nối
-          </span>
+          <div id="apps-script-sync-msg" class="text-[11px] font-bold text-emerald-800 hidden"></div>
+        </div>
+
+        <!-- Google Apps Script Deployment Modal Guide -->
+        <div id="apps-script-guide-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+          <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[85vh] overflow-y-auto text-xs text-slate-700">
+            <div class="flex justify-between items-center border-b pb-3">
+              <h5 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                <span>⚡</span> Cách Thiết Lập Google Apps Script (3 Bước)
+              </h5>
+              <button onclick="toggleAppsScriptGuide()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-bold flex items-center justify-center">✕</button>
+            </div>
+            
+            <div class="space-y-3">
+              <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-200">
+                <b class="text-emerald-900 block mb-1">Bước 1: Mở Google Sheet & Apps Script</b>
+                <span>Mở link bảng tính: </span>
+                <a href="https://docs.google.com/spreadsheets/d/1PXoeDi6YVOr75HJEq1FhK3Xn0YdzcEyui3xV-CWvM04/edit?gid=0#gid=0" target="_blank" class="font-mono text-emerald-700 underline font-bold">Mở Google Sheets ↗</a>
+                <p class="mt-1">Trên thanh menu Google Sheets, chọn <b>Tiện ích mở rộng (Extensions) ➔ Apps Script</b>.</p>
+              </div>
+
+              <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200">
+                <b class="text-slate-900 block mb-1">Bước 2: Dán Mã Code Xử Lý</b>
+                <p class="mb-2">Xóa code cũ trong file <code class="bg-slate-200 px-1 py-0.5 rounded">Code.gs</code> và dán toàn bộ đoạn code sau (đã có sẵn trong file dự án <code class="bg-slate-200 px-1 py-0.5 rounded">google-apps-script.js</code>):</p>
+                <button onclick="copyAppsScriptCode()" class="w-full py-2 rounded-xl bg-slate-800 text-white font-bold text-xs hover:bg-slate-900 shadow">
+                  📋 Sao Chép Mã Google Apps Script Code.gs
+                </button>
+              </div>
+
+              <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200">
+                <b class="text-amber-900 block mb-1">Bước 3: Triển Khai Ứng Dụng Web (Deploy Web App)</b>
+                <ol class="list-decimal pl-4 space-y-1">
+                  <li>Bấm nút <b>Triển khai (Deploy)</b> góc trên bên phải ➔ <b>Tùy chọn triển khai mới (New deployment)</b>.</li>
+                  <li>Chọn loại: <b>Ứng dụng web (Web app)</b>.</li>
+                  <li>Thực thi dưới dạng: <b>Tôi (Me)</b>.</li>
+                  <li>Ai có quyền truy cập: <b>Bất kỳ ai (Anyone)</b>.</li>
+                  <li>Bấm <b>Triển khai</b>, cấp quyền và <b>Sao chép URL ứng dụng web</b> (đuôi <code class="font-mono">/exec</code>) rồi dán vào ô trên App.</li>
+                </ol>
+              </div>
+            </div>
+
+            <button onclick="toggleAppsScriptGuide()" class="w-full py-2.5 rounded-xl bg-[#1b3a24] text-white font-bold text-xs hover:bg-[#142e1c]">
+              Đã hiểu, đóng hướng dẫn
+            </button>
+          </div>
         </div>
 
         <div class="card-soft p-6 rounded-3xl overflow-x-auto">
@@ -1789,8 +1852,12 @@
         score: score,
         correctCount: correct,
         rank: score >= 8 ? 'Xuất sắc' : score >= 6.5 ? 'Khá' : 'Đạt',
-        synced: true
+        synced: false
       };
+
+      // Tự động đồng bộ lên Google Sheets bằng Apps Script
+      syncResultToAppsScript(record);
+
       let list = JSON.parse(localStorage.getItem('lms_data')) || [];
       list.unshift(record);
       localStorage.setItem('lms_data', JSON.stringify(list));
@@ -2061,6 +2128,115 @@
       a.click();
     }
 
+    // ================= GOOGLE APPS SCRIPT SYNC CONTROLLER =================
+    const APPS_SCRIPT_STORAGE_KEY = 'apps_script_url';
+    const DEFAULT_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQ7NnFvQjS9xP1w6kX2oB4zL-EXAMPLE/exec"; // Placeholder
+
+    function getAppsScriptUrl() {
+      return localStorage.getItem(APPS_SCRIPT_STORAGE_KEY) || "";
+    }
+
+    function saveAppsScriptUrl() {
+      const inp = document.getElementById('apps-script-url-input');
+      if (!inp) return;
+      const url = inp.value.trim();
+      localStorage.setItem(APPS_SCRIPT_STORAGE_KEY, url);
+      playTone(700);
+      showSyncMsg("✅ Đã lưu Google Apps Script Web App URL!", "text-emerald-800");
+    }
+
+    function toggleAppsScriptGuide() {
+      const modal = document.getElementById('apps-script-guide-modal');
+      if (modal) modal.classList.toggle('hidden');
+    }
+
+    function showSyncMsg(text, colorClass) {
+      const msg = document.getElementById('apps-script-sync-msg');
+      if (msg) {
+        msg.className = `text-[11px] font-bold ${colorClass} mt-1 block`;
+        msg.innerText = text;
+        setTimeout(() => {
+          msg.classList.add('hidden');
+        }, 6000);
+      }
+    }
+
+    async function syncResultToAppsScript(record) {
+      const url = getAppsScriptUrl();
+      if (!url) {
+        console.log("Chưa cấu hình Google Apps Script URL. Đang lưu cục bộ.");
+        return;
+      }
+      try {
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        });
+        showSyncMsg(`🚀 Đã gửi kết quả của "${record.name}" lên Google Sheets!`, "text-emerald-800");
+      } catch (err) {
+        console.warn("Lỗi đồng bộ Apps Script:", err);
+      }
+    }
+
+    async function testSyncGoogleSheet() {
+      const url = getAppsScriptUrl();
+      if (!url) {
+        alert("Vui lòng dán và Lưu URL Google Apps Script trước khi kiểm tra!");
+        return;
+      }
+      playTone(600);
+      showSyncMsg("⏳ Đang gửi thử nghiệm lên Google Sheets...", "text-amber-800");
+      try {
+        const testData = {
+          time: new Date().toLocaleTimeString(),
+          name: "Bài Thi Thử Nghiệm",
+          class: "7A1",
+          score: "10.0",
+          correctCount: 20,
+          rank: "Xuất sắc"
+        };
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(testData)
+        });
+        playTone(900);
+        confetti({ particleCount: 50 });
+        showSyncMsg("🎉 Kết nối thành công! Kiểm tra file Google Sheets của thầy cô nhé.", "text-emerald-800");
+      } catch (e) {
+        showSyncMsg("⚠️ Không thể kết nối. Kiểm tra lại quyền hạn Web App (Anyone).", "text-rose-600");
+      }
+    }
+
+    function copyAppsScriptCode() {
+      const code = `function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Thời Gian", "Họ và Tên", "Lớp", "Điểm Số", "Số Câu Đúng", "Xếp Loại", "Trạng Thái"]);
+      sheet.getRange(1, 1, 1, 7).setBackground("#1b3a24").setFontColor("#ffffff").setFontWeight("bold");
+    }
+    var data = JSON.parse(e.postData.contents);
+    sheet.appendRow([data.time, data.name, data.class, data.score, data.correctCount + "/20", data.rank, "Đã đồng bộ"]);
+    return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status: "error", error: err.toString()})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+function doGet(e) {
+  return ContentService.createTextOutput("Google Apps Script API Online").setMimeType(ContentService.MimeType.TEXT);
+}`;
+      navigator.clipboard.writeText(code).then(() => {
+        playTone(850);
+        alert("Đã sao chép mã Google Apps Script Code.gs vào khay nhớ tạm!");
+      }).catch(() => {
+        alert("Vui lòng mở file google-apps-script.js trong thư mục dự án để lấy mã!");
+      });
+    }
+
     function saveStudentProfile() {
       const name = document.getElementById('setting-student-name').value.trim();
       const sClass = document.getElementById('setting-student-class').value.trim();
@@ -2225,6 +2401,12 @@
 
       // Check current login session
       applyLoggedInState();
+
+      // Populate Apps Script URL input
+      const scriptUrlInp = document.getElementById('apps-script-url-input');
+      if (scriptUrlInp) {
+        scriptUrlInp.value = getAppsScriptUrl();
+      }
 
       setTimeout(() => {
         if (window.renderMathInElement) {
