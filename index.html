@@ -1939,19 +1939,24 @@
             `⭐ TỔNG ĐIỂM: ${totalScore}/10.0 Điểm\n` +
             `• Xếp loại: ${rank}`);
 
-      // Google Sheets sync configuration
+      // Google Sheets sync configuration with individual question scores
       const record = {
         time: new Date().toLocaleTimeString(),
         name: localStorage.getItem('std_name') || "Học sinh Lớp 7",
         class: localStorage.getItem('std_class') || "7A1",
+        totalScore: totalScore,
+        score: totalScore, // For backward compatibility
         mcqScore: mcqScore,
         mcqCorrect: mcqCorrect,
         essayScore: essayScore,
-        essayBreakdown: `C1:${essayData.e1}|C2:${essayData.e2}|C3:${essayData.e3}|C4:${essayData.e4}`,
-        totalScore: totalScore,
-        score: totalScore, // For backward compatibility
-        correctCount: mcqCorrect,
         rank: rank,
+        // Điểm từng câu trắc nghiệm (0.5đ nếu đúng, 0đ nếu sai)
+        ...mcqBreakdown,
+        // Điểm từng câu tự luận
+        tl1: essayData.e1,
+        tl2: essayData.e2,
+        tl3: essayData.e3,
+        tl4: essayData.e4,
         synced: false
       };
 
@@ -2324,14 +2329,13 @@
           time: new Date().toLocaleTimeString(),
           name: "Bài Thi Thử Nghiệm",
           class: "7A1",
-          mcqScore: "10.0",
-          mcqCorrect: 20,
-          essayScore: "9.5",
-          essayBreakdown: "C1:2.5|C2:2.5|C3:2.5|C4:2.0",
-          totalScore: "9.8",
-          score: "9.8",
-          correctCount: 20,
-          rank: "Xuất sắc"
+          totalScore: "9.5",
+          score: "9.5",
+          // 20 câu trắc nghiệm
+          c1: 0.5, c2: 0.5, c3: 0.5, c4: 0.5, c5: 0.5, c6: 0.5, c7: 0.5, c8: 0.5, c9: 0.5, c10: 0.5,
+          c11: 0.5, c12: 0.5, c13: 0.5, c14: 0.5, c15: 0.5, c16: 0.5, c17: 0.5, c18: 0.5, c19: 0.5, c20: 0.5,
+          // 4 câu tự luận
+          tl1: 2.5, tl2: 2.0, tl3: 2.5, tl4: 2.5
         };
         await fetch(url, {
           method: 'POST',
@@ -2352,34 +2356,48 @@
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(["Thời Gian", "Họ và Tên", "Lớp", "Điểm Trắc Nghiệm", "Số Câu Đúng (MCQ)", "Điểm Tự Luận", "Chi Tiết Tự Luận", "TỔNG ĐIỂM (10.0)", "Xếp Loại"]);
-      sheet.getRange(1, 1, 1, 9).setBackground("#1b3a24").setFontColor("#ffffff").setFontWeight("bold").setHorizontalAlignment("center");
-      sheet.setColumnWidth(1, 140); sheet.setColumnWidth(2, 180); sheet.setColumnWidth(3, 80);
-      sheet.setColumnWidth(4, 140); sheet.setColumnWidth(5, 140); sheet.setColumnWidth(6, 120);
-      sheet.setColumnWidth(7, 180); sheet.setColumnWidth(8, 140); sheet.setColumnWidth(9, 120);
+      sheet.appendRow([
+        "Thời Gian", "Họ và Tên", "Lớp", "Tổng điểm",
+        "TN C1", "TN C2", "TN C3", "TN C4", "TN C5", "TN C6", "TN C7", "TN C8", "TN C9", "TN C10",
+        "TN C11", "TN C12", "TN C13", "TN C14", "TN C15", "TN C16", "TN C17", "TN C18", "TN C19", "TN C20",
+        "TL C1", "TL C2", "TL C3", "TL C4"
+      ]);
+      var headerRange = sheet.getRange(1, 1, 1, 28);
+      headerRange.setBackground("#1b3a24").setFontColor("#ffffff").setFontWeight("bold").setHorizontalAlignment("center");
+      sheet.setColumnWidth(1, 140); sheet.setColumnWidth(2, 180); sheet.setColumnWidth(3, 80); sheet.setColumnWidth(4, 110);
+      for (var c = 5; c <= 24; c++) { sheet.setColumnWidth(c, 70); }
+      for (var l = 25; l <= 28; l++) { sheet.setColumnWidth(l, 80); }
     }
     var data = JSON.parse(e.postData ? e.postData.contents : e.parameter);
-    var mcqScore   = data.mcqScore !== undefined ? (data.mcqScore + "đ") : (data.score ? data.score + "đ" : "0.0đ");
-    var mcqCorrect = data.mcqCorrect !== undefined ? (data.mcqCorrect + "/20") : (data.correctCount ? data.correctCount + "/20" : "0/20");
-    var essayScore = data.essayScore !== undefined ? (data.essayScore + "đ") : "0.0đ";
-    var essayBreak = data.essayBreakdown || "C1:0|C2:0|C3:0|C4:0";
+    var timestamp  = data.time || new Date().toLocaleString("vi-VN");
+    var name       = data.name || "Học sinh";
+    var sClass     = data.class || "Lớp 7";
     var totalScore = data.totalScore !== undefined ? data.totalScore : (data.score || "0.0");
-    sheet.appendRow([data.time, data.name, data.class, mcqScore, mcqCorrect, essayScore, essayBreak, totalScore, data.rank]);
+    var tnScores = [];
+    for (var i = 1; i <= 20; i++) {
+      var val = data["c" + i];
+      tnScores.push(val !== undefined ? val : 0);
+    }
+    var tl1 = data.tl1 !== undefined ? data.tl1 : 0;
+    var tl2 = data.tl2 !== undefined ? data.tl2 : 0;
+    var tl3 = data.tl3 !== undefined ? data.tl3 : 0;
+    var tl4 = data.tl4 !== undefined ? data.tl4 : 0;
+    sheet.appendRow([timestamp, name, sClass, totalScore].concat(tnScores).concat([tl1, tl2, tl3, tl4]));
     var lastRow = sheet.getLastRow();
-    sheet.getRange(lastRow, 1, 1, 9).setHorizontalAlignment("center");
+    sheet.getRange(lastRow, 1, 1, 28).setHorizontalAlignment("center");
     sheet.getRange(lastRow, 2).setHorizontalAlignment("left");
-    sheet.getRange(lastRow, 8).setFontWeight("bold");
+    sheet.getRange(lastRow, 4).setFontWeight("bold").setBackground("#fef3c7");
     return ContentService.createTextOutput(JSON.stringify({status: "success", totalScore: totalScore})).setMimeType(ContentService.MimeType.JSON);
   } catch(err) {
     return ContentService.createTextOutput(JSON.stringify({status: "error", error: err.toString()})).setMimeType(ContentService.MimeType.JSON);
   }
 }
 function doGet(e) {
-  return ContentService.createTextOutput("Google Apps Script API Online").setMimeType(ContentService.MimeType.TEXT);
+  return ContentService.createTextOutput("Google Apps Script API 28 Cột Online").setMimeType(ContentService.MimeType.TEXT);
 }`;
       navigator.clipboard.writeText(code).then(() => {
         playTone(850);
-        alert("Đã sao chép mã Google Apps Script 9 Cột Chi Tiết vào khay nhớ tạm!");
+        alert("Đã sao chép mã Google Apps Script 28 Cột Chuẩn vào khay nhớ tạm!");
       }).catch(() => {
         alert("Vui lòng mở file google-apps-script.js trong thư mục dự án để lấy mã!");
       });
