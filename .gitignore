@@ -1,2 +1,7 @@
 .Agent/
 .Agent
+index.backup.html
+ui_reference.png
+*.log
+.DS_Store
+Thumbs.db
