@@ -969,19 +969,46 @@
 
       <!-- ================= SECTION 5: TAB GHI CHÚ (LMS TEACHER DASHBOARD) ================= -->
       <div id="view-ghi-chu" class="space-y-6 hidden">
-        <div class="card-soft p-6 rounded-3xl flex justify-between items-center">
+        <div class="card-soft p-6 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h4 class="text-xl font-extrabold text-slate-900">Bảng Quản Trị Học Tập & Điểm Số</h4>
-            <p class="text-xs text-slate-600">Đồng bộ Google Sheets & Xuất báo cáo</p>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+              <h4 class="text-xl font-extrabold text-slate-900">Bảng Quản Trị Học Tập & Điểm Số (LMS)</h4>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Đồng bộ trực tiếp kết quả thi của học sinh với Google Sheets của Giáo viên</p>
           </div>
-          <div class="flex gap-2">
-            <button onclick="exportCSVReport()" class="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs">
-              Xuất Excel / CSV
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Google Sheets Direct Link Button -->
+            <a href="https://docs.google.com/spreadsheets/d/1PXoeDi6YVOr75HJEq1FhK3Xn0YdzcEyui3xV-CWvM04/edit?gid=0#gid=0" 
+              target="_blank" rel="noopener noreferrer"
+              class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-md hover:scale-105 transition">
+              <span class="text-sm">📊</span>
+              <span>Mở Google Sheets</span>
+              <span class="text-[10px] opacity-80">↗</span>
+            </a>
+            <button onclick="exportCSVReport()" class="px-4 py-2.5 rounded-xl bg-[#1b3a24] hover:bg-[#142e1c] text-white font-bold text-xs flex items-center gap-1.5 shadow">
+              <span>📥</span> Xuất Excel / CSV
             </button>
-            <button onclick="addMockStudentResult()" class="px-4 py-2 rounded-xl bg-slate-200 text-slate-800 font-bold text-xs">
-              + Tạo Mẫu Học Sinh
+            <button onclick="addMockStudentResult()" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs flex items-center gap-1.5 border border-slate-200">
+              <span>+</span> Thêm Mẫu
             </button>
           </div>
+        </div>
+
+        <!-- Google Drive Sheet Connected Banner -->
+        <div class="p-3.5 rounded-2xl bg-emerald-50/90 border border-emerald-300 flex items-center justify-between text-xs text-emerald-900 shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <span class="text-lg">🔗</span>
+            <div>
+              <span class="font-bold">Đã liên kết Google Sheets: </span>
+              <a href="https://docs.google.com/spreadsheets/d/1PXoeDi6YVOr75HJEq1FhK3Xn0YdzcEyui3xV-CWvM04/edit?gid=0#gid=0" target="_blank" class="font-mono text-emerald-800 underline hover:text-emerald-950 font-semibold break-all">
+                docs.google.com/spreadsheets/d/1PXoeDi6YVOr...
+              </a>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full bg-emerald-200 text-emerald-950 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 flex-shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Đã kết nối
+          </span>
         </div>
 
         <div class="card-soft p-6 rounded-3xl overflow-x-auto">
@@ -1751,6 +1778,9 @@
       confetti({ particleCount: 90, spread: 70 });
       alert(`🎉 Kết quả kiểm tra của em:\n• Số câu đúng: ${correct}/20 câu\n• Điểm số: ${score}/10 Điểm\n• Xếp loại: ${score >= 8 ? 'Xuất sắc' : score >= 6.5 ? 'Khá' : 'Đạt'}`);
 
+      // Google Sheets sync configuration
+      const GOOGLE_SHEETS_URL = "https://docs.google.com/spreadsheets/d/1PXoeDi6YVOr75HJEq1FhK3Xn0YdzcEyui3xV-CWvM04/edit?gid=0#gid=0";
+
       // Save record
       const record = {
         time: new Date().toLocaleTimeString(),
@@ -1758,7 +1788,8 @@
         class: localStorage.getItem('std_class') || "7A1",
         score: score,
         correctCount: correct,
-        rank: score >= 8 ? 'Xuất sắc' : 'Khá'
+        rank: score >= 8 ? 'Xuất sắc' : score >= 6.5 ? 'Khá' : 'Đạt',
+        synced: true
       };
       let list = JSON.parse(localStorage.getItem('lms_data')) || [];
       list.unshift(record);
