@@ -922,14 +922,14 @@
           <!-- Populated by JavaScript -->
         </div>
 
-        <!-- 4 Câu tự luận có Ô Trả Lời & Chấm Điểm Từng Câu -->
+        <!-- 4 Câu tự luận có Ô Trả Lời & Chấm Điểm Tự Luận -->
         <div class="space-y-4 pt-4 border-t border-slate-200">
-          <div class="flex justify-between items-center">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
               <h4 class="font-extrabold text-slate-900 text-lg">Phần II: Câu Hỏi Tự Luận (4 Câu - Thang 10 Điểm)</h4>
-              <p class="text-xs text-slate-600">Học sinh gõ câu trả lời, giáo viên/học sinh đối chiếu Rubric để nhập điểm từng câu</p>
+              <p id="essay-subtitle-text" class="text-xs text-slate-600">Học sinh gõ câu trả lời vào các ô bên dưới và nộp bài để giáo viên chấm điểm.</p>
             </div>
-            <span class="text-xs font-bold px-3 py-1 bg-purple-100 text-purple-900 rounded-full border border-purple-200">
+            <span id="display-essay-badge" class="text-xs font-bold px-3 py-1 bg-purple-100 text-purple-900 rounded-full border border-purple-200 hidden">
               Điểm Tự Luận: <b id="display-essay-total" class="text-purple-700">0.0</b>/10.0
             </span>
           </div>
@@ -939,19 +939,23 @@
             <div class="card-soft p-5 rounded-3xl space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">Câu 1 Tự Luận</span>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <span>Điểm:</span>
+                <!-- Teacher only score input -->
+                <div class="teacher-score-ctrl flex items-center gap-1.5 text-xs font-bold text-slate-700 hidden">
+                  <span>Chấm điểm:</span>
                   <input type="number" id="score-essay-1" min="0" max="2.5" step="0.25" value="0" onchange="calculateDetailedScores()"
                     class="w-16 px-2 py-1 rounded-lg border border-slate-300 font-mono text-center text-xs font-bold text-emerald-800 bg-white">
                   <span>/2.5đ</span>
                 </div>
               </div>
               <p class="text-xs font-bold text-slate-800">Mối quan hệ giữa cấu tạo hình thái phiến lá với khả năng hấp thụ ánh sáng?</p>
-              <textarea id="ans-essay-1" rows="2" placeholder="Nhập câu trả lời của em tại đây..." 
+              <textarea id="ans-essay-1" rows="3" placeholder="Nhập câu trả lời của em tại đây..." 
                 class="w-full p-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
-              <details class="text-xs bg-slate-50 p-2.5 rounded-xl border">
-                <summary class="font-bold text-emerald-800 cursor-pointer">Xem Rubric chấm chuẩn</summary>
-                <div class="mt-1 text-slate-600 space-y-0.5 text-[11px]">
+              <!-- Rubric only visible for Teacher -->
+              <details class="teacher-rubric text-xs bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200 hidden">
+                <summary class="font-bold text-emerald-900 cursor-pointer flex items-center gap-1">
+                  <span>📋</span> Rubric Chấm Chuẩn (Dành cho Giáo viên)
+                </summary>
+                <div class="mt-1.5 text-slate-700 space-y-0.5 text-[11px]">
                   <div>• Diện tích bề mặt lớn, bản dẹt đón tối đa bức xạ: <b>1.0đ</b></div>
                   <div>• Mô giậu xếp sít nhau, tập trung mật độ lục lạp cao: <b>1.0đ</b></div>
                   <div>• Các lá mọc so le trên cành không che khuất nhau: <b>0.5đ</b></div>
@@ -962,19 +966,23 @@
             <div class="card-soft p-5 rounded-3xl space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">Câu 2 Tự Luận</span>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <span>Điểm:</span>
+                <!-- Teacher only score input -->
+                <div class="teacher-score-ctrl flex items-center gap-1.5 text-xs font-bold text-slate-700 hidden">
+                  <span>Chấm điểm:</span>
                   <input type="number" id="score-essay-2" min="0" max="2.5" step="0.25" value="0" onchange="calculateDetailedScores()"
                     class="w-16 px-2 py-1 rounded-lg border border-slate-300 font-mono text-center text-xs font-bold text-emerald-800 bg-white">
                   <span>/2.5đ</span>
                 </div>
               </div>
               <p class="text-xs font-bold text-slate-800">Tại sao khi trồng cây nông nghiệp cần chú ý đến mật độ và khoảng cách?</p>
-              <textarea id="ans-essay-2" rows="2" placeholder="Nhập câu trả lời của em tại đây..." 
+              <textarea id="ans-essay-2" rows="3" placeholder="Nhập câu trả lời của em tại đây..." 
                 class="w-full p-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
-              <details class="text-xs bg-slate-50 p-2.5 rounded-xl border">
-                <summary class="font-bold text-emerald-800 cursor-pointer">Xem Rubric chấm chuẩn</summary>
-                <div class="mt-1 text-slate-600 space-y-0.5 text-[11px]">
+              <!-- Rubric only visible for Teacher -->
+              <details class="teacher-rubric text-xs bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200 hidden">
+                <summary class="font-bold text-emerald-900 cursor-pointer flex items-center gap-1">
+                  <span>📋</span> Rubric Chấm Chuẩn (Dành cho Giáo viên)
+                </summary>
+                <div class="mt-1.5 text-slate-700 space-y-0.5 text-[11px]">
                   <div>• Đảm bảo lá cây nhận đủ ánh sáng, không che khuất nhau: <b>1.0đ</b></div>
                   <div>• Lưu thông không khí cung cấp đầy đủ nồng độ CO₂: <b>1.0đ</b></div>
                   <div>• Đủ diện tích rễ hút nước và muối khoáng: <b>0.5đ</b></div>
@@ -985,19 +993,23 @@
             <div class="card-soft p-5 rounded-3xl space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">Câu 3 Tự Luận</span>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <span>Điểm:</span>
+                <!-- Teacher only score input -->
+                <div class="teacher-score-ctrl flex items-center gap-1.5 text-xs font-bold text-slate-700 hidden">
+                  <span>Chấm điểm:</span>
                   <input type="number" id="score-essay-3" min="0" max="2.5" step="0.25" value="0" onchange="calculateDetailedScores()"
                     class="w-16 px-2 py-1 rounded-lg border border-slate-300 font-mono text-center text-xs font-bold text-emerald-800 bg-white">
                   <span>/2.5đ</span>
                 </div>
               </div>
               <p class="text-xs font-bold text-slate-800">Giải thích tại sao cây lá tía/đỏ vẫn thực hiện quang hợp bình thường?</p>
-              <textarea id="ans-essay-3" rows="2" placeholder="Nhập câu trả lời của em tại đây..." 
+              <textarea id="ans-essay-3" rows="3" placeholder="Nhập câu trả lời của em tại đây..." 
                 class="w-full p-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
-              <details class="text-xs bg-slate-50 p-2.5 rounded-xl border">
-                <summary class="font-bold text-emerald-800 cursor-pointer">Xem Rubric chấm chuẩn</summary>
-                <div class="mt-1 text-slate-600 space-y-0.5 text-[11px]">
+              <!-- Rubric only visible for Teacher -->
+              <details class="teacher-rubric text-xs bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200 hidden">
+                <summary class="font-bold text-emerald-900 cursor-pointer flex items-center gap-1">
+                  <span>📋</span> Rubric Chấm Chuẩn (Dành cho Giáo viên)
+                </summary>
+                <div class="mt-1.5 text-slate-700 space-y-0.5 text-[11px]">
                   <div>• Cây vẫn có diệp lục nhưng bị sắc tố đỏ (Anthocyanin) che lấp: <b>1.5đ</b></div>
                   <div>• Đun trong cồn sôi rửa hết đỏ sẽ thấy màu xanh diệp lục, thử Iodine đổi xanh tím: <b>1.0đ</b></div>
                 </div>
@@ -1007,19 +1019,23 @@
             <div class="card-soft p-5 rounded-3xl space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">Câu 4 Tự Luận</span>
-                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <span>Điểm:</span>
+                <!-- Teacher only score input -->
+                <div class="teacher-score-ctrl flex items-center gap-1.5 text-xs font-bold text-slate-700 hidden">
+                  <span>Chấm điểm:</span>
                   <input type="number" id="score-essay-4" min="0" max="2.5" step="0.25" value="0" onchange="calculateDetailedScores()"
                     class="w-16 px-2 py-1 rounded-lg border border-slate-300 font-mono text-center text-xs font-bold text-emerald-800 bg-white">
                   <span>/2.5đ</span>
                 </div>
               </div>
               <p class="text-xs font-bold text-slate-800">Ý nghĩa thực tiễn của quang hợp đối với vấn đề giảm hiệu ứng nhà kính?</p>
-              <textarea id="ans-essay-4" rows="2" placeholder="Nhập câu trả lời của em tại đây..." 
+              <textarea id="ans-essay-4" rows="3" placeholder="Nhập câu trả lời của em tại đây..." 
                 class="w-full p-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
-              <details class="text-xs bg-slate-50 p-2.5 rounded-xl border">
-                <summary class="font-bold text-emerald-800 cursor-pointer">Xem Rubric chấm chuẩn</summary>
-                <div class="mt-1 text-slate-600 space-y-0.5 text-[11px]">
+              <!-- Rubric only visible for Teacher -->
+              <details class="teacher-rubric text-xs bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200 hidden">
+                <summary class="font-bold text-emerald-900 cursor-pointer flex items-center gap-1">
+                  <span>📋</span> Rubric Chấm Chuẩn (Dành cho Giáo viên)
+                </summary>
+                <div class="mt-1.5 text-slate-700 space-y-0.5 text-[11px]">
                   <div>• Hấp thụ lượng khổng lồ CO₂ - khí nhà kính gây nóng Trái Đất: <b>1.0đ</b></div>
                   <div>• Giải phóng Oxygen và hơi nước điều hòa nhiệt độ khí quyển: <b>1.0đ</b></div>
                   <div>• Cản bụi lọc sạch không khí, chống xói mòn đất: <b>0.5đ</b></div>
@@ -1151,12 +1167,56 @@
                 <th class="p-3 text-center">Tổng Điểm</th>
                 <th class="p-3">Xếp loại</th>
                 <th class="p-3 text-center">Google Sheets</th>
+                <th class="p-3 text-center">Thao Tác</th>
               </tr>
             </thead>
             <tbody id="lms-result-tbody" class="divide-y divide-slate-100 font-medium">
               <!-- Populated by JS -->
             </tbody>
           </table>
+        </div>
+
+        <!-- MODAL CHẤM ĐIỂM TỰ LUẬN HỌC SINH DÀNH CHO GIÁO VIÊN / ADMIN -->
+        <div id="teacher-grade-modal" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+          <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto text-xs">
+            <div class="flex justify-between items-center border-b pb-3">
+              <div>
+                <h5 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                  <span>✍️</span> Chấm Điểm Tự Luận Bài Làm Của Học Sinh
+                </h5>
+                <p id="grade-modal-student-info" class="text-xs text-slate-600 font-medium mt-0.5">
+                  Học sinh: <b class="text-emerald-800">...</b> - Lớp: <b>...</b>
+                </p>
+              </div>
+              <button onclick="closeTeacherGradeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-bold flex items-center justify-center text-slate-600">✕</button>
+            </div>
+
+            <!-- 4 Questions Grading List -->
+            <div class="space-y-4" id="grade-modal-questions-container">
+              <!-- Dynamically populated or rendered -->
+            </div>
+
+            <!-- Summary & Actions -->
+            <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+              <div class="space-y-1 text-center sm:text-left">
+                <div class="text-xs text-slate-700">
+                  Điểm Trắc Nghiệm: <b id="grade-modal-mcq-score" class="text-sky-700">0.0</b>/10.0
+                  | Điểm Tự Luận: <b id="grade-modal-essay-score" class="text-purple-700">0.0</b>/10.0
+                </div>
+                <div class="text-sm font-black text-[#1b3a24]">
+                  ⭐ TỔNG ĐIỂM DỰ KIẾN: <span id="grade-modal-total-score" class="text-amber-700 bg-amber-100 px-2 py-0.5 rounded-lg text-base">0.0</span> / 10.0
+                </div>
+              </div>
+              <div class="flex gap-2 w-full sm:w-auto">
+                <button onclick="closeTeacherGradeModal()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-slate-300 bg-white font-bold text-slate-700 hover:bg-slate-50 transition">
+                  Hủy
+                </button>
+                <button onclick="saveAndSyncTeacherGrade()" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-[#1b3a24] hover:bg-[#142e1c] text-white font-bold shadow flex items-center justify-center gap-1.5 transition">
+                  <span>💾</span> Lưu & Đồng Bộ Lại Sheet
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1939,8 +1999,15 @@
             `⭐ TỔNG ĐIỂM: ${totalScore}/10.0 Điểm\n` +
             `• Xếp loại: ${rank}`);
 
+      // Lấy câu trả lời tự luận của học sinh
+      const ans1 = document.getElementById('ans-essay-1')?.value || "";
+      const ans2 = document.getElementById('ans-essay-2')?.value || "";
+      const ans3 = document.getElementById('ans-essay-3')?.value || "";
+      const ans4 = document.getElementById('ans-essay-4')?.value || "";
+
       // Google Sheets sync configuration with individual question scores
       const record = {
+        id: 'rec_' + Date.now(),
         time: new Date().toLocaleTimeString(),
         name: localStorage.getItem('std_name') || "Học sinh Lớp 7",
         class: localStorage.getItem('std_class') || "7A1",
@@ -1957,6 +2024,13 @@
         tl2: essayData.e2,
         tl3: essayData.e3,
         tl4: essayData.e4,
+        // Nội dung bài tự luận học sinh đã làm
+        essayAnswers: {
+          q1: ans1,
+          q2: ans2,
+          q3: ans3,
+          q4: ans4
+        },
         synced: false
       };
 
@@ -2188,10 +2262,57 @@
       const tb = document.getElementById('lms-result-tbody');
       if (!tb) return;
       let list = JSON.parse(localStorage.getItem('lms_data')) || [
-        { time: "08:15", name: "Nguyễn Văn An", class: "7A1", mcqScore: "9.5", mcqCorrect: 19, essayScore: "8.5", totalScore: "9.0", rank: "Xuất sắc", synced: true },
-        { time: "08:20", name: "Trần Thảo Linh", class: "7A1", mcqScore: "8.5", mcqCorrect: 17, essayScore: "9.0", totalScore: "8.8", rank: "Xuất sắc", synced: true }
+        { 
+          id: "rec_1",
+          time: "08:15", 
+          name: "Nguyễn Văn An", 
+          class: "7A1", 
+          mcqScore: "9.5", 
+          mcqCorrect: 19, 
+          essayScore: "8.5", 
+          totalScore: "9.0", 
+          rank: "Xuất sắc", 
+          tl1: 2.0, tl2: 2.0, tl3: 2.5, tl4: 2.0,
+          c1:0.5, c2:0.5, c3:0.5, c4:0.5, c5:0.5, c6:0.5, c7:0.5, c8:0.5, c9:0.5, c10:0.5,
+          c11:0.5, c12:0.5, c13:0.5, c14:0.5, c15:0.5, c16:0.5, c17:0.5, c18:0.5, c19:0.5, c20:0,
+          essayAnswers: {
+            q1: "Phiến lá bản dẹt, diện tích bề mặt lớn giúp thu nhận tối đa ánh sáng mặt trời; mô giậu chứa nhiều lục lạp phân bố sát mặt trên; các lá mọc so le nhau.",
+            q2: "Trồng đúng mật độ để lá không che khuất nhau đón đủ ánh sáng, không khí lưu thông đủ CO2 và rễ có đủ không gian hút nước và khoáng.",
+            q3: "Cây lá tía vẫn chứa sắc tố quang hợp diệp lục (chlorophyll), nhưng bị sắc tố đỏ anthocyanin che khuất đi.",
+            q4: "Quang hợp hấp thụ lượng lớn CO2 giúp giảm nhiệt độ toàn cầu, nhả khí Oxygen trong lành và điều hòa khí hậu."
+          },
+          synced: true 
+        },
+        { 
+          id: "rec_2",
+          time: "08:20", 
+          name: "Trần Thảo Linh", 
+          class: "7A1", 
+          mcqScore: "8.5", 
+          mcqCorrect: 17, 
+          essayScore: "9.0", 
+          totalScore: "8.8", 
+          rank: "Xuất sắc", 
+          tl1: 2.5, tl2: 2.0, tl3: 2.0, tl4: 2.5,
+          c1:0.5, c2:0.5, c3:0.5, c4:0.5, c5:0.5, c6:0.5, c7:0.5, c8:0.5, c9:0.5, c10:0.5,
+          c11:0.5, c12:0.5, c13:0.5, c14:0, c15:0.5, c16:0.5, c17:0, c18:0.5, c19:0.5, c20:0,
+          essayAnswers: {
+            q1: "Lá có diện tích lớn đón ánh sáng, mô giậu nhiều diệp lục, xếp so le trên cành cây.",
+            q2: "Đảm bảo cây nhận đủ ánh sáng mặt trời, lưu thông CO2 và diện tích rễ hấp thu dinh dưỡng tối ưu.",
+            q3: "Cây vẫn có chất diệp lục bình thường nhưng bị che lấp bởi màu đỏ anthocyanin.",
+            q4: "Giảm CO2 nhà kính, sản sinh O2 duy trì sự sống cho con người và động vật."
+          },
+          synced: true 
+        }
       ];
-      tb.innerHTML = list.map(r => `
+
+      // Đảm bảo mỗi bản ghi có id hợp lệ
+      list.forEach((r, idx) => {
+        if (!r.id) r.id = 'rec_' + (Date.now() - idx * 1000);
+      });
+      localStorage.setItem('lms_data', JSON.stringify(list));
+
+      tb.innerHTML = list.map((r, index) => `
         <tr class="hover:bg-slate-50 transition border-b border-slate-100">
           <td class="p-3 font-mono text-slate-500 text-xs">${r.time}</td>
           <td class="p-3 font-bold text-slate-900">${r.name}</td>
@@ -2219,8 +2340,181 @@
               <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Đã gửi
             </span>
           </td>
+          <td class="p-3 text-center">
+            <button onclick="openTeacherGradeModal(${index})" 
+              class="px-3 py-1.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs shadow flex items-center justify-center gap-1 mx-auto transition">
+              <span>✍️</span> Chấm Điểm
+            </button>
+          </td>
         </tr>
       `).join('');
+    }
+
+    // Modal Chấm Điểm Tự Luận của Giáo viên
+    let activeGradingIndex = null;
+
+    const ESSAY_QUESTIONS_META = [
+      {
+        id: 1,
+        title: "Câu 1: Mối quan hệ giữa cấu tạo hình thái phiến lá với khả năng hấp thụ ánh sáng?",
+        rubrics: [
+          "Diện tích bề mặt lớn, bản dẹt đón tối đa bức xạ: 1.0đ",
+          "Mô giậu xếp sít nhau, tập trung mật độ lục lạp cao: 1.0đ",
+          "Các lá mọc so le trên cành không che khuất nhau: 0.5đ"
+        ]
+      },
+      {
+        id: 2,
+        title: "Câu 2: Tại sao khi trồng cây nông nghiệp cần chú ý đến mật độ và khoảng cách?",
+        rubrics: [
+          "Đảm bảo lá cây nhận đủ ánh sáng, không che khuất nhau: 1.0đ",
+          "Lưu thông không khí cung cấp đầy đủ nồng độ CO₂: 1.0đ",
+          "Đủ diện tích rễ hút nước và muối khoáng: 0.5đ"
+        ]
+      },
+      {
+        id: 3,
+        title: "Câu 3: Giải thích tại sao cây lá tía/đỏ vẫn thực hiện quang hợp bình thường?",
+        rubrics: [
+          "Cây vẫn có diệp lục nhưng bị sắc tố đỏ (Anthocyanin) che lấp: 1.5đ",
+          "Đun trong cồn sôi rửa hết đỏ sẽ thấy màu xanh diệp lục, thử Iodine đổi xanh tím: 1.0đ"
+        ]
+      },
+      {
+        id: 4,
+        title: "Câu 4: Ý nghĩa thực tiễn của quang hợp đối với vấn đề giảm hiệu ứng nhà kính?",
+        rubrics: [
+          "Hấp thụ lượng khổng lồ CO₂ - khí nhà kính gây nóng Trái Đất: 1.0đ",
+          "Giải phóng Oxygen và hơi nước điều hòa nhiệt độ khí quyển: 1.0đ",
+          "Cản bụi lọc sạch không khí, chống xói mòn đất: 0.5đ"
+        ]
+      }
+    ];
+
+    function openTeacherGradeModal(index) {
+      let list = JSON.parse(localStorage.getItem('lms_data')) || [];
+      const item = list[index];
+      if (!item) return;
+
+      activeGradingIndex = index;
+      playTone(650);
+
+      // Điền thông tin học sinh
+      document.getElementById('grade-modal-student-info').innerHTML = 
+        `Học sinh: <b class="text-emerald-800 text-sm">${item.name}</b> - Lớp: <b class="text-slate-800">${item.class}</b> - Thời gian nộp: <span class="font-mono text-slate-500">${item.time}</span>`;
+
+      // Render danh sách 4 câu hỏi, câu trả lời của học sinh, Rubric và ô cho giáo viên chấm
+      const container = document.getElementById('grade-modal-questions-container');
+      const answers = item.essayAnswers || {};
+
+      container.innerHTML = ESSAY_QUESTIONS_META.map((meta, qIdx) => {
+        const studentAns = answers['q' + meta.id] || '(Học sinh chưa nhập câu trả lời)';
+        const curScore = item['tl' + meta.id] !== undefined ? item['tl' + meta.id] : 0;
+        return `
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+              <span class="font-extrabold text-slate-900 text-xs sm:text-sm text-emerald-950">${meta.title}</span>
+              <div class="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-purple-200 shadow-sm">
+                <span class="font-bold text-purple-900 text-xs">Giáo viên cho điểm:</span>
+                <input type="number" id="grade-input-q${meta.id}" min="0" max="2.5" step="0.25" value="${curScore}" 
+                  oninput="updateModalTotalScorePreview()"
+                  class="w-16 px-2 py-1 rounded-lg border border-slate-300 font-mono text-center font-bold text-xs text-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-purple-50/50">
+                <span class="font-bold text-xs text-slate-500">/ 2.5đ</span>
+              </div>
+            </div>
+
+            <!-- Bài làm của học sinh -->
+            <div>
+              <span class="text-[11px] font-bold text-slate-500 block mb-1">📝 Bài làm của học sinh:</span>
+              <div class="p-3 bg-white rounded-xl border border-slate-200 text-xs text-slate-800 font-normal leading-relaxed whitespace-pre-wrap">
+                ${studentAns}
+              </div>
+            </div>
+
+            <!-- Rubric chuẩn đối chiếu -->
+            <details class="text-[11px] bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200" open>
+              <summary class="font-bold text-emerald-900 cursor-pointer flex items-center gap-1">
+                <span>📋</span> Rubric Chấm Chuẩn
+              </summary>
+              <div class="mt-1 text-slate-700 space-y-0.5 pl-2">
+                ${meta.rubrics.map(r => `<div>• ${r}</div>`).join('')}
+              </div>
+            </details>
+          </div>
+        `;
+      }).join('');
+
+      updateModalTotalScorePreview();
+      document.getElementById('teacher-grade-modal').classList.remove('hidden');
+    }
+
+    function updateModalTotalScorePreview() {
+      if (activeGradingIndex === null) return;
+      let list = JSON.parse(localStorage.getItem('lms_data')) || [];
+      const item = list[activeGradingIndex];
+      if (!item) return;
+
+      const q1 = parseFloat(document.getElementById('grade-input-q1')?.value) || 0;
+      const q2 = parseFloat(document.getElementById('grade-input-q2')?.value) || 0;
+      const q3 = parseFloat(document.getElementById('grade-input-q3')?.value) || 0;
+      const q4 = parseFloat(document.getElementById('grade-input-q4')?.value) || 0;
+
+      const essayScore = (q1 + q2 + q3 + q4).toFixed(1);
+      const mcqScore = parseFloat(item.mcqScore || 0).toFixed(1);
+      const totalScore = ((parseFloat(mcqScore) + parseFloat(essayScore)) / 2).toFixed(1);
+
+      document.getElementById('grade-modal-mcq-score').innerText = mcqScore;
+      document.getElementById('grade-modal-essay-score').innerText = essayScore;
+      document.getElementById('grade-modal-total-score').innerText = totalScore;
+    }
+
+    function closeTeacherGradeModal() {
+      document.getElementById('teacher-grade-modal').classList.add('hidden');
+      activeGradingIndex = null;
+    }
+
+    async function saveAndSyncTeacherGrade() {
+      if (activeGradingIndex === null) return;
+      let list = JSON.parse(localStorage.getItem('lms_data')) || [];
+      const item = list[activeGradingIndex];
+      if (!item) return;
+
+      const q1 = parseFloat(document.getElementById('grade-input-q1')?.value) || 0;
+      const q2 = parseFloat(document.getElementById('grade-input-q2')?.value) || 0;
+      const q3 = parseFloat(document.getElementById('grade-input-q3')?.value) || 0;
+      const q4 = parseFloat(document.getElementById('grade-input-q4')?.value) || 0;
+
+      const essayScore = (q1 + q2 + q3 + q4).toFixed(1);
+      const mcqScore = parseFloat(item.mcqScore || 0).toFixed(1);
+      const totalScore = ((parseFloat(mcqScore) + parseFloat(essayScore)) / 2).toFixed(1);
+      const rank = totalScore >= 8.0 ? 'Xuất sắc' : totalScore >= 6.5 ? 'Khá' : totalScore >= 5.0 ? 'Đạt' : 'Cần cố gắng';
+
+      // Cập nhật record
+      item.tl1 = q1;
+      item.tl2 = q2;
+      item.tl3 = q3;
+      item.tl4 = q4;
+      item.essayScore = essayScore;
+      item.totalScore = totalScore;
+      item.score = totalScore;
+      item.rank = rank;
+      item.synced = false;
+
+      // Lưu LocalStorage
+      list[activeGradingIndex] = item;
+      localStorage.setItem('lms_data', JSON.stringify(list));
+
+      playTone(850, 0.2);
+      confetti({ particleCount: 70 });
+
+      // Đóng modal và render lại bảng
+      closeTeacherGradeModal();
+      renderLMSTable();
+
+      // Đồng bộ lại bản ghi đã chấm lên Google Sheets bằng Apps Script
+      showSyncMsg(`⏳ Đang đồng bộ lại điểm mới của học sinh "${item.name}" lên Google Sheets...`, "text-amber-800");
+      await syncResultToAppsScript(item);
+      alert(`✅ Đã lưu kết quả chấm tự luận của học sinh "${item.name}"!\n• Điểm Tự Luận: ${essayScore}/10.0\n• Tổng Điểm: ${totalScore}/10.0\nĐã đồng bộ lên Google Sheets thành công!`);
     }
 
     function addMockStudentResult() {
@@ -2231,13 +2525,20 @@
       const essS = (7.5 + Math.random() * 2.5).toFixed(1);
       const totS = ((parseFloat(mcqS) + parseFloat(essS)) / 2).toFixed(1);
       const r = {
+        id: 'rec_' + Date.now(),
         time: new Date().toLocaleTimeString(),
         name: names[Math.floor(Math.random() * names.length)],
         class: "7A2",
         mcqScore: mcqS,
         mcqCorrect: mcqC,
         essayScore: essS,
-        essayBreakdown: "C1:2.0|C2:2.0|C3:2.5|C4:2.0",
+        tl1: 2.0, tl2: 2.0, tl3: 2.0, tl4: 2.0,
+        essayAnswers: {
+          q1: "Lá dẹt diện tích rộng đón ánh sáng, mô giậu chứa nhiều lục lạp phân bố bên trên.",
+          q2: "Trồng đúng khoảng cách giúp cây đón đủ ánh sáng, đủ CO2 và diện tích hút dinh dưỡng.",
+          q3: "Cây lá đỏ vẫn có diệp lục tham gia quang hợp nhưng bị sắc tố đỏ anthocyanin che lấp.",
+          q4: "Quang hợp giúp hấp thụ lượng lớn khí nhà kính CO2, thải O2 cân bằng sinh thái."
+        },
         totalScore: totS,
         score: totS,
         correctCount: mcqC,
@@ -2530,6 +2831,15 @@ function doGet(e) {
         // Teacher has full access
         if (navGhiChu) navGhiChu.classList.remove('hidden');
         if (navCaiDat) navCaiDat.classList.remove('hidden');
+
+        // Hiện Rubric chấm chuẩn và ô nhập điểm trên Phần Tự Luận dành cho Giáo viên
+        document.querySelectorAll('.teacher-rubric').forEach(el => el.classList.remove('hidden'));
+        document.querySelectorAll('.teacher-score-ctrl').forEach(el => el.classList.remove('hidden'));
+        const essayBadge = document.getElementById('display-essay-badge');
+        if (essayBadge) essayBadge.classList.remove('hidden');
+        const subtitle = document.getElementById('essay-subtitle-text');
+        if (subtitle) subtitle.innerText = "Giáo viên/Admin xem câu trả lời của học sinh, đối chiếu Rubric chuẩn để nhập điểm từng câu.";
+
         setTimeout(() => {
           switchSidebarTab('ghi-chu');
         }, 100);
@@ -2539,6 +2849,15 @@ function doGet(e) {
         // Student: STRICTLY HIDE "Ghi chú" and "Cài đặt"
         if (navGhiChu) navGhiChu.classList.add('hidden');
         if (navCaiDat) navCaiDat.classList.add('hidden');
+
+        // Học sinh: TUYỆT ĐỐI ẨN "Xem Rubric chấm chuẩn" và ô nhập điểm tự luận
+        document.querySelectorAll('.teacher-rubric').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.teacher-score-ctrl').forEach(el => el.classList.add('hidden'));
+        const essayBadge = document.getElementById('display-essay-badge');
+        if (essayBadge) essayBadge.classList.add('hidden');
+        const subtitle = document.getElementById('essay-subtitle-text');
+        if (subtitle) subtitle.innerText = "Học sinh gõ câu trả lời vào các ô bên dưới và bấm 'Nộp Bài Chấm Điểm' để giáo viên chấm.";
+
         // Ensure student lands on Hoạt động
         switchSidebarTab('hoat-dong');
       }
