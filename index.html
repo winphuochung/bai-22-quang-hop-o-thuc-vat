@@ -108,7 +108,125 @@
     }
   </style>
 </head>
-<body class="flex min-h-screen bg-[#f7faf7] selection:bg-emerald-500 selection:text-white">
+<body class="min-h-screen bg-[#f7faf7] selection:bg-emerald-500 selection:text-white font-sans antialiased">
+
+  <!-- ================= AUTH LOGIN SCREEN (MÀN HÌNH ĐĂNG NHẬP 3D PIXAR) ================= -->
+  <div id="login-modal-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-[#064e3b] via-[#022c22] to-[#0f172a] overflow-y-auto">
+    <!-- Pixar Floating Particles Background -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+      <div class="absolute top-10 left-10 w-48 h-48 rounded-full bg-emerald-500/20 blur-3xl animate-pulse"></div>
+      <div class="absolute bottom-10 right-10 w-72 h-72 rounded-full bg-amber-400/20 blur-3xl animate-pulse"></div>
+      <div class="absolute top-1/2 left-1/3 w-60 h-60 rounded-full bg-cyan-400/15 blur-3xl"></div>
+    </div>
+
+    <!-- Login Card Container -->
+    <div class="relative w-full max-w-md bg-white/95 backdrop-blur-xl rounded-[36px] shadow-2xl border border-white/50 p-6 sm:p-8 z-10 space-y-6">
+      
+      <!-- Brand Mascot Header -->
+      <div class="text-center space-y-2">
+        <div class="relative inline-flex items-center justify-center">
+          <!-- 3D Pixar Sprout Badge -->
+          <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 via-green-500 to-emerald-800 shadow-xl shadow-emerald-900/30 flex items-center justify-center text-4xl border-2 border-emerald-200 hover:rotate-6 transition duration-300">
+            🌱
+          </div>
+          <span class="absolute -bottom-2 px-3 py-0.5 rounded-full bg-amber-400 text-slate-950 font-black text-[11px] shadow">
+            Bài 22 KHTN 7
+          </span>
+        </div>
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight pt-2">Quang Hợp Ở Thực Vật</h2>
+        <p class="text-xs text-slate-600 font-medium">Hệ Thống Học Tập & Đánh Giá Tương Tác 3D Pixar</p>
+      </div>
+
+      <!-- Role Selection Tabs -->
+      <div class="flex p-1.5 bg-slate-100 rounded-2xl border border-slate-200">
+        <button type="button" onclick="switchLoginRole('student')" id="btn-role-student"
+          class="flex-1 py-2.5 rounded-xl font-bold text-xs transition-all shadow bg-white text-emerald-900 flex items-center justify-center gap-1.5">
+          <span>🎒</span> Học Sinh
+        </button>
+        <button type="button" onclick="switchLoginRole('teacher')" id="btn-role-teacher"
+          class="flex-1 py-2.5 rounded-xl font-bold text-xs transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+          <span>👩‍🏫</span> Giáo Viên
+        </button>
+      </div>
+
+      <!-- Student Form -->
+      <form id="form-login-student" onsubmit="handleStudentLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            Họ và Tên học sinh <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">👤</span>
+            <input type="text" id="login-std-name" required placeholder="Ví dụ: Nguyễn Văn An"
+              class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition shadow-inner">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            Lớp học <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">🏫</span>
+            <input type="text" id="login-std-class" required placeholder="Ví dụ: 7A1, 7A2, 7B..."
+              class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition shadow-inner">
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-[#1b3a24] hover:from-emerald-500 hover:to-[#142e1c] text-white font-extrabold text-sm shadow-lg shadow-emerald-950/20 hover:scale-[1.02] active:scale-[0.98] transition flex items-center justify-center gap-2">
+          <span>🚀</span> Vào Học Ngay
+        </button>
+      </form>
+
+      <!-- Teacher Form (Hidden by default) -->
+      <form id="form-login-teacher" onsubmit="handleTeacherLogin(event)" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+            Họ và Tên Giáo Viên <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">👩‍🏫</span>
+            <input type="text" id="login-tch-name" required placeholder="Ví dụ: Cô Trần Thu Hà"
+              class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition shadow-inner">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5 flex justify-between items-center">
+            <span>Mật khẩu quản trị <span class="text-rose-500">*</span></span>
+            <span class="text-[10px] text-slate-400 font-normal">Mật khẩu mặc định: 123456</span>
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">🔒</span>
+            <input type="password" id="login-tch-pass" required placeholder="Nhập mật khẩu (1,2,3,4,5,6)"
+              class="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-semibold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition shadow-inner">
+            <button type="button" onclick="togglePassVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 text-xs font-bold">
+              <span id="pass-eye-icon">👁️</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="teacher-login-error" class="text-xs font-bold text-rose-600 text-center hidden p-2 bg-rose-50 rounded-xl border border-rose-200">
+          ⚠️ Mật khẩu không chính xác! Vui lòng nhập 123456.
+        </div>
+
+        <button type="submit"
+          class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-800 to-slate-900 hover:from-emerald-700 hover:to-slate-800 text-white font-extrabold text-sm shadow-lg shadow-emerald-950/20 hover:scale-[1.02] active:scale-[0.98] transition flex items-center justify-center gap-2">
+          <span>🔐</span> Đăng Nhập Quản Trị
+        </button>
+      </form>
+
+      <!-- Footer Info -->
+      <div class="pt-2 text-center text-[11px] text-slate-600 border-t border-slate-100 flex items-center justify-center gap-1.5">
+        <span>🌱</span> Sách Giáo Khoa Khoa Học Tự Nhiên 7 • Bài 22
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MAIN APP ROOT WRAPPER (HIDDEN UNTIL LOGIN) ================= -->
+  <div id="app-root" class="flex min-h-screen w-full hidden">
 
   <!-- ================= LEFT SIDEBAR (DARK FOREST GREEN) ================= -->
   <aside class="sidebar-forest w-64 md:w-72 flex-shrink-0 flex flex-col justify-between py-6 px-4 text-emerald-100 z-30 shadow-2xl min-h-screen sticky top-0 h-screen overflow-y-auto">
@@ -204,9 +322,15 @@
 
         <!-- Student/Teacher Badge -->
         <div id="user-display-pill" class="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200">
-          <span>🎓</span>
+          <span id="user-display-icon">🎓</span>
           <span id="user-display-name">Học sinh Lớp 7</span>
         </div>
+
+        <!-- Logout button -->
+        <button onclick="handleLogout()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 font-bold text-xs transition flex items-center gap-1.5" title="Đăng xuất">
+          <span>🚪</span>
+          <span class="hidden sm:inline">Đăng xuất</span>
+        </button>
       </div>
     </header>
 
@@ -903,6 +1027,7 @@
     </div>
 
   </main>
+  </div> <!-- /#app-root -->
 
   <!-- ================= JAVASCRIPT CONTROLLER ================= -->
   <script>
@@ -1911,15 +2036,151 @@
       switchSidebarTab('hoat-dong');
     }
 
+    // ================= AUTHENTICATION & LOGIN CONTROLLER =================
+    let currentUserRole = null; // 'student' or 'teacher'
+
+    function switchLoginRole(role) {
+      playTone(500);
+      const btnStd = document.getElementById('btn-role-student');
+      const btnTch = document.getElementById('btn-role-teacher');
+      const formStd = document.getElementById('form-login-student');
+      const formTch = document.getElementById('form-login-teacher');
+      const errBox = document.getElementById('teacher-login-error');
+      if (errBox) errBox.classList.add('hidden');
+
+      if (role === 'student') {
+        btnStd.className = "flex-1 py-2.5 rounded-xl font-bold text-xs transition-all shadow bg-white text-emerald-900 flex items-center justify-center gap-1.5";
+        btnTch.className = "flex-1 py-2.5 rounded-xl font-bold text-xs transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5";
+        formStd.classList.remove('hidden');
+        formTch.classList.add('hidden');
+      } else {
+        btnTch.className = "flex-1 py-2.5 rounded-xl font-bold text-xs transition-all shadow bg-white text-emerald-900 flex items-center justify-center gap-1.5";
+        btnStd.className = "flex-1 py-2.5 rounded-xl font-bold text-xs transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5";
+        formTch.classList.remove('hidden');
+        formStd.classList.add('hidden');
+      }
+    }
+
+    function togglePassVisibility() {
+      const passInp = document.getElementById('login-tch-pass');
+      const eyeIcon = document.getElementById('pass-eye-icon');
+      if (passInp.type === 'password') {
+        passInp.type = 'text';
+        eyeIcon.innerText = '🙈';
+      } else {
+        passInp.type = 'password';
+        eyeIcon.innerText = '👁️';
+      }
+    }
+
+    function handleStudentLogin(e) {
+      e.preventDefault();
+      const name = document.getElementById('login-std-name').value.trim();
+      const sClass = document.getElementById('login-std-class').value.trim();
+      if (!name || !sClass) {
+        alert("Vui lòng nhập đầy đủ Họ và tên cùng Lớp học!");
+        return;
+      }
+
+      playTone(850, 0.2);
+      confetti({ particleCount: 70, spread: 60 });
+
+      // Save user session
+      currentUserRole = 'student';
+      sessionStorage.setItem('auth_role', 'student');
+      sessionStorage.setItem('auth_name', name);
+      sessionStorage.setItem('auth_class', sClass);
+      localStorage.setItem('std_name', name);
+      localStorage.setItem('std_class', sClass);
+
+      applyLoggedInState();
+    }
+
+    function handleTeacherLogin(e) {
+      e.preventDefault();
+      const name = document.getElementById('login-tch-name').value.trim();
+      const pass = document.getElementById('login-tch-pass').value.trim();
+      const errBox = document.getElementById('teacher-login-error');
+
+      // Check teacher password: 123456 or 1,2,3,4,5,6
+      const validPass = (pass === '123456' || pass === '1,2,3,4,5,6');
+      if (!validPass) {
+        playTone(280, 0.2);
+        if (errBox) {
+          errBox.classList.remove('hidden');
+          errBox.innerText = "⚠️ Mật khẩu không chính xác! Vui lòng nhập 123456.";
+        }
+        return;
+      }
+
+      playTone(920, 0.25);
+      confetti({ particleCount: 90, spread: 70 });
+
+      // Save teacher session
+      currentUserRole = 'teacher';
+      sessionStorage.setItem('auth_role', 'teacher');
+      sessionStorage.setItem('auth_name', name || "Giáo viên");
+      sessionStorage.setItem('auth_class', "Ban Giám Khảo / Admin");
+
+      applyLoggedInState();
+    }
+
+    function applyLoggedInState() {
+      const role = sessionStorage.getItem('auth_role');
+      const name = sessionStorage.getItem('auth_name');
+      const sClass = sessionStorage.getItem('auth_class');
+
+      if (!role) {
+        // Show login modal, hide app
+        document.getElementById('login-modal-overlay').classList.remove('hidden');
+        document.getElementById('app-root').classList.add('hidden');
+        return;
+      }
+
+      // Hide login, reveal main app
+      document.getElementById('login-modal-overlay').classList.add('hidden');
+      document.getElementById('app-root').classList.remove('hidden');
+
+      // Update badge
+      const icon = document.getElementById('user-display-icon');
+      const nameEl = document.getElementById('user-display-name');
+      if (role === 'teacher') {
+        if (icon) icon.innerText = '👩‍🏫';
+        if (nameEl) nameEl.innerText = `${name} (Giáo viên)`;
+        // If teacher, show teacher dashboard first or notification
+        setTimeout(() => {
+          switchSidebarTab('ghi-chu');
+        }, 100);
+      } else {
+        if (icon) icon.innerText = '🎒';
+        if (nameEl) nameEl.innerText = `${name} (${sClass})`;
+      }
+    }
+
+    function handleLogout() {
+      if (confirm("Em/Thầy cô có chắc chắn muốn đăng xuất không?")) {
+        playTone(400);
+        sessionStorage.removeItem('auth_role');
+        sessionStorage.removeItem('auth_name');
+        sessionStorage.removeItem('auth_class');
+        // Reset form inputs
+        document.getElementById('login-tch-pass').value = '';
+        const errBox = document.getElementById('teacher-login-error');
+        if (errBox) errBox.classList.add('hidden');
+
+        document.getElementById('app-root').classList.add('hidden');
+        document.getElementById('login-modal-overlay').classList.remove('hidden');
+      }
+    }
+
     // Init Page
     window.addEventListener('DOMContentLoaded', () => {
       renderExamQuiz();
       renderLMSTable();
-      const savedName = localStorage.getItem('std_name');
-      const savedClass = localStorage.getItem('std_class');
-      if (savedName) {
-        document.getElementById('user-display-name').innerText = `${savedName} (${savedClass || '7A1'})`;
-      }
+
+      // Check current login session
+      applyLoggedInState();
+
       setTimeout(() => {
         if (window.renderMathInElement) {
           renderMathInElement(document.body, {
