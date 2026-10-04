@@ -261,19 +261,57 @@
               <path d="M 315 150 Q 330 165 350 175" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#arrowLeafGreen)"/>
             </svg>
 
-            <!-- Illustrated Plant Tree in Center -->
-            <div class="relative flex flex-col items-center breeze-leaf">
-              <!-- Sunlight rays top -->
-              <div class="text-amber-400 text-3xl mb-1 filter drop-shadow">☀️</div>
-
-              <!-- Leafy Plant Body -->
-              <div class="w-32 h-36 rounded-full bg-gradient-to-b from-emerald-500 via-green-600 to-emerald-700 shadow-xl flex items-center justify-center text-6xl text-white border-2 border-emerald-300">
-                🌿
+            <!-- Illustrated Plant Tree in Center with Pixar 3D Character Styling -->
+            <div class="relative flex flex-col items-center breeze-leaf cursor-pointer hover:scale-105 transition duration-300">
+              <!-- 3D Pixar Animated Sun Mascot -->
+              <div class="relative flex items-center justify-center mb-1">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-amber-500 shadow-lg shadow-amber-400/50 flex items-center justify-center border-2 border-yellow-100 animate-pulse">
+                  <span class="text-xl">☀️</span>
+                </div>
+                <div class="absolute -top-1 -right-1 px-1.5 py-0.2 bg-amber-400 text-slate-950 font-black text-[9px] rounded-full shadow">
+                  Sunny
+                </div>
               </div>
 
-              <!-- Root in soil -->
-              <div class="text-3xl text-amber-900 mt-1">🌱</div>
-              <div class="w-36 h-3 bg-amber-950/20 rounded-full blur-[2px] mt-0.5"></div>
+              <!-- 3D Glossy Pixar Leafy Mascot Character -->
+              <div class="relative w-36 h-40 rounded-[40px] bg-gradient-to-b from-emerald-400 via-emerald-600 to-emerald-900 shadow-2xl flex flex-col items-center justify-center border-4 border-emerald-200/80 p-2 overflow-hidden">
+                <!-- Glossy shine reflection top -->
+                <div class="absolute top-1 left-3 right-3 h-10 rounded-full bg-gradient-to-b from-white/40 to-transparent pointer-events-none"></div>
+
+                <!-- Cute Pixar Face -->
+                <div class="flex items-center gap-4 my-auto z-10">
+                  <!-- Left Eye -->
+                  <div class="w-5 h-7 rounded-full bg-slate-900 flex items-center justify-center relative shadow-inner">
+                    <div class="w-2.5 h-3.5 rounded-full bg-white absolute top-1 left-1"></div>
+                    <div class="w-1 h-1 rounded-full bg-white absolute bottom-1.5 right-1"></div>
+                  </div>
+                  <!-- Right Eye -->
+                  <div class="w-5 h-7 rounded-full bg-slate-900 flex items-center justify-center relative shadow-inner">
+                    <div class="w-2.5 h-3.5 rounded-full bg-white absolute top-1 left-1"></div>
+                    <div class="w-1 h-1 rounded-full bg-white absolute bottom-1.5 right-1"></div>
+                  </div>
+                </div>
+
+                <!-- Rosy Cheeks & Smile -->
+                <div class="flex items-center gap-7 -mt-2 mb-1 z-10">
+                  <div class="w-3.5 h-2 rounded-full bg-rose-400/70 blur-[1px]"></div>
+                  <div class="w-3.5 h-2 rounded-full bg-rose-400/70 blur-[1px]"></div>
+                </div>
+                <div class="w-6 h-3 border-b-2 border-slate-900 rounded-full -mt-2 mb-2 z-10"></div>
+
+                <!-- Leaf veins watermark -->
+                <div class="text-[10px] font-black text-emerald-200 uppercase tracking-widest z-10 bg-emerald-950/40 px-2 py-0.5 rounded-full">
+                  🍃 LỤC LẠP 3D
+                </div>
+              </div>
+
+              <!-- 3D Pixar Soil & Root Base -->
+              <div class="relative flex items-center justify-center -mt-2">
+                <div class="px-4 py-1 rounded-full bg-gradient-to-r from-amber-900 via-amber-800 to-amber-950 border border-amber-600/50 shadow-md text-[11px] font-bold text-amber-200 flex items-center gap-1.5">
+                  <span>🌱</span> Rễ hút nước H₂O
+                </div>
+              </div>
+              <div class="w-44 h-3.5 bg-amber-950/25 rounded-full blur-[3px] mt-1"></div>
             </div>
 
             <!-- Top Left Floating Label: Khí carbonic (CO2) -->
@@ -614,7 +652,15 @@
               </span>
               <span class="text-xs font-bold text-emerald-800">Bấm thẻ để soi chi tiết</span>
             </div>
-            <h4 class="font-extrabold text-slate-900 text-lg mb-2">Giải Phẫu Bó Mạch & Bào Quan</h4>
+            <h4 class="font-extrabold text-slate-900 text-lg mb-2">Giải Phẫu Bó Mạch & Bào Quan 3D Pixar</h4>
+
+            <!-- Interactive 3D Pixar Anatomy Canvas -->
+            <div class="relative w-full h-36 rounded-2xl overflow-hidden border border-purple-300 shadow-inner bg-gradient-to-br from-[#1e1b4b] via-[#312e81] to-[#0f172a] mb-2">
+              <canvas id="pixar-exp3-canvas" class="w-full h-full"></canvas>
+              <div class="absolute top-2 left-2 px-2.5 py-0.5 rounded-full bg-purple-950/80 border border-purple-400/50 text-[10px] font-bold text-purple-200">
+                🧬 Lớp Cắt 3D Thời Gian Thực
+              </div>
+            </div>
 
             <!-- Interactive Hotspots Grid -->
             <div class="grid grid-cols-2 gap-2.5 text-xs">
@@ -935,6 +981,7 @@
       }
       if (subId === 1) initPixarExp1Canvas();
       if (subId === 2) initPixarExp2Canvas();
+      if (subId === 3) initPixarExp3Canvas();
     }
 
     // ================= 3D PIXAR CANVASES & SIMULATION CONTROLLER =================
@@ -1400,8 +1447,102 @@
       }
     };
 
+    // ================= EXP 3: 3D PIXAR ANATOMY CANVAS CONTROLLER =================
+    let exp3AnimId = null;
+    let exp3SelectedId = 1;
+
+    function initPixarExp3Canvas() {
+      const cv = document.getElementById('pixar-exp3-canvas');
+      if (!cv) return;
+      const rect = cv.parentElement.getBoundingClientRect();
+      cv.width = rect.width || 480;
+      cv.height = rect.height || 144;
+      const ctx = cv.getContext('2d');
+
+      if (exp3AnimId) cancelAnimationFrame(exp3AnimId);
+      let frame = 0;
+
+      function animateExp3() {
+        frame++;
+        ctx.clearRect(0, 0, cv.width, cv.height);
+
+        // 3D Cutaway block layers of leaf cross-section
+        const w = cv.width;
+        const h = cv.height;
+
+        // Layer 1: Upper Cuticle & Epidermis (Glossy glass-like bar)
+        ctx.fillStyle = exp3SelectedId === 2 ? '#fef08a' : '#a7f3d0';
+        ctx.fillRect(w * 0.08, h * 0.12, w * 0.84, 12);
+
+        // Layer 2: Palisade Mesophyll with Chloroplast dots (Mô giậu chứa lục lạp)
+        ctx.fillStyle = exp3SelectedId === 3 ? '#22c55e' : '#15803d';
+        ctx.fillRect(w * 0.08, h * 0.24, w * 0.84, 38);
+        // Chloroplast pills inside
+        ctx.fillStyle = '#86efac';
+        for (let x = w * 0.12; x < w * 0.88; x += 22) {
+          ctx.beginPath();
+          ctx.ellipse(x, h * 0.36 + Math.sin(frame * 0.04 + x) * 2, 7, 14, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Layer 3: Vein bundles (Gân lá & bó mạch)
+        const veinX = w * 0.5;
+        const veinY = h * 0.58;
+        // Xylem (Blue - Water)
+        ctx.fillStyle = exp3SelectedId === 1 ? '#38bdf8' : '#0284c7';
+        ctx.beginPath();
+        ctx.arc(veinX - 16, veinY, 14 + (exp3SelectedId === 1 ? Math.sin(frame * 0.1) * 2 : 0), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 9px monospace';
+        ctx.fillText('H₂O', veinX - 25, veinY + 3);
+
+        // Phloem (Purple - Sugar)
+        ctx.fillStyle = exp3SelectedId === 1 ? '#c084fc' : '#7e22ce';
+        ctx.beginPath();
+        ctx.arc(veinX + 16, veinY, 14 + (exp3SelectedId === 1 ? Math.sin(frame * 0.1) * 2 : 0), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 9px monospace';
+        ctx.fillText('ĐƯỜNG', veinX + 5, veinY + 3);
+
+        // Layer 4: Lower Epidermis with Stomata guard cells (Khí khổng)
+        ctx.fillStyle = exp3SelectedId === 4 ? '#f472b6' : '#6ee7b7';
+        ctx.fillRect(w * 0.08, h * 0.78, w * 0.84, 12);
+
+        // Stoma bean cells at bottom
+        const stomaX = w * 0.28;
+        const stomaY = h * 0.84;
+        const open = exp3SelectedId === 4 ? Math.sin(frame * 0.08) * 3 : 2;
+        ctx.fillStyle = '#065f46';
+        ctx.beginPath();
+        ctx.ellipse(stomaX - 8 - open, stomaY, 6, 9, -0.3, 0, Math.PI * 2); // left bean
+        ctx.ellipse(stomaX + 8 + open, stomaY, 6, 9, 0.3, 0, Math.PI * 2);  // right bean
+        ctx.fill();
+
+        // Glowing pointer for active hotspot
+        ctx.fillStyle = '#fbbf24';
+        let targetX = veinX;
+        let targetY = veinY;
+        if (exp3SelectedId === 1) { targetX = veinX; targetY = veinY; }
+        else if (exp3SelectedId === 2) { targetX = w * 0.5; targetY = h * 0.16; }
+        else if (exp3SelectedId === 3) { targetX = w * 0.7; targetY = h * 0.36; }
+        else if (exp3SelectedId === 4) { targetX = stomaX; targetY = stomaY; }
+
+        ctx.beginPath();
+        ctx.arc(targetX, targetY, 18 + Math.sin(frame * 0.1) * 3, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.8)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        exp3AnimId = requestAnimationFrame(animateExp3);
+      }
+      animateExp3();
+    }
+
     function selectAnatomyHotspot(id) {
       playTone(650 + id * 50);
+      exp3SelectedId = id;
       for (let i = 1; i <= 4; i++) {
         const btn = document.getElementById(`btn-hotspot-${i}`);
         if (!btn) continue;
@@ -1540,38 +1681,139 @@
       const cv = document.getElementById('mini-leafy-canvas');
       const ctx = cv.getContext('2d');
       let items = [];
+      let gameFrame = 0;
 
       function loop() {
         if (!miniRunning) return;
+        gameFrame++;
         ctx.clearRect(0, 0, cv.width, cv.height);
 
-        if (Math.random() < 0.1) {
-          items.push({ x: Math.random() * cv.width, y: 0, r: 12, speed: 3 });
+        // Dark starry night / atmosphere background
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, cv.height);
+        bgGrad.addColorStop(0, '#091e14');
+        bgGrad.addColorStop(0.6, '#0f291e');
+        bgGrad.addColorStop(1, '#1b3a24');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, cv.width, cv.height);
+
+        // Spawn items: 80% Sunny Photons, 20% Smoke Dust Obstacles
+        if (Math.random() < 0.12) {
+          const isPollution = Math.random() < 0.22;
+          items.push({
+            type: isPollution ? 'smoke' : 'sunny',
+            x: 20 + Math.random() * (cv.width - 40),
+            y: 0,
+            r: isPollution ? 14 : 11,
+            speed: isPollution ? 2.5 : 3.2 + Math.random() * 1.5,
+            pulse: Math.random() * Math.PI
+          });
         }
 
+        // Draw and update items
         for (let i = items.length - 1; i >= 0; i--) {
           const it = items[i];
           it.y += it.speed;
-          ctx.beginPath();
-          ctx.arc(it.x, it.y, it.r, 0, Math.PI * 2);
-          ctx.fillStyle = "#facc15";
-          ctx.fill();
+          it.pulse += 0.08;
 
-          if (it.y > cv.height - 35 && it.y < cv.height - 10 && Math.abs(it.x - miniLeafX) < 40) {
-            miniScore = Math.min(100, miniScore + 10);
-            document.getElementById('mini-leafy-score').innerText = `${miniScore}%`;
-            playTone(800, 0.05);
+          if (it.type === 'sunny') {
+            // 3D Pixar Sunny Photon Ball
+            const glow = ctx.createRadialGradient(it.x, it.y, 2, it.x, it.y, it.r * 2);
+            glow.addColorStop(0, 'rgba(254, 240, 138, 0.9)');
+            glow.addColorStop(0.5, 'rgba(245, 158, 11, 0.4)');
+            glow.addColorStop(1, 'rgba(245, 158, 11, 0)');
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(it.x, it.y, it.r * 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Core sphere
+            const sphere = ctx.createRadialGradient(it.x - 3, it.y - 3, 1, it.x, it.y, it.r);
+            sphere.addColorStop(0, '#ffffff');
+            sphere.addColorStop(0.4, '#fef08a');
+            sphere.addColorStop(0.85, '#f59e0b');
+            sphere.addColorStop(1, '#b45309');
+            ctx.fillStyle = sphere;
+            ctx.beginPath();
+            ctx.arc(it.x, it.y, it.r, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            // Smoke / Dust particle
+            ctx.fillStyle = 'rgba(100, 116, 139, 0.75)';
+            ctx.beginPath();
+            ctx.arc(it.x, it.y, it.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = 'bold 9px sans-serif';
+            ctx.fillText('☁️', it.x - 6, it.y + 3);
+          }
+
+          // Catch collision with Leafy player
+          if (it.y > cv.height - 45 && it.y < cv.height - 10 && Math.abs(it.x - miniLeafX) < 45) {
+            if (it.type === 'sunny') {
+              miniScore = Math.min(100, miniScore + 10);
+              document.getElementById('mini-leafy-score').innerText = `${miniScore}%`;
+              playTone(850, 0.08);
+            } else {
+              miniScore = Math.max(0, miniScore - 10);
+              document.getElementById('mini-leafy-score').innerText = `${miniScore}%`;
+              playTone(250, 0.12);
+            }
             items.splice(i, 1);
             continue;
           }
           if (it.y > cv.height) items.splice(i, 1);
         }
 
-        // Draw leafy
+        // Draw 3D Pixar Leafy Character at bottom
+        ctx.save();
+        ctx.translate(miniLeafX, cv.height - 24);
+
+        // Glossy 3D Leaf body
+        const leafGrad = ctx.createRadialGradient(-5, -6, 2, 0, 0, 36);
+        leafGrad.addColorStop(0, '#86efac');
+        leafGrad.addColorStop(0.45, '#22c55e');
+        leafGrad.addColorStop(0.85, '#15803d');
+        leafGrad.addColorStop(1, '#052e16');
+        ctx.fillStyle = leafGrad;
         ctx.beginPath();
-        ctx.ellipse(miniLeafX, cv.height - 25, 35, 15, 0, 0, Math.PI * 2);
-        ctx.fillStyle = "#22c55e";
+        ctx.ellipse(0, 0, 38, 18, 0, 0, Math.PI * 2);
         ctx.fill();
+
+        // White sheen stripe
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.ellipse(-4, -6, 26, 6, -0.1, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Cute Pixar Eyes
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(-11, -2, 3.5, 0, Math.PI * 2); // left eye
+        ctx.arc(11, -2, 3.5, 0, Math.PI * 2);  // right eye
+        ctx.fill();
+        // Eye reflections
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(-12, -3.5, 1.4, 0, Math.PI * 2);
+        ctx.arc(10, -3.5, 1.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cheeks
+        ctx.fillStyle = 'rgba(251, 113, 133, 0.6)';
+        ctx.beginPath();
+        ctx.arc(-16, 2, 3, 0, Math.PI * 2);
+        ctx.arc(16, 2, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Smile
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.arc(0, 2, 5, 0.1, Math.PI - 0.1);
+        ctx.stroke();
+
+        ctx.restore();
 
         requestAnimationFrame(loop);
       }
