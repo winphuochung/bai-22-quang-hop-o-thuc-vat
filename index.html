@@ -1,0 +1,2547 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biosphère 22 - Quang Hợp Ở Thực Vật | Mô Phỏng Chuẩn SGK</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- KaTeX for Scientific Formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  
+  <!-- Three.js for 3D Pixar Simulation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pixar: {
+              sun: '#ffbe0b',
+              water: '#00b4d8',
+              carbon: '#9d4edd',
+              leaf: '#10b981',
+              glucose: '#ff5400',
+              oxygen: '#ef4444',
+              lime: '#a7c957',
+              berry: '#f72585'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #090d16;
+      background-image: 
+        radial-gradient(at 15% 15%, rgba(16, 185, 129, 0.22) 0px, transparent 50%),
+        radial-gradient(at 85% 15%, rgba(245, 158, 11, 0.18) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(14, 165, 233, 0.16) 0px, transparent 55%),
+        radial-gradient(at 20% 85%, rgba(168, 85, 247, 0.18) 0px, transparent 50%),
+        radial-gradient(at 85% 85%, rgba(244, 63, 94, 0.16) 0px, transparent 50%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Ambient glowing background orbs */
+    .ambient-orb {
+      position: fixed;
+      border-radius: 9999px;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+      animation: float-slow 18s infinite alternate ease-in-out;
+    }
+
+    @keyframes float-slow {
+      0% { transform: translate(0px, 0px) scale(1); }
+      100% { transform: translate(40px, -30px) scale(1.15); }
+    }
+
+    /* Modern Vivid Glassmorphism Cards */
+    .glass-vivid {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .glass-card-hover:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Custom colorful scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #10b981, #06b6d4, #f59e0b);
+      border-radius: 4px;
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.4)); }
+      50% { filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.6)); }
+    }
+    .badge-glow {
+      animation: glow-pulse 4s infinite ease-in-out;
+    }
+
+    /* Animated dashed SVG arrows & Pixar Flow */
+    @keyframes dash-move {
+      to {
+        stroke-dashoffset: -40;
+      }
+    }
+    .animated-arrow-dash {
+      stroke-dasharray: 8, 4;
+      animation: dash-move 1.5s linear infinite;
+    }
+
+    @keyframes particle-flow-up {
+      0% { transform: translateY(12px); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-12px); opacity: 0; }
+    }
+    .particle-up {
+      animation: particle-flow-up 2s infinite ease-in-out;
+    }
+
+    @keyframes float-subtle {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(1deg); }
+    }
+    .pixar-float {
+      animation: float-subtle 4s ease-in-out infinite;
+    }
+
+    @keyframes ray-expand {
+      0%, 100% { opacity: 0.35; transform: scale(0.95); }
+      50% { opacity: 0.85; transform: scale(1.05); }
+    }
+    .sun-ray-pulse {
+      animation: ray-expand 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="selection:bg-emerald-500 selection:text-slate-950 flex flex-col min-h-screen relative">
+
+  <!-- Ambient Blurred Orbs -->
+  <div class="ambient-orb w-96 h-96 bg-emerald-500/20 top-0 left-0"></div>
+  <div class="ambient-orb w-80 h-80 bg-amber-500/20 top-20 right-10"></div>
+  <div class="ambient-orb w-96 h-96 bg-cyan-500/20 bottom-10 left-1/3"></div>
+  <div class="ambient-orb w-80 h-80 bg-fuchsia-500/20 bottom-20 right-10"></div>
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="glass-vivid sticky top-0 z-50 border-b border-white/10 px-4 lg:px-8 py-3.5 flex justify-between items-center shadow-2xl">
+    <div class="flex items-center gap-3">
+      <div class="relative p-0.5 rounded-2xl bg-gradient-to-tr from-emerald-400 via-cyan-400 to-amber-400 shadow-lg shadow-emerald-500/20">
+        <div class="w-10 h-10 rounded-[14px] overflow-hidden bg-slate-950 flex items-center justify-center">
+          <img src="logo.png" alt="Logo" class="w-full h-full object-cover" onerror="this.src=''; this.parentElement.innerHTML='🌿'">
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-display font-black text-lg md:text-2xl tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 via-cyan-300 to-amber-300 bg-clip-text text-transparent">
+            BIOSPHÈRE 22
+          </span>
+          <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-rose-500 text-slate-950 uppercase tracking-widest shadow-md">
+            CHUẨN SGK KHTN 7
+          </span>
+        </div>
+        <p class="text-xs text-slate-300 hidden sm:flex items-center gap-2">
+          <span class="text-emerald-400 font-semibold">Bài 22: Quang Hợp Ở Thực Vật</span>
+          <span class="text-slate-500">•</span>
+          <span class="text-cyan-400">Hình 22.1, 22.2 & 22.3 SGK Kết Nối Tri Thức</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- User Actions -->
+    <div class="flex items-center gap-3">
+      <button onclick="toggleAudio()" id="btn-audio" title="Bật/Tắt âm thanh hiệu ứng" 
+        class="p-2.5 rounded-2xl bg-slate-800/80 border border-amber-400/30 text-amber-300 hover:bg-slate-700 hover:scale-105 transition shadow-lg">
+        <span id="audio-icon">🔊</span>
+      </button>
+
+      <div id="user-status-pill" class="hidden items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-950/90 to-teal-950/90 border border-emerald-400/40 text-xs text-emerald-200 shadow-xl">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <span id="user-display-name" class="font-bold">Học sinh</span>
+        <button onclick="handleLogout()" class="ml-2 px-2 py-0.5 rounded-lg bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white transition font-semibold text-[11px]">
+          Thoát
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <div class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 lg:p-8 flex flex-col gap-6 relative z-10">
+
+    <!-- 1. LOGIN SCREEN -->
+    <section id="login-view" class="my-auto py-8">
+      <div class="max-w-xl mx-auto glass-vivid p-6 sm:p-10 rounded-3xl border border-white/15 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-56 h-56 bg-emerald-500/25 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-56 h-56 bg-amber-500/25 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="text-center space-y-2 mb-8">
+          <div class="inline-flex p-4 rounded-3xl bg-gradient-to-tr from-emerald-500/30 via-teal-500/20 to-amber-500/30 border border-emerald-400/40 text-4xl mb-2 shadow-2xl badge-glow">
+            🌿
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-display font-extrabold text-white tracking-tight">
+            Khám Phá Cỗ Máy Quang Hợp
+          </h2>
+          <p class="text-sm text-slate-300 max-w-md mx-auto">
+            Học tập qua 3 thí nghiệm mô phỏng động và hình ảnh trực quan chuẩn xác theo SGK Hình 22.1, 22.2 và 22.3
+          </p>
+        </div>
+
+        <!-- Role Selector Tabs -->
+        <div class="grid grid-cols-2 p-1.5 bg-slate-900/90 rounded-2xl border border-white/10 mb-6 shadow-inner">
+          <button id="role-tab-student" onclick="switchLoginRole('student')" 
+            class="py-3 rounded-xl font-bold text-sm transition-all bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-slate-950 shadow-lg">
+            🎓 Em là Học Sinh
+          </button>
+          <button id="role-tab-teacher" onclick="switchLoginRole('teacher')" 
+            class="py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:text-white">
+            👨‍🏫 Quản Trị Giáo Viên
+          </button>
+        </div>
+
+        <!-- Student Form -->
+        <form id="form-student-login" onsubmit="doStudentLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-emerald-300 uppercase tracking-wider mb-2">Họ và Tên Học Sinh</label>
+            <input id="input-std-name" type="text" required placeholder="Ví dụ: Lê Văn Thắng" 
+              class="w-full px-4 py-3.5 rounded-2xl bg-slate-900/90 border border-emerald-500/30 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-400/20 outline-none text-white text-sm transition shadow-inner">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-cyan-300 uppercase tracking-wider mb-2">Lớp Học</label>
+            <select id="input-std-class" class="w-full px-4 py-3.5 rounded-2xl bg-slate-900/90 border border-cyan-500/30 focus:border-cyan-400 outline-none text-cyan-200 text-sm transition shadow-inner font-semibold">
+              <option value="7A1">Lớp 7A1</option>
+              <option value="7A2">Lớp 7A2</option>
+              <option value="7A3">Lớp 7A3</option>
+              <option value="7A4">Lớp 7A4</option>
+              <option value="Khối 11">Lớp 11 Sinh Học</option>
+            </select>
+          </div>
+          <div class="pt-2">
+            <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 hover:opacity-95 text-slate-950 font-black text-base shadow-xl shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] transition">
+              Bắt Đầu Khám Phá Ngay ✨
+            </button>
+          </div>
+          <p class="text-center text-xs text-slate-400">Không cần mật khẩu • Vào lớp nhanh trong 3 giây</p>
+        </form>
+
+        <!-- Teacher Form -->
+        <form id="form-teacher-login" onsubmit="doTeacherLogin(event)" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs font-bold text-purple-300 uppercase tracking-wider mb-2">Tên Giáo Viên</label>
+            <input id="input-tch-name" type="text" required placeholder="Ví dụ: Cô Hoàng Mai" 
+              class="w-full px-4 py-3.5 rounded-2xl bg-slate-900/90 border border-purple-500/30 focus:border-purple-400 focus:ring-4 focus:ring-purple-400/20 outline-none text-white text-sm transition shadow-inner">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-rose-300 uppercase tracking-wider mb-2">Mật Khẩu Cố Định</label>
+            <input id="input-tch-pin" type="password" required placeholder="Mật khẩu: 123456" 
+              class="w-full px-4 py-3.5 rounded-2xl bg-slate-900/90 border border-rose-500/30 focus:border-rose-400 focus:ring-4 focus:ring-rose-400/20 outline-none text-white text-sm transition shadow-inner">
+          </div>
+          <div class="pt-2">
+            <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-500 via-fuchsia-500 to-rose-500 hover:opacity-95 text-white font-black text-base shadow-xl shadow-purple-500/30 hover:scale-[1.02] active:scale-[0.98] transition">
+              Đăng Nhập Quản Trị LMS 🔐
+            </button>
+          </div>
+          <p class="text-center text-xs text-slate-400">Mật khẩu mặc định: <code class="text-amber-300 font-bold">123456</code></p>
+        </form>
+
+      </div>
+    </section>
+
+    <!-- 2. MAIN APP PORTAL -->
+    <div id="main-portal-view" class="hidden flex-col gap-6">
+
+      <!-- Multi-color Tab Navigation Bar -->
+      <nav class="glass-vivid p-2 rounded-3xl flex flex-wrap gap-2 items-center justify-between shadow-2xl border border-white/10">
+        <div class="flex flex-wrap gap-2">
+          <!-- Tab 1: Theory (Emerald) -->
+          <button onclick="switchTab('theory')" id="nav-theory" 
+            class="tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/30 transition">
+            <span class="p-1 rounded-lg bg-emerald-900/50 text-white text-xs">📖</span> 
+            <span>Lý Thuyết & Cấu Tạo Lá</span>
+          </button>
+
+          <!-- Tab 2: 3 SGK Experiments (Cyan) -->
+          <button onclick="switchTab('lab3d')" id="nav-lab3d" 
+            class="tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800/60 transition">
+            <span class="p-1 rounded-lg bg-cyan-900/50 text-cyan-300 text-xs">🔬</span> 
+            <span>3 Thí Nghiệm Chuẩn SGK</span>
+          </button>
+
+          <!-- Tab 3: Games (Amber/Rose) -->
+          <button onclick="switchTab('games')" id="nav-games" 
+            class="tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800/60 transition">
+            <span class="p-1 rounded-lg bg-amber-900/50 text-amber-300 text-xs">🎮</span> 
+            <span>Game 3D Pixar</span>
+          </button>
+
+          <!-- Tab 4: Assessment (Violet/Fuchsia) -->
+          <button onclick="switchTab('assessment')" id="nav-assessment" 
+            class="tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800/60 transition">
+            <span class="p-1 rounded-lg bg-violet-900/50 text-violet-300 text-xs">📝</span> 
+            <span>20 Trắc Nghiệm + Tự Luận</span>
+          </button>
+
+          <!-- Tab 5: LMS Dashboard (Pink/Rose) -->
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" 
+            class="tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800/60 transition">
+            <span class="p-1 rounded-lg bg-rose-900/50 text-rose-300 text-xs">👨‍🏫</span> 
+            <span>Bảng Điểm LMS</span>
+          </button>
+        </div>
+
+        <div class="hidden sm:flex items-center gap-2 text-xs px-3.5 py-1.5 rounded-xl bg-slate-900/80 border border-emerald-400/30">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="text-slate-300">Khí khổng: <b class="text-emerald-400" id="stomata-status">Đang mở (Quang hợp tối đa)</b></span>
+        </div>
+      </nav>
+
+      <!-- ================= TAB 1: LÝ THUYẾT & CẤU TẠO LÁ ================= -->
+      <section id="tab-content-theory" class="space-y-6">
+        
+        <!-- Multi-colored Hero LaTeX Card -->
+        <div class="glass-vivid p-6 sm:p-8 rounded-3xl border border-emerald-400/30 text-center relative overflow-hidden shadow-2xl">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/20 via-cyan-500/20 to-amber-500/20 border border-emerald-400/40 text-xs font-bold text-emerald-300 uppercase tracking-widest mb-4">
+            ✨ Cốt lõi Sinh học Bài 22
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-display font-extrabold text-white mb-2">
+            Phương Trình Tổng Quát Của Quang Hợp
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto mb-6">
+            Quá trình cây xanh sử dụng <b class="text-amber-300">quang năng</b> hấp thu bởi <b class="text-emerald-400">diệp lục</b> để biến đổi <b class="text-cyan-300">nước</b> và <b class="text-purple-300">carbon dioxide</b> thành <b class="text-rose-300">glucose</b> và giải phóng <b class="text-teal-300">oxygen</b>.
+          </p>
+          
+          <!-- KaTeX Display Equation -->
+          <div class="p-5 sm:p-7 bg-slate-950/90 rounded-3xl border border-white/10 overflow-x-auto text-emerald-300 text-lg sm:text-2xl font-serif shadow-inner">
+            $$\text{Nước} + \text{Carbon dioxide} \xrightarrow[\text{Diệp lục}]{\text{Ánh sáng}} \text{Glucose} + \text{Oxygen}$$
+          </div>
+
+          <!-- Balanced Chemical Equation -->
+          <div class="mt-4 p-3.5 bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 rounded-2xl border border-indigo-400/30 inline-block text-xs sm:text-sm font-mono text-cyan-200">
+            $$6\text{CO}_2 + 6\text{H}_2\text{O} \xrightarrow[\text{Diệp lục}]{\text{Ánh sáng}} \text{C}_6\text{H}_{12}\text{O}_6 + 6\text{O}_2 \uparrow$$
+          </div>
+
+          <!-- 4 Pillars Cards -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 text-left">
+            <div class="glass-vivid p-5 rounded-2xl border-t-4 border-t-cyan-400 glass-card-hover">
+              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-2xl mb-2">💧</div>
+              <h4 class="font-bold text-cyan-300 text-sm">Nước ($H_2O$)</h4>
+              <p class="text-xs text-slate-300 mt-1">Hấp thụ từ đất qua lông hút rễ, theo mạch gỗ dâng lên phiến lá.</p>
+            </div>
+            <div class="glass-vivid p-5 rounded-2xl border-t-4 border-t-purple-400 glass-card-hover">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center text-2xl mb-2">🌬️</div>
+              <h4 class="font-bold text-purple-300 text-sm">Khí $CO_2$</h4>
+              <p class="text-xs text-slate-300 mt-1">Khuếch tán từ bầu khí quyển qua khí khổng vào khoang gian bào.</p>
+            </div>
+            <div class="glass-vivid p-5 rounded-2xl border-t-4 border-t-amber-400 glass-card-hover">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-2xl mb-2">☀️</div>
+              <h4 class="font-bold text-amber-300 text-sm">Ánh Sáng & Diệp Lục</h4>
+              <p class="text-xs text-slate-300 mt-1">Sắc tố diệp lục trong màng thylakoid hấp thu photon kích hoạt electron.</p>
+            </div>
+            <div class="glass-vivid p-5 rounded-2xl border-t-4 border-t-emerald-400 glass-card-hover">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-2xl mb-2">🍬</div>
+              <h4 class="font-bold text-emerald-300 text-sm">Glucose & $O_2$</h4>
+              <p class="text-xs text-slate-300 mt-1">Glucose dự trữ thành tinh bột, Oxygen thoát ra nuôi dưỡng sự sống.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cấu tạo hình thái lá -->
+        <div class="glass-vivid p-6 sm:p-8 rounded-3xl space-y-6">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h3 class="text-xl font-display font-bold text-white flex items-center gap-2">
+                <span>🍃</span> Cấu Tạo Hình Thái Của Lá Thích Nghi Với Quang Hợp
+              </h3>
+              <p class="text-xs text-slate-300">Bấm vào từng cấu trúc để khám phá bí mật giải phẫu sinh học</p>
+            </div>
+            <span class="px-3.5 py-1.5 rounded-full text-xs bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 text-emerald-300 font-bold">
+              Tương Tác Trực Quan
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div onclick="selectLeafPart('phien-la')" id="card-phien-la" 
+              class="glass-vivid p-5 rounded-2xl cursor-pointer border-2 border-emerald-400 bg-emerald-950/40 glass-card-hover">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-2xl mb-3 shadow-lg shadow-emerald-500/20">🌿</div>
+              <h4 class="font-bold text-emerald-300 text-base">1. Phiến Lá</h4>
+              <p class="text-xs text-slate-300 mt-2">Bản rộng dẹt, mỏng, xếp so le nhau trên cành giúp hứng trọn vẹn ánh sáng.</p>
+            </div>
+
+            <div onclick="selectLeafPart('gan-la')" id="card-gan-la" 
+              class="glass-vivid p-5 rounded-2xl cursor-pointer border-2 border-transparent hover:border-cyan-400 glass-card-hover">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-500 flex items-center justify-center text-2xl mb-3 shadow-lg shadow-cyan-500/20">🕸️</div>
+              <h4 class="font-bold text-cyan-300 text-base">2. Gân Lá</h4>
+              <p class="text-xs text-slate-300 mt-2">Mạch gỗ cấp nước, mạch rây vận chuyển đường hữu cơ đi nuôi toàn bộ cơ thể cây.</p>
+            </div>
+
+            <div onclick="selectLeafPart('luc-lap')" id="card-luc-lap" 
+              class="glass-vivid p-5 rounded-2xl cursor-pointer border-2 border-transparent hover:border-lime-400 glass-card-hover">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-lime-500 to-emerald-500 flex items-center justify-center text-2xl mb-3 shadow-lg shadow-lime-500/20">🟢</div>
+              <h4 class="font-bold text-lime-300 text-base">3. Lục Lạp</h4>
+              <p class="text-xs text-slate-300 mt-2">Bào quan chứa chất diệp lục tập trung ở mô giậu mặt trên để trực tiếp đón sáng.</p>
+            </div>
+
+            <div onclick="selectLeafPart('khi-khong')" id="card-khi-khong" 
+              class="glass-vivid p-5 rounded-2xl cursor-pointer border-2 border-transparent hover:border-purple-400 glass-card-hover">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-2xl mb-3 shadow-lg shadow-purple-500/20">🕳️</div>
+              <h4 class="font-bold text-purple-300 text-base">4. Khí Khổng</h4>
+              <p class="text-xs text-slate-300 mt-2">2 tế bào hạt đậu đóng mở linh hoạt kiểm soát trao đổi $CO_2, O_2$ và thoát hơi nước.</p>
+            </div>
+          </div>
+
+          <div id="leaf-part-detail" class="p-6 rounded-3xl bg-slate-950/90 border border-white/10 text-sm flex items-start gap-4 shadow-xl">
+            <span class="text-4xl" id="detail-icon">🌿</span>
+            <div class="space-y-1">
+              <h5 class="font-bold text-emerald-300 text-lg" id="detail-title">Phiến lá: Tối ưu hóa bề mặt đón sáng</h5>
+              <p class="text-slate-300 text-sm leading-relaxed" id="detail-desc">
+                Phiến lá có diện tích bề mặt lớn, dạng bản dẹt mỏng. Tế bào lớp mô giậu phía mặt trên chứa lượng diệp lục dồi dào nhất, xếp sít nhau thẳng đứng giúp bắt trọn từng chùm tia nắng chiếu rọi.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 2: 3 THÍ NGHIỆM CHUẨN XÁC THEO SGK ================= -->
+      <section id="tab-content-lab3d" class="hidden space-y-6">
+        
+        <!-- Header & Nav chuyển đổi 3 Thí Nghiệm SGK -->
+        <div class="glass-vivid p-3 rounded-3xl flex flex-wrap gap-2 border border-white/15 shadow-xl">
+          <button onclick="switchSGKExperiment(1)" id="btn-sgk-1"
+            class="flex-1 min-w-[240px] py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 text-slate-950 shadow-lg">
+            <span>🌱</span>
+            <span>Hình 22.1: Quang Hợp Ở Thực Vật</span>
+          </button>
+          <button onclick="switchSGKExperiment(2)" id="btn-sgk-2"
+            class="flex-1 min-w-[240px] py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all text-slate-300 hover:text-white hover:bg-slate-800/60">
+            <span>🍃</span>
+            <span>Hình 22.2: Trao Đổi Chất & Năng Lượng</span>
+          </button>
+          <button onclick="switchSGKExperiment(3)" id="btn-sgk-3"
+            class="flex-1 min-w-[240px] py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all text-slate-300 hover:text-white hover:bg-slate-800/60">
+            <span>🔬</span>
+            <span>Hình 22.3: Vai Trò & Giải Phẫu Lá</span>
+          </button>
+        </div>
+
+        <!-- ================= CONTAINER THÍ NGHIỆM 1: HÌNH 22.1 ================= -->
+        <div id="sgk-exp-1" class="space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            
+            <!-- Cột 1: Ảnh gốc SGK Hình 22.1 -->
+            <div class="glass-vivid p-6 rounded-3xl flex flex-col justify-between border border-emerald-500/30 shadow-2xl">
+              <div>
+                <div class="flex justify-between items-center mb-3">
+                  <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-950 text-emerald-300 border border-emerald-400/40">
+                    SÁCH GIÁO KHOA KHTN 7
+                  </span>
+                  <span class="text-xs text-slate-400 font-mono">Hình 22.1</span>
+                </div>
+                <h3 class="text-xl font-display font-extrabold text-white mb-2">Hình 22.1. Quang hợp ở thực vật</h3>
+                <p class="text-xs text-slate-300 mb-4">
+                  Sơ đồ chu trình hấp thu Ánh sáng, $CO_2$, hút Nước & khoáng từ rễ, giải phóng $O_2$ và tạo Glucose $\rightarrow$ Tinh bột.
+                </p>
+              </div>
+
+              <!-- Khung hiển thị ảnh SGK chuẩn nét -->
+              <div class="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-white/5 flex items-center justify-center p-2 group">
+                <img src="hinh22_1.png" alt="Hình 22.1 Quang hợp ở thực vật" class="max-h-[380px] w-auto object-contain rounded-xl shadow-lg transition duration-300 group-hover:scale-105">
+                <div class="absolute bottom-2 right-2 bg-black/60 text-emerald-300 px-3 py-1 rounded-lg text-[11px] backdrop-blur-md">
+                  Ảnh gốc SGK
+                </div>
+              </div>
+            </div>
+
+            <!-- Cột 2: Mô phỏng động tương tác chuẩn xác theo Hình 22.1 -->
+            <div class="glass-vivid p-6 rounded-3xl flex flex-col justify-between border border-cyan-500/30 shadow-2xl">
+              <div>
+                <div class="flex justify-between items-center mb-3">
+                  <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-cyan-950 text-cyan-300 border border-cyan-400/40">
+                    MÔ PHỎNG ĐỒ HỌA ĐỘNG
+                  </span>
+                  <button onclick="animateExp1Flow()" class="px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 shadow-md hover:scale-105 transition">
+                    ▶ Chạy Mô Phỏng
+                  </button>
+                </div>
+                <h3 class="text-xl font-display font-extrabold text-white mb-2">Mô Phỏng Động Theo Hình 22.1</h3>
+                <p class="text-xs text-slate-300 mb-4">
+                  Các mũi tên phát sáng và dòng phân tử di chuyển tương ứng 100% với từng chú thích trên sơ đồ SGK.
+                </p>
+              </div>
+
+              <!-- Sơ đồ vector tương tác Hình 22.1 Chuẩn SGK -->
+              <div class="relative w-full h-[410px] rounded-2xl overflow-hidden border border-white/15 bg-gradient-to-b from-[#0a192f] via-[#091524] to-[#1a120b] p-3 shadow-inner flex flex-col justify-between">
+                
+                <!-- SVG Canvas cho Mũi tên động chuẩn xác SGK -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 500 410" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="sunRayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#ffbe0b" stop-opacity="0.9"/>
+                      <stop offset="100%" stop-color="#fb5607" stop-opacity="0.2"/>
+                    </linearGradient>
+                    <linearGradient id="waterFlowGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                      <stop offset="0%" stop-color="#00b4d8"/>
+                      <stop offset="100%" stop-color="#48cae4"/>
+                    </linearGradient>
+                    <marker id="arrowWater" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#00b4d8"/>
+                    </marker>
+                    <marker id="arrowCO2" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#a855f7"/>
+                    </marker>
+                    <marker id="arrowO2" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#ef4444"/>
+                    </marker>
+                    <marker id="arrowGlucose" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#10b981"/>
+                    </marker>
+                    <marker id="arrowStarch" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#f59e0b"/>
+                    </marker>
+                  </defs>
+
+                  <!-- Tia sáng mặt trời chiếu vào tán lá -->
+                  <line x1="75" y1="65" x2="230" y2="170" stroke="url(#sunRayGrad)" stroke-width="4" stroke-linecap="round" class="animated-arrow-dash"/>
+                  <line x1="90" y1="75" x2="250" y2="180" stroke="url(#sunRayGrad)" stroke-width="2.5" stroke-linecap="round" class="animated-arrow-dash"/>
+
+                  <!-- Dòng nước từ rễ lên thân -> tán lá -->
+                  <path d="M 250 380 L 250 250 L 235 200" fill="none" stroke="url(#waterFlowGrad)" stroke-width="4" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#arrowWater)"/>
+
+                  <!-- Mũi tên CO2 từ không khí đi vào lá -->
+                  <path d="M 60 215 Q 140 215 210 210" fill="none" stroke="#a855f7" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#arrowCO2)"/>
+
+                  <!-- Mũi tên O2 từ lá thoát ra không khí -->
+                  <path d="M 285 190 Q 360 170 425 140" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#arrowO2)"/>
+
+                  <!-- Mũi tên Glucose tạo ra ở lá -->
+                  <path d="M 290 220 Q 340 220 380 230" fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#arrowGlucose)"/>
+
+                  <!-- Mũi tên Tinh bột dự trữ đi xuống thân cây -->
+                  <path d="M 405 260 L 405 305" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#arrowStarch)"/>
+                </svg>
+
+                <!-- Bầu trời: Mặt trời và mây -->
+                <div class="flex justify-between items-start z-20">
+                  <div class="flex items-center gap-2.5 p-2 rounded-2xl bg-slate-900/80 border border-amber-400/40 shadow-lg backdrop-blur-md">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 via-yellow-400 to-orange-400 shadow-xl shadow-amber-400/50 flex items-center justify-center text-2xl animate-pulse">
+                      ☀️
+                    </div>
+                    <div>
+                      <span class="text-xs font-black text-amber-300 block">Ánh sáng mặt trời</span>
+                      <span class="text-[10px] text-amber-200/90 font-mono">Quang năng chiếu rọi</span>
+                    </div>
+                  </div>
+
+                  <!-- Khí Oxygen thoát ra bên phải -->
+                  <div class="p-2.5 rounded-2xl bg-rose-950/80 border border-rose-400/40 text-right shadow-lg backdrop-blur-md">
+                    <span class="text-xs font-black text-rose-300 flex items-center gap-1.5 justify-end">
+                      <span class="w-2.5 h-2.5 rounded-full bg-rose-400 animate-ping"></span>
+                      <span>Oxygen (O₂)</span>
+                    </span>
+                    <span class="text-[10px] text-rose-200/80 block mt-0.5">Khí giải phóng ra ngoài ↗</span>
+                  </div>
+                </div>
+
+                <!-- Trung tâm: Thân cây & Tán lá quang hợp -->
+                <div class="relative flex items-center justify-between my-auto z-20 px-2">
+                  
+                  <!-- CO2 từ không khí đi vào lá -->
+                  <div class="p-2.5 rounded-2xl bg-purple-950/85 border border-purple-400/40 shadow-xl backdrop-blur-md max-w-[130px]">
+                    <span class="text-xs font-black text-purple-300 flex items-center gap-1">
+                      <span>🌬️</span> Carbon dioxide
+                    </span>
+                    <span class="text-[10px] text-purple-200/80 block mt-0.5 font-mono">Hấp thu từ khí quyển ➔</span>
+                  </div>
+
+                  <!-- Tán cây Pixar 3D -->
+                  <div class="text-center space-y-1.5 pixar-float">
+                    <div class="relative inline-block">
+                      <div class="w-24 h-24 rounded-full bg-gradient-to-b from-emerald-400 via-teal-500 to-emerald-700 shadow-2xl shadow-emerald-500/50 flex items-center justify-center text-5xl border-2 border-emerald-300">
+                        🌿
+                      </div>
+                      <div class="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full bg-slate-950/90 border border-emerald-400 text-[10px] text-emerald-300 font-bold">
+                        Diệp lục
+                      </div>
+                    </div>
+                    <div>
+                      <span class="px-3 py-1 rounded-full bg-emerald-950/90 border border-emerald-400/60 text-xs text-emerald-200 font-bold shadow-lg block">
+                        Tán lá quang hợp
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Glucose & Tinh bột -->
+                  <div class="p-2.5 rounded-2xl bg-emerald-950/85 border border-emerald-400/40 shadow-xl backdrop-blur-md max-w-[135px] text-right">
+                    <div class="text-xs font-black text-emerald-300 flex items-center gap-1 justify-end">
+                      <span>Glucose</span> <span>🍬</span>
+                    </div>
+                    <div class="text-[11px] text-amber-300 font-bold mt-1.5 pt-1 border-t border-white/10 flex items-center gap-1 justify-end">
+                      <span>Tinh bột</span> <span>📦</span>
+                    </div>
+                    <span class="text-[9px] text-amber-200/80 block mt-0.5 font-mono">Dự trữ & dẫn nuôi cây ⬇</span>
+                  </div>
+                </div>
+
+                <!-- Đất & Rễ cây hút Nước, chất khoáng -->
+                <div class="pt-2.5 pb-2 px-3 border-t border-amber-700/50 bg-amber-950/70 -mx-3 -mb-3 rounded-b-2xl flex justify-between items-center z-20 backdrop-blur-md">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 flex items-center justify-center text-lg">
+                      💧
+                    </div>
+                    <div>
+                      <span class="text-xs font-black text-cyan-300">Nước & Chất khoáng</span>
+                      <p class="text-[10px] text-slate-300">Rễ hút từ đất theo mạch gỗ dâng lên lá</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-1 text-xs font-mono font-bold text-cyan-300 bg-cyan-950/80 px-2.5 py-1 rounded-xl border border-cyan-400/30">
+                    <span>H₂O</span> <span class="text-cyan-400">⬆ Dâng lên</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= CONTAINER THÍ NGHIỆM 2: HÌNH 22.2 ================= -->
+        <div id="sgk-exp-2" class="space-y-6 hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            
+            <!-- Cột 1: Ảnh gốc SGK Hình 22.2 -->
+            <div class="glass-vivid p-6 rounded-3xl flex flex-col justify-between border border-cyan-500/30 shadow-2xl">
+              <div>
+                <div class="flex justify-between items-center mb-3">
+                  <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-cyan-950 text-cyan-300 border border-cyan-400/40">
+                    SÁCH GIÁO KHOA KHTN 7
+                  </span>
+                  <span class="text-xs text-slate-400 font-mono">Hình 22.2</span>
+                </div>
+                <h3 class="text-xl font-display font-extrabold text-white mb-2">Hình 22.2. Trao đổi chất & Chuyển hóa năng lượng</h3>
+                <p class="text-xs text-slate-300 mb-4">
+                  Mối quan hệ chặt chẽ: Quang năng kích hoạt phản ứng hóa học tạo ra Hóa năng tích lũy trong Tinh bột và giải phóng $O_2$.
+                </p>
+              </div>
+
+              <div class="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-white/5 flex items-center justify-center p-2 group">
+                <img src="hinh22_2.png" alt="Hình 22.2 Trao đổi chất và chuyển hóa năng lượng" class="max-h-[380px] w-auto object-contain rounded-xl shadow-lg transition duration-300 group-hover:scale-105">
+                <div class="absolute bottom-2 right-2 bg-black/60 text-cyan-300 px-3 py-1 rounded-lg text-[11px] backdrop-blur-md">
+                  Ảnh gốc SGK
+                </div>
+              </div>
+            </div>
+
+            <!-- Cột 2: Mô phỏng động tương tác Hình 22.2 -->
+            <div class="glass-vivid p-6 rounded-3xl flex flex-col justify-between border border-amber-500/30 shadow-2xl">
+              <div>
+                <div class="flex justify-between items-center mb-3">
+                  <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-amber-950 text-amber-300 border border-amber-400/40">
+                    MÔ PHỎNG ĐỘNG CẬN CẢNH
+                  </span>
+                  <button onclick="animateExp2Reaction()" class="px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-md hover:scale-105 transition">
+                    ⚡ Kích Hoạt Phản Ứng
+                  </button>
+                </div>
+                <h3 class="text-xl font-display font-extrabold text-white mb-2">Mô Phỏng Cận Cảnh Phiến Lá</h3>
+                <p class="text-xs text-slate-300 mb-4">
+                  Tái hiện chính xác cành cây dẫn $H_2O$, tia nắng quang năng, dòng $CO_2$ và phương trình hóa học trên mặt phiến lá.
+                </p>
+              </div>
+
+              <!-- Sơ đồ vector tương tác cận cảnh phiến lá Chuẩn SGK Hình 22.2 -->
+              <div class="relative w-full h-[410px] rounded-2xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#061e1b] via-[#091522] to-[#1a0f2b] p-3 shadow-inner flex flex-col justify-between">
+                
+                <!-- SVG Canvas cho các luồng quang năng, H2O, CO2, O2, Glucose chuẩn SGK 22.2 -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 500 410" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="exp2SunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.95"/>
+                      <stop offset="100%" stop-color="#ea580c" stop-opacity="0.3"/>
+                    </linearGradient>
+                    <marker id="exp2ArrowH2O" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#06b6d4"/>
+                    </marker>
+                    <marker id="exp2ArrowCO2" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#a855f7"/>
+                    </marker>
+                    <marker id="exp2ArrowO2" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#f43f5e"/>
+                    </marker>
+                    <marker id="exp2ArrowStarch" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#f59e0b"/>
+                    </marker>
+                  </defs>
+
+                  <!-- 3 Chùm tia quang năng vàng chiếu chéo từ góc trên xuống lá -->
+                  <line x1="85" y1="55" x2="210" y2="150" stroke="url(#exp2SunGrad)" stroke-width="4.5" stroke-linecap="round" class="animated-arrow-dash"/>
+                  <line x1="120" y1="45" x2="245" y2="140" stroke="url(#exp2SunGrad)" stroke-width="3" stroke-linecap="round" class="animated-arrow-dash"/>
+
+                  <!-- Mũi tên đen/xanh dẫn H2O từ cuống lá đi lên gân lá -->
+                  <path d="M 85 365 Q 120 320 200 240" fill="none" stroke="#06b6d4" stroke-width="4" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#exp2ArrowH2O)"/>
+
+                  <!-- Mũi tên xanh tím CO2 từ khí quyển uốn vào mặt phiến lá -->
+                  <path d="M 435 345 Q 350 320 280 250" fill="none" stroke="#a855f7" stroke-width="4" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#exp2ArrowCO2)"/>
+
+                  <!-- Mũi tên đỏ giải phóng O2 từ phiến lá bay ra ngoài khí quyển -->
+                  <path d="M 290 170 Q 360 120 425 65" fill="none" stroke="#f43f5e" stroke-width="4" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#exp2ArrowO2)"/>
+
+                  <!-- Mũi tên vàng hóa năng: Tinh bột dự trữ -->
+                  <path d="M 250 255 L 250 310" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#exp2ArrowStarch)"/>
+                </svg>
+
+                <!-- Quang năng từ góc trái trên & O2 góc phải trên -->
+                <div class="flex justify-between items-start z-20">
+                  <div class="p-2.5 rounded-2xl bg-amber-950/80 border border-amber-400/50 flex items-center gap-2.5 shadow-xl backdrop-blur-md">
+                    <span class="text-3xl animate-pulse">☀️</span>
+                    <div>
+                      <span class="text-xs font-black text-amber-300 block">Ánh Sáng (Quang Năng)</span>
+                      <span class="text-[10px] text-amber-200/90 font-mono">Chùm tia vàng chiếu vào lá</span>
+                    </div>
+                  </div>
+
+                  <!-- Mũi tên đỏ giải phóng O2 -->
+                  <div class="p-2.5 rounded-2xl bg-rose-950/80 border border-rose-400/50 flex items-center gap-2 shadow-xl backdrop-blur-md">
+                    <div class="text-right">
+                      <span class="text-xs font-black text-rose-300 block">Oxygen (O₂)</span>
+                      <span class="text-[10px] text-rose-200/90 font-mono">Mũi tên đỏ giải phóng ↗</span>
+                    </div>
+                    <span class="text-3xl">💨</span>
+                  </div>
+                </div>
+
+                <!-- Trung tâm phiến lá với phương trình SGK và chuyển hóa năng lượng -->
+                <div class="my-auto p-4 rounded-3xl bg-slate-950/90 border border-emerald-400/50 text-center shadow-2xl z-20 backdrop-blur-md max-w-md mx-auto w-full">
+                  <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-950 border border-emerald-400/40 text-[11px] font-bold text-emerald-300 mb-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>Phương trình trao đổi chất trên mặt lá</span>
+                  </div>
+                  
+                  <div class="text-sm sm:text-base font-mono font-black text-white bg-slate-900/90 py-2 px-3 rounded-2xl border border-white/10 tracking-wide">
+                    <span class="text-cyan-300">H₂O</span> + <span class="text-purple-300">CO₂</span> 
+                    <span class="text-amber-400 font-bold mx-1">➔</span> 
+                    <span class="text-emerald-300">C₆H₁₂O₆</span> + <span class="text-rose-400">O₂</span>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-2 pt-2.5 mt-2.5 border-t border-white/10 text-xs">
+                    <div class="p-2 rounded-xl bg-slate-900/80 border border-cyan-400/30 text-left">
+                      <span class="text-[10px] text-slate-400 block">Chất hữu cơ tạo ra:</span>
+                      <b class="text-cyan-300 text-xs">Glucose (Đường đơn)</b>
+                    </div>
+                    <div class="p-2 rounded-xl bg-amber-950/60 border border-amber-400/30 text-right">
+                      <span class="text-[10px] text-slate-400 block">Chuyển thành Hóa năng:</span>
+                      <b class="text-amber-400 text-xs">⬇ Tinh bột tích lũy</b>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cuống lá bên dưới và CO2 -->
+                <div class="flex justify-between items-end pt-2 z-20">
+                  <div class="flex items-center gap-2 bg-slate-950/85 px-3 py-2 rounded-2xl border border-cyan-400/40 shadow-xl backdrop-blur-md">
+                    <span class="text-2xl">🌿</span>
+                    <div>
+                      <span class="text-xs font-black text-cyan-300">Cuống Lá: H₂O</span>
+                      <p class="text-[10px] text-slate-300">Mũi tên xanh dẫn nước lên phiến lá</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-2 bg-slate-950/85 px-3 py-2 rounded-2xl border border-purple-400/40 shadow-xl backdrop-blur-md">
+                    <div class="text-right">
+                      <span class="text-xs font-black text-purple-300">CO₂ (Carbon dioxide)</span>
+                      <p class="text-[10px] text-slate-300">Mũi tên tím uốn vào mặt lá</p>
+                    </div>
+                    <span class="text-2xl">🌬️</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= CONTAINER THÍ NGHIỆM 3: HÌNH 22.3 ================= -->
+        <div id="sgk-exp-3" class="space-y-6 hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            
+            <!-- Cột 1: Ảnh gốc SGK Hình 22.3 -->
+            <div class="glass-vivid p-6 rounded-3xl flex flex-col justify-between border border-purple-500/30 shadow-2xl">
+              <div>
+                <div class="flex justify-between items-center mb-3">
+                  <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-purple-950 text-purple-300 border border-purple-400/40">
+                    SÁCH GIÁO KHOA KHTN 7
+                  </span>
+                  <span class="text-xs text-slate-400 font-mono">Hình 22.3</span>
+                </div>
+                <h3 class="text-xl font-display font-extrabold text-white mb-2">Hình 22.3. Sơ đồ vai trò của lá với quang hợp</h3>
+                <p class="text-xs text-slate-300 mb-4">
+                  Giải phẫu 3D bóc tách: Cuống lá, Gân lá (mạch gỗ & mạch rây), Lục lạp chứa diệp lục và Khí khổng đóng mở.
+                </p>
+              </div>
+
+              <div class="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-white/5 flex items-center justify-center p-2 group">
+                <img src="hinh22_3.png" alt="Hình 22.3 Sơ đồ mô tả vai trò của lá với chức năng quang hợp" class="max-h-[380px] w-auto object-contain rounded-xl shadow-lg transition duration-300 group-hover:scale-105">
+                <div class="absolute bottom-2 right-2 bg-black/60 text-purple-300 px-3 py-1 rounded-lg text-[11px] backdrop-blur-md">
+                  Ảnh gốc SGK
+                </div>
+              </div>
+            </div>
+
+            <!-- Cột 2: Mô phỏng giải phẫu tương tác Hình 22.3 -->
+            <div class="glass-vivid p-6 rounded-3xl flex flex-col justify-between border border-emerald-500/30 shadow-2xl">
+              <div>
+                <div class="flex justify-between items-center mb-3">
+                  <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-950 text-emerald-300 border border-emerald-400/40">
+                    BÓC TÁCH GIẢI PHẪU TƯƠNG TÁC
+                  </span>
+                  <button onclick="toggleAnatomyHighlight()" class="px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 shadow-md hover:scale-105 transition">
+                    🔍 Soi Bó Mạch & Bào Quan
+                  </button>
+                </div>
+                <h3 class="text-xl font-display font-extrabold text-white mb-2">Bản Đồ Giải Phẫu 4 Tầng</h3>
+                <p class="text-xs text-slate-300 mb-4">
+                  Bấm vào từng điểm Hotspot bên dưới để xem chi tiết đường truyền vật chất đúng như Hình 22.3.
+                </p>
+              </div>
+
+              <!-- Hotspot Interactive Anatomical Diagram Chuẩn SGK Hình 22.3 -->
+              <div class="relative w-full h-[410px] rounded-2xl overflow-hidden border border-white/15 bg-gradient-to-br from-[#051a14] via-[#091522] to-[#160d27] p-3 shadow-inner flex flex-col justify-between">
+                
+                <!-- SVG Canvas cho Sơ đồ giải phẫu cắt lớp lá Chuẩn SGK 22.3 -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 500 410" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="exp3XylemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#00b4d8"/>
+                      <stop offset="100%" stop-color="#90e0ef"/>
+                    </linearGradient>
+                    <linearGradient id="exp3PhloemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#7209b7"/>
+                      <stop offset="100%" stop-color="#b5179e"/>
+                    </linearGradient>
+                    <marker id="exp3ArrowCO2" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#10b981"/>
+                    </marker>
+                    <marker id="exp3ArrowO2" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto">
+                      <polygon points="0 0, 6 3, 0 6" fill="#ef4444"/>
+                    </marker>
+                  </defs>
+
+                  <!-- Bó Mạch Gân Lá: Mạch Gỗ (Xanh) dẫn H2O vào phiến lá -->
+                  <path d="M 45 65 Q 120 70 210 95" fill="none" stroke="url(#exp3XylemGrad)" stroke-width="4.5" stroke-linecap="round" class="animated-arrow-dash"/>
+                  
+                  <!-- Mạch Rây (Tím) dẫn chất hữu cơ ra thân cành -->
+                  <path d="M 215 115 Q 130 90 45 85" fill="none" stroke="url(#exp3PhloemGrad)" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash"/>
+
+                  <!-- Chùm tia sáng mặt trời chiếu vào tầng mô giậu lá -->
+                  <line x1="270" y1="20" x2="270" y2="70" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash"/>
+                  <line x1="310" y1="20" x2="310" y2="70" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash"/>
+
+                  <!-- Khí khổng: Mũi tên CO2 xanh lục đi vào -->
+                  <path d="M 330 240 Q 330 200 350 165" fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#exp3ArrowCO2)"/>
+
+                  <!-- Khí khổng: Mũi tên O2 đỏ thoát ra -->
+                  <path d="M 390 165 Q 410 200 410 240" fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round" class="animated-arrow-dash" marker-end="url(#exp3ArrowO2)"/>
+                </svg>
+
+                <!-- Grid 4 Hotspots tương tác giải phẫu Chuẩn SGK -->
+                <div class="grid grid-cols-2 gap-2.5 text-xs z-20">
+                  <!-- Điểm 1: Cuống lá & Mạch dẫn -->
+                  <div onclick="showAnatomyDetail('cuong-la')" id="hotspot-cuong-la" 
+                    class="p-2.5 rounded-2xl bg-slate-950/85 border-2 border-cyan-400 cursor-pointer hover:border-cyan-300 transition shadow-lg backdrop-blur-md">
+                    <span class="font-black text-cyan-300 block flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span> 1. Cuống & Gân Lá
+                    </span>
+                    <p class="text-[10px] text-slate-300 mt-1 font-mono leading-tight">
+                      • Mạch gỗ: Nước (Lam)<br>
+                      • Mạch rây: Hữu cơ (Tím)
+                    </p>
+                  </div>
+
+                  <!-- Điểm 2: Ánh sáng chiếu vào phiến lá -->
+                  <div onclick="showAnatomyDetail('anh-sang')" id="hotspot-anh-sang" 
+                    class="p-2.5 rounded-2xl bg-slate-950/85 border border-amber-400/50 cursor-pointer hover:border-amber-300 transition shadow-lg backdrop-blur-md">
+                    <span class="font-black text-amber-300 block flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> 2. Ánh Sáng & Phiến Lá
+                    </span>
+                    <p class="text-[10px] text-slate-300 mt-1 font-mono leading-tight">
+                      Bản mỏng dẹt đón trọn tia sáng xuyên vào mô giậu
+                    </p>
+                  </div>
+
+                  <!-- Điểm 3: Lục lạp chứa diệp lục -->
+                  <div onclick="showAnatomyDetail('luc-lap')" id="hotspot-luc-lap" 
+                    class="p-2.5 rounded-2xl bg-slate-950/85 border border-emerald-400/50 cursor-pointer hover:border-emerald-300 transition shadow-lg backdrop-blur-md">
+                    <span class="font-black text-emerald-300 block flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> 3. Lục Lạp & Diệp Lục
+                    </span>
+                    <p class="text-[10px] text-slate-300 mt-1 font-mono leading-tight">
+                      Đĩa Grana đón H₂O từ mạch gỗ để tổng hợp đường
+                    </p>
+                  </div>
+
+                  <!-- Điểm 4: Khí khổng biểu bì dưới -->
+                  <div onclick="showAnatomyDetail('khi-khong')" id="hotspot-khi-khong" 
+                    class="p-2.5 rounded-2xl bg-slate-950/85 border border-purple-400/50 cursor-pointer hover:border-purple-300 transition shadow-lg backdrop-blur-md">
+                    <span class="font-black text-purple-300 block flex items-center gap-1.5">
+                      <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span> 4. Khí Khổng Đóng Mở
+                    </span>
+                    <p class="text-[10px] text-slate-300 mt-1 font-mono leading-tight">
+                      • CO₂ xanh lục đi vào<br>
+                      • O₂ đỏ giải phóng ra
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Box hiển thị chi tiết điểm giải phẫu đã chọn -->
+                <div id="anatomy-detail-box" class="p-3.5 rounded-2xl bg-slate-950/95 border border-emerald-400/40 text-xs text-slate-200 space-y-1 shadow-2xl z-20 backdrop-blur-md mt-auto">
+                  <div class="flex items-center justify-between">
+                    <b class="text-emerald-300 text-sm flex items-center gap-2" id="anatomy-detail-title">
+                      <span>🌿</span> 1. Hệ Thống Bó Mạch Dẫn Trong Cuống & Gân Lá
+                    </b>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 border border-emerald-400/30 text-emerald-300">
+                      Chuẩn Hình 22.3 SGK
+                    </span>
+                  </div>
+                  <p id="anatomy-detail-desc" class="text-[11px] leading-relaxed text-slate-300">
+                    Gân lá có 2 bó mạch song song: Nửa dưới là <b>mạch gỗ (màu xanh lam)</b> vận chuyển nước và muối khoáng từ rễ đến cung cấp cho lục lạp; nửa trên là <b>mạch rây (màu tím)</b> vận chuyển chất hữu cơ sau quang hợp từ lá đi nuôi khắp cơ thể cây.
+                  </p>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 3: GAME 3D PIXAR SINH ĐỘNG ================= -->
+      <section id="tab-content-games" class="hidden space-y-6">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- GAME 1: CHIẾN BINH QUANG TỬ 3D PIXAR -->
+          <div class="glass-vivid p-6 rounded-3xl flex flex-col justify-between gap-4 border border-amber-500/40 shadow-2xl relative overflow-hidden">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-3.5 py-1 rounded-full text-xs font-black bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-slate-950 uppercase tracking-widest shadow-md flex items-center gap-1.5">
+                  <span class="animate-spin">🌟</span> GAME 1 • PIXAR 3D ARCADE
+                </span>
+                <span id="g1-high-score" class="text-xs text-amber-300 font-bold bg-amber-950/80 px-2.5 py-0.5 rounded-full border border-amber-400/30">Điểm cao: 0</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-display font-black text-white flex items-center gap-2">
+                <span>🍃</span> Bé Lá Leafy & Chùm Quang Tử Sunny
+              </h3>
+              <p class="text-xs text-slate-300 mt-1">
+                Lái <b>Bé Lá Leafy</b> 3D hoạt hình né tránh <b>Hạt Khói Đen Ô Nhiễm 🪨</b> và bắt trọn các <b>Hạt Sunny Photon Vàng ☀️</b> để quang hợp phát sáng!
+              </p>
+            </div>
+
+            <div class="relative w-full h-80 rounded-2xl overflow-hidden border border-amber-500/40 shadow-2xl flex items-center justify-center bg-slate-950"
+              style="background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #0f172a 60%, #020617 100%);">
+              <canvas id="g1-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+              
+              <div id="g1-overlay" class="absolute inset-0 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-400 to-emerald-400 p-1 mb-3 shadow-2xl shadow-emerald-500/40 animate-bounce">
+                  <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-4xl">
+                    🍃
+                  </div>
+                </div>
+                <h4 class="text-2xl font-display font-extrabold text-white">Bé Lá Leafy Siêu Cấp</h4>
+                <p class="text-xs text-slate-300 max-w-sm mt-1.5 mb-6">Di chuyển chuột hoặc trượt ngón tay để lái Bé Lá Leafy hứng chùm quang tử Sunny và né đám bụi ô nhiễm!</p>
+                <button onclick="startGame1()" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-slate-950 font-black text-sm shadow-xl shadow-amber-500/40 hover:scale-105 active:scale-95 transition flex items-center gap-2">
+                  <span>🎮</span> Bắt Đầu Chơi Ngay (3D Pixar)
+                </button>
+              </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="p-3 rounded-2xl bg-slate-950/90 border border-white/10 flex justify-between items-center text-xs">
+              <div class="flex items-center gap-2">
+                <span class="text-slate-400">Thời gian:</span>
+                <span class="text-white font-mono font-bold text-sm bg-slate-900 px-2 py-0.5 rounded border border-white/10" id="g1-time">30s</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-slate-400">Năng lượng quang:</span>
+                <div class="w-28 h-3 rounded-full bg-slate-800 overflow-hidden border border-white/10">
+                  <div id="g1-energy-bar" class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-emerald-400 w-0 transition-all duration-200"></div>
+                </div>
+                <b class="text-amber-400 font-mono text-sm" id="g1-score">0%</b>
+              </div>
+            </div>
+          </div>
+
+          <!-- GAME 2: BẾP TRƯỞNG LỤC LẠP 3D PIXAR -->
+          <div class="glass-vivid p-6 rounded-3xl flex flex-col justify-between gap-4 border border-emerald-500/40 shadow-2xl relative overflow-hidden">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-3.5 py-1 rounded-full text-xs font-black bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-slate-950 uppercase tracking-widest shadow-md flex items-center gap-1.5">
+                  <span class="animate-bounce">🧪</span> GAME 2 • PHÒNG THÍ NGHIỆM PIXAR
+                </span>
+                <span id="g2-glucose-count" class="text-xs text-emerald-300 font-bold bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-400/30">Đã tạo: 0 Glucose</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-display font-black text-white flex items-center gap-2">
+                <span>👨‍🍳</span> Lò Phản Ứng Diệp Lục & Bếp Trưởng Lục Lạp
+              </h3>
+              <p class="text-xs text-slate-300 mt-1">
+                Thu thập đúng tỉ lệ phân tử: <code class="text-cyan-300 font-bold">6 H₂O</code> + <code class="text-purple-300 font-bold">6 CO₂</code> để nấu thành <code class="text-emerald-300 font-bold">1 Glucose</code> phát nổ <code class="text-rose-400 font-bold">6 O₂</code>!
+              </p>
+            </div>
+
+            <!-- Pixar Lab Reactor Visualization -->
+            <div class="relative w-full h-80 rounded-2xl overflow-hidden border border-emerald-500/30 shadow-2xl flex flex-col justify-between p-4 bg-slate-950"
+              style="background: radial-gradient(circle at 50% 50%, #064e3b 0%, #022c22 45%, #020617 100%);">
+              
+              <!-- Pixar Molecular Reactor Beaker Visual -->
+              <div class="relative w-full flex-1 flex items-center justify-around my-auto">
+                <!-- Beaker Left: H2O Droppy Character -->
+                <div class="flex flex-col items-center">
+                  <div class="relative group">
+                    <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-cyan-500 to-blue-500 p-1 shadow-2xl shadow-cyan-500/50 flex items-center justify-center text-3xl animate-pulse">
+                      💧
+                    </div>
+                    <span id="g2-droppy-badge" class="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-cyan-400 text-slate-950 font-black text-xs font-mono shadow-md">
+                      0
+                    </span>
+                  </div>
+                  <span class="text-xs font-black text-cyan-300 mt-2">Bé Droppy (H₂O)</span>
+                  <div class="flex gap-1.5 mt-2">
+                    <button onclick="removeGame2Ingredient('h2o')" class="w-8 h-8 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-black transition">-</button>
+                    <button onclick="addGame2Ingredient('h2o')" class="px-3 h-8 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-bold text-xs hover:scale-105 transition shadow-lg">+ Thêm</button>
+                  </div>
+                </div>
+
+                <!-- Central Reactor: Chloroplast Cauldron -->
+                <div class="text-center relative">
+                  <div id="reactor-cauldron" class="w-24 h-24 rounded-full bg-gradient-to-b from-emerald-400 via-teal-600 to-emerald-900 border-4 border-emerald-300/60 shadow-2xl shadow-emerald-500/60 flex items-center justify-center text-4xl pixar-float">
+                    🍵
+                  </div>
+                  <span class="text-[11px] font-bold text-emerald-300 block mt-2">Lò Nồi Nấu Grana</span>
+                  <div class="text-[10px] text-slate-300 font-mono mt-0.5" id="g2-reactor-status">Cần đủ 6 H₂O + 6 CO₂</div>
+                </div>
+
+                <!-- Beaker Right: CO2 Carby Character -->
+                <div class="flex flex-col items-center">
+                  <div class="relative group">
+                    <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-purple-500 to-fuchsia-500 p-1 shadow-2xl shadow-purple-500/50 flex items-center justify-center text-3xl animate-pulse">
+                      🌬️
+                    </div>
+                    <span id="g2-carby-badge" class="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-purple-400 text-slate-950 font-black text-xs font-mono shadow-md">
+                      0
+                    </span>
+                  </div>
+                  <span class="text-xs font-black text-purple-300 mt-2">Bé Carby (CO₂)</span>
+                  <div class="flex gap-1.5 mt-2">
+                    <button onclick="removeGame2Ingredient('co2')" class="w-8 h-8 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-black transition">-</button>
+                    <button onclick="addGame2Ingredient('co2')" class="px-3 h-8 rounded-xl bg-gradient-to-r from-purple-400 to-fuchsia-500 text-slate-950 font-bold text-xs hover:scale-105 transition shadow-lg">+ Thêm</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Cook Button -->
+              <div class="space-y-1.5">
+                <button onclick="cookGame2Glucose()" id="btn-g2-cook" 
+                  class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 hover:opacity-95 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 hover:scale-[1.01] active:scale-[0.99] transition flex items-center justify-center gap-2">
+                  <span>⚡</span> Kích Hoạt Diệp Lục: Nấu Glucose & Thổi Khí Oxygen!
+                </button>
+                <div id="g2-message" class="text-center text-xs text-slate-300 h-5 font-bold"></div>
+              </div>
+
+            </div>
+
+            <div class="text-xs text-slate-400 flex justify-between items-center px-1">
+              <span>Định luật bảo toàn khối lượng (Lavoisier)</span>
+              <button onclick="resetGame2()" class="text-rose-400 hover:underline font-bold">Đặt lại nguyên liệu</button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 4: 20 TRẮC NGHIỆM + 4 TỰ LUẬN ================= -->
+      <section id="tab-content-assessment" class="hidden space-y-8">
+        
+        <div class="glass-vivid p-6 rounded-3xl flex flex-wrap justify-between items-center gap-4 border border-violet-500/30 shadow-2xl">
+          <div>
+            <h3 class="text-xl font-display font-extrabold text-white flex items-center gap-2">
+              <span>📝</span> Ngân Hàng Đánh Giá Năng Lực Bài 22: Quang Hợp Ở Thực Vật
+            </h3>
+            <p class="text-xs text-slate-300">20 câu trắc nghiệm 4 mức độ • 4 câu tự luận có Rubric chuẩn • Tự động chấm điểm</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="px-5 py-2.5 rounded-2xl bg-slate-950 border border-white/10 text-xs shadow-inner">
+              Thời gian: <span id="quiz-timer" class="font-mono text-amber-400 font-extrabold text-sm">00:00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 20 CÂU TRẮC NGHIỆM -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center px-1">
+            <h4 class="font-extrabold text-emerald-300 text-base flex items-center gap-2">
+              <span>1️⃣</span> PHẦN I: TRẮC NGHIỆM KHÁCH QUAN (20 Câu - 10 Điểm)
+            </h4>
+            <span class="text-xs text-slate-400">0.5 điểm / câu</span>
+          </div>
+
+          <div id="quiz-list-wrapper" class="space-y-4">
+            <!-- Questions rendered via JS -->
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="p-6 rounded-3xl glass-vivid flex flex-wrap justify-between items-center gap-4 border border-emerald-400/30 shadow-2xl">
+            <div>
+              <div id="assessment-score-display" class="text-lg font-bold text-amber-300">
+                Chưa nộp bài
+              </div>
+              <p class="text-xs text-slate-400">Kết quả sẽ được ghi vào Bảng điểm Quản lý Giáo viên</p>
+            </div>
+            <button onclick="gradeAndSubmitAssessment()" id="btn-submit-assessment" 
+              class="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 hover:scale-105 transition">
+              Nộp Bài & Chấm Điểm Ngay 🎯
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 CÂU TỰ LUẬN KÈM RUBRIC -->
+        <div class="space-y-4 pt-6 border-t border-slate-800">
+          <div class="flex justify-between items-center px-1">
+            <h4 class="font-extrabold text-teal-300 text-base flex items-center gap-2">
+              <span>2️⃣</span> PHẦN II: CÂU HỎI TỰ LUẬN THỰC TIỄN & RUBRIC CHẤM ĐIỂM
+            </h4>
+            <span class="text-xs text-slate-400">Tự rèn luyện & Nghiên cứu sâu</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Essay 1 -->
+            <div class="glass-vivid p-6 rounded-3xl space-y-3 border-t-4 border-t-emerald-400">
+              <div class="flex justify-between text-xs">
+                <span class="font-bold text-emerald-300">Câu 1 (3.0 Điểm)</span>
+                <span class="text-slate-400">Bản chất quang hợp</span>
+              </div>
+              <p class="text-sm text-slate-200">
+                Viết phương trình tổng quát của quang hợp bằng chữ và công thức hóa học. Nêu rõ nguyên liệu, sản phẩm và điều kiện xảy ra phản ứng.
+              </p>
+              <details class="text-xs bg-slate-950/80 p-3.5 rounded-2xl border border-white/10">
+                <summary class="font-bold text-amber-300 cursor-pointer">Xem Rubric & Hướng dẫn chấm</summary>
+                <div class="mt-2 text-slate-300 space-y-1">
+                  <p>• Viết chuẩn 2 phương trình bằng KaTeX (1.0đ)</p>
+                  <p>• Chỉ rõ nguyên liệu $H_2O, CO_2$ và sản phẩm $C_6H_{12}O_6, O_2$ (1.0đ)</p>
+                  <p>• Bản chất: Chuyển hóa quang năng thành hóa năng tích lũy (1.0đ)</p>
+                </div>
+              </details>
+            </div>
+
+            <!-- Essay 2 -->
+            <div class="glass-vivid p-6 rounded-3xl space-y-3 border-t-4 border-t-cyan-400">
+              <div class="flex justify-between text-xs">
+                <span class="font-bold text-cyan-300">Câu 2 (2.0 Điểm)</span>
+                <span class="text-slate-400">Hình thái giải phẫu</span>
+              </div>
+              <p class="text-sm text-slate-200">
+                Phân tích 3 đặc điểm cấu tạo của phiến lá phù hợp với chức năng hấp thụ ánh sáng và trao đổi khí.
+              </p>
+              <details class="text-xs bg-slate-950/80 p-3.5 rounded-2xl border border-white/10">
+                <summary class="font-bold text-amber-300 cursor-pointer">Xem Rubric & Hướng dẫn chấm</summary>
+                <div class="mt-2 text-slate-300 space-y-1">
+                  <p>• Phiến lá bản dẹt, diện tích bề mặt lớn, xếp so le hứng sáng (0.75đ)</p>
+                  <p>• Khí khổng mở cho $CO_2$ vào, $O_2$ thoát ra (0.75đ)</p>
+                  <p>• Mạch dẫn gân lá cấp nước và vận chuyển tinh bột (0.5đ)</p>
+                </div>
+              </details>
+            </div>
+
+            <!-- Essay 3 -->
+            <div class="glass-vivid p-6 rounded-3xl space-y-3 border-t-4 border-t-purple-400">
+              <div class="flex justify-between text-xs">
+                <span class="font-bold text-purple-300">Câu 3 (2.5 Điểm)</span>
+                <span class="text-slate-400">Vận dụng thực tiễn</span>
+              </div>
+              <p class="text-sm text-slate-200">
+                Ý kiến: "Cây lá đỏ (huyết dụ, tía tô cảnh) không có khả năng quang hợp". Nhận xét và đề xuất thí nghiệm kiểm chứng.
+              </p>
+              <details class="text-xs bg-slate-950/80 p-3.5 rounded-2xl border border-white/10">
+                <summary class="font-bold text-amber-300 cursor-pointer">Xem Rubric & Hướng dẫn chấm</summary>
+                <div class="mt-2 text-slate-300 space-y-1">
+                  <p>• Khẳng định ý kiến SAI (0.5đ)</p>
+                  <p>• Cây vẫn có diệp lục nhưng bị Anthocyanin đỏ che lấp (1.0đ)</p>
+                  <p>• Thí nghiệm luộc cồn khử màu, thử Iodine chuyển xanh tím (1.0đ)</p>
+                </div>
+              </details>
+            </div>
+
+            <!-- Essay 4 -->
+            <div class="glass-vivid p-6 rounded-3xl space-y-3 border-t-4 border-t-rose-400">
+              <div class="flex justify-between text-xs">
+                <span class="font-bold text-rose-300">Câu 4 (2.5 Điểm)</span>
+                <span class="text-slate-400">Môi trường & Sinh thái</span>
+              </div>
+              <p class="text-sm text-slate-200">
+                Dựa trên bản chất quang hợp, hãy giải thích vì sao trồng nhiều cây xanh ở đô thị giúp giảm hiệu ứng nhà kính và thanh lọc không khí?
+              </p>
+              <details class="text-xs bg-slate-950/80 p-3.5 rounded-2xl border border-white/10">
+                <summary class="font-bold text-amber-300 cursor-pointer">Xem Rubric & Hướng dẫn chấm</summary>
+                <div class="mt-2 text-slate-300 space-y-1">
+                  <p>• Cây xanh hấp thu khí $CO_2$ (khí nhà kính) quy mô lớn (1.0đ)</p>
+                  <p>• Nhả dưỡng khí $O_2$ và thoát hơi nước điều hòa vi khí hậu (1.0đ)</p>
+                  <p>• Tán lá giữ và lắng đọng bụi mịn bảo vệ sức khỏe (0.5đ)</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB 5: BẢNG ĐIỀU KHIỂN GIÁO VIÊN ================= -->
+      <section id="tab-content-dashboard" class="hidden space-y-6">
+        
+        <div class="glass-vivid p-6 rounded-3xl border border-teal-500/30 flex flex-wrap justify-between items-center gap-4 shadow-2xl">
+          <div>
+            <h3 class="text-xl font-display font-extrabold text-white flex items-center gap-2">
+              <span>👨‍🏫</span> Bảng Quản Trị Học Tập Dành Cho Giáo Viên
+            </h3>
+            <p class="text-xs text-slate-300">Theo dõi điểm thi đua, thời gian hoàn thành và đồng bộ Google Sheets</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="exportToCSV()" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-teal-500 to-cyan-500 hover:opacity-95 text-slate-950 font-bold text-xs shadow-lg transition">
+              📥 Xuất File Excel / CSV
+            </button>
+            <button onclick="addDemoStudentData()" class="px-4 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-white/10 text-emerald-300 text-xs font-semibold transition">
+              + Tạo Dữ Liệu Học Sinh Mẫu
+            </button>
+            <button onclick="clearAllData()" class="px-4 py-2.5 rounded-2xl bg-rose-950/80 hover:bg-rose-900 border border-rose-500/40 text-rose-300 text-xs font-semibold transition">
+              Xóa Bảng Điểm
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 Multi-color Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="glass-vivid p-6 rounded-3xl border-t-4 border-t-emerald-400 shadow-xl">
+            <span class="text-xs text-slate-400 uppercase font-bold">Tổng học sinh đã làm</span>
+            <div id="stat-total-students" class="text-4xl font-display font-black text-white mt-1">0</div>
+            <p class="text-[11px] text-emerald-400 mt-1 font-semibold">✓ Đã đồng bộ Cloud & Local</p>
+          </div>
+
+          <div class="glass-vivid p-6 rounded-3xl border-t-4 border-t-amber-400 shadow-xl">
+            <span class="text-xs text-slate-400 uppercase font-bold">Điểm trung bình cả lớp</span>
+            <div id="stat-avg-score" class="text-4xl font-display font-black text-amber-300 mt-1">0.0</div>
+            <p class="text-[11px] text-slate-400 mt-1">Thang điểm 10</p>
+          </div>
+
+          <div class="glass-vivid p-6 rounded-3xl border-t-4 border-t-cyan-400 shadow-xl">
+            <span class="text-xs text-slate-400 uppercase font-bold">Tỉ lệ đạt trên 8.0</span>
+            <div id="stat-pass-rate" class="text-4xl font-display font-black text-cyan-300 mt-1">0%</div>
+            <p class="text-[11px] text-cyan-400 mt-1 font-semibold">Đánh giá xuất sắc</p>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="glass-vivid p-6 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="font-extrabold text-white text-base">Danh Sách Kết Quả Học Tập (Thời Gian Thực)</h4>
+            <div class="text-xs text-emerald-400 font-semibold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Tự động cập nhật
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+              <thead class="text-xs uppercase bg-slate-950/80 text-emerald-300 font-bold border-b border-white/10">
+                <tr>
+                  <th class="py-3.5 px-4">Thời gian</th>
+                  <th class="py-3.5 px-4">Họ và Tên</th>
+                  <th class="py-3.5 px-4">Lớp</th>
+                  <th class="py-3.5 px-4">Điểm số (/10)</th>
+                  <th class="py-3.5 px-4">Số câu đúng</th>
+                  <th class="py-3.5 px-4">Thời gian làm</th>
+                  <th class="py-3.5 px-4">Xếp loại</th>
+                </tr>
+              </thead>
+              <tbody id="admin-table-body" class="divide-y divide-white/5">
+                <!-- Data populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Google Apps Script URL configuration -->
+        <div class="p-6 rounded-3xl bg-slate-950/90 border border-white/10 space-y-2 text-xs shadow-xl">
+          <div class="flex items-center gap-2 font-bold text-cyan-400">
+            <span>🔗</span> Cấu hình Google Sheets Apps Script Web App Endpoint:
+          </div>
+          <p class="text-slate-400">
+            Dán đường dẫn <code class="text-amber-300 font-bold">Web App URL</code> từ Apps Script để đồng bộ trực tiếp về Google Sheets:
+          </p>
+          <div class="flex gap-2">
+            <input id="input-apps-script-url" type="text" placeholder="https://script.google.com/macros/s/.../exec" 
+              class="flex-1 px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-slate-200 outline-none text-xs focus:border-cyan-400">
+            <button onclick="saveAppsScriptUrl()" class="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold transition shadow-md">
+              Lưu URL
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="glass-vivid border-t border-white/10 py-5 px-6 text-center text-xs text-slate-400 mt-auto relative z-10">
+    Hệ thống Giáo Dục Số Biosphère 22: Quang Hợp Ở Thực Vật • Tối ưu hóa trên PC, Máy tính bảng & Điện thoại • 2026
+  </footer>
+
+  <!-- ================= JAVASCRIPT CONTROLLER ================= -->
+  <script>
+    /* -------------------------------------------------------------
+     * 1. STATE & STORAGE
+     * ------------------------------------------------------------- */
+    let currentUser = JSON.parse(sessionStorage.getItem('bio22_user')) || null;
+    let quizTimeStart = null;
+    let quizInterval = null;
+    let sfxEnabled = true;
+    let studentRecords = JSON.parse(localStorage.getItem('bio22_records')) || [];
+
+    const QUIZ_QUESTIONS = [
+      {
+        id: 1,
+        level: "Nhận biết",
+        q: "Quang hợp ở thực vật diễn ra chủ yếu ở bào quan nào sau đây?",
+        options: ["Ti thể", "Lục lạp", "Không bào", "Bộ máy Golgi"],
+        ans: 1,
+        explain: "Lục lạp chứa chất diệp lục có khả năng hấp thụ và chuyển hóa quang năng."
+      },
+      {
+        id: 2,
+        level: "Nhận biết",
+        q: "Nguyên liệu trực tiếp của quá trình quang hợp gồm có:",
+        options: ["Glucose và Oxygen", "Tinh bột và Nước", "Nước và Carbon dioxide", "Nước và Oxygen"],
+        ans: 2,
+        explain: "Nước lấy từ rễ cây và Carbon dioxide hấp thu từ khí quyển qua khí khổng."
+      },
+      {
+        id: 3,
+        level: "Nhận biết",
+        q: "Chất sắc tố có khả năng hấp thụ năng lượng ánh sáng mặt trời là:",
+        options: ["Hemoglobin", "Diệp lục (Chlorophyll)", "Carotenoid hòa tan", "Xenlulozo"],
+        ans: 1,
+        explain: "Diệp lục là sắc tố quang hợp chính tạo nên màu xanh đặc trưng của lá cây."
+      },
+      {
+        id: 4,
+        level: "Nhận biết",
+        q: "Khí nào sau đây được giải phóng ra môi trường như một sản phẩm của quang hợp?",
+        options: ["Carbon dioxide", "Nitrogen", "Oxygen (O₂)", "Methane"],
+        ans: 2,
+        explain: "Quang hợp phân ly nước và giải phóng khí Oxygen duy trì sự sống."
+      },
+      {
+        id: 5,
+        level: "Nhận biết",
+        q: "Bộ phận nào của lá thực hiện chức năng đóng mở để trao đổi khí và thoát hơi nước?",
+        options: ["Gân lá", "Mô xốp", "Khí khổng (Stomata)", "Lớp sáp cutin"],
+        ans: 2,
+        explain: "Hai tế bào hình hạt đậu của khí khổng kiểm soát việc đóng mở trao đổi khí."
+      },
+      {
+        id: 6,
+        level: "Thông hiểu",
+        q: "Phương trình chữ nào sau đây mô tả chính xác quá trình quang hợp?",
+        options: [
+          "Nước + Carbon dioxide -> (Ánh sáng, Diệp lục) -> Glucose + Oxygen",
+          "Glucose + Oxygen -> Nước + Carbon dioxide",
+          "Nước + Oxygen -> (Ánh sáng) -> Glucose + Carbon dioxide",
+          "Carbon dioxide + Tinh bột -> Nước + Oxygen"
+        ],
+        ans: 0,
+        explain: "Đây là phương trình biến đổi chất vô cơ đơn giản thành chất hữu cơ giàu năng lượng."
+      },
+      {
+        id: 7,
+        level: "Thông hiểu",
+        q: "Đặc điểm nào của phiến lá giúp lá cây hấp thu được nhiều ánh sáng nhất?",
+        options: [
+          "Phiến lá dày và có nhiều lông tơ",
+          "Bản dẹt, diện tích bề mặt lớn, các lá xếp so le nhau trên cành",
+          "Mặt trên phủ lớp sáp chống thấm",
+          "Có cuống lá dài và cứng"
+        ],
+        ans: 1,
+        explain: "Diện tích bề mặt lớn và sắp xếp so le giúp đón trọn vẹn ánh sáng mặt trời."
+      },
+      {
+        id: 8,
+        level: "Thông hiểu",
+        q: "Gân lá có vai trò gì trong hoạt động quang hợp của cây xanh?",
+        options: [
+          "Trực tiếp hấp thu khí CO₂",
+          "Chứa phần lớn sắc tố diệp lục để tổng hợp đường",
+          "Vận chuyển nước đến thịt lá và dẫn truyền sản phẩm hữu cơ đi nuôi cây",
+          "Bảo vệ lá khỏi nhiệt độ cao"
+        ],
+        ans: 2,
+        explain: "Mạch gỗ dẫn nước, mạch rây dẫn sản phẩm quang hợp (glucose/tinh bột)."
+      },
+      {
+        id: 9,
+        level: "Thông hiểu",
+        q: "Tại sao mặt trên của lá cây thường có màu xanh lục đậm hơn mặt dưới?",
+        options: [
+          "Lớp mô giậu phía trên tập trung mật độ lục lạp cao hơn để đón ánh sáng",
+          "Mặt trên hấp thu nhiều bụi bẩn hơn",
+          "Mặt dưới có nhiều khí khổng làm loãng màu xanh",
+          "Mặt trên không có tế bào biểu bì"
+        ],
+        ans: 0,
+        explain: "Tế bào mô giậu chứa nhiều lục lạp nằm ở phía mặt trên đón nắng trực tiếp."
+      },
+      {
+        id: 10,
+        level: "Thông hiểu",
+        q: "Vai trò sinh thái to lớn nhất của quá trình quang hợp đối với sinh quyển là gì?",
+        options: [
+          "Tạo ra nước cho chu trình thủy văn",
+          "Cung cấp chất hữu cơ cho mọi sinh vật dị dưỡng và cân bằng khí O₂/CO₂",
+          "Làm tăng nhiệt độ toàn cầu",
+          "Tiêu diệt vi khuẩn gây bệnh trong đất"
+        ],
+        ans: 1,
+        explain: "Quang hợp là mắt xích khởi đầu chuỗi thức ăn và điều hòa khí quyển Trái Đất."
+      },
+      {
+        id: 11,
+        level: "Vận dụng",
+        q: "Khi nuôi cá cảnh trong bể kính kín, người ta thường thả thêm rong đuôi chó nhằm mục đích chính là:",
+        options: [
+          "Làm thức ăn duy nhất cho cá",
+          "Trang trí cho bể cá đẹp mắt",
+          "Cung cấp thêm Oxygen hòa tan cho cá hô hấp nhờ rong quang hợp",
+          "Làm giảm độ trong suốt của nước"
+        ],
+        ans: 2,
+        explain: "Rong quang hợp giải phóng bọt khí O₂ hòa tan giúp cá thở tốt."
+      },
+      {
+        id: 12,
+        level: "Vận dụng",
+        q: "Bịt kín một phần lá cây bằng giấy bạc đen rồi đem chiếu sáng 6 giờ. Thử bằng thuốc thử Iodine sẽ có hiện tượng:",
+        options: [
+          "Toàn bộ lá đều chuyển sang màu xanh tím",
+          "Phần bịt kín đổi màu tím, phần không bịt giữ nguyên",
+          "Phần không bịt đổi sang màu xanh tím, phần bịt kín không đổi màu",
+          "Cả lá không có bất kỳ sự biến đổi màu nào"
+        ],
+        ans: 2,
+        explain: "Phần bịt kín không nhận được ánh sáng nên không tạo tinh bột, không bắt màu với thuốc thử Iodine."
+      },
+      {
+        id: 13,
+        level: "Vận dụng",
+        q: "Tại sao việc trồng cây nông nghiệp với mật độ quá dày lại làm giảm năng suất thu hoạch?",
+        options: [
+          "Cây nhận quá nhiều ánh sáng gây cháy lá",
+          "Các lá che khuất nhau làm giảm khả năng đón sáng và cạnh tranh dinh dưỡng",
+          "Khí khổng bị bít kín hoàn toàn",
+          "Cây tạo ra quá nhiều oxygen ức chế sinh trưởng"
+        ],
+        ans: 1,
+        explain: "Lá tầng dưới bị che bóng, cường độ quang hợp thấp hơn cường độ hô hấp."
+      },
+      {
+        id: 14,
+        level: "Vận dụng",
+        q: "Biện pháp thắp đèn sợi đốt hoặc đèn LED vào ban đêm cho vườn thanh long nhằm mục đích gì?",
+        options: [
+          "Sưởi ấm cho bộ rễ cây",
+          "Xua đuổi côn trùng hại hoa",
+          "Bổ sung ánh sáng kích thích quang hợp và phân hóa mầm hoa trái vụ",
+          "Hạn chế quá trình thoát hơi nước"
+        ],
+        ans: 2,
+        explain: "Ánh sáng nhân tạo giúp tăng tích lũy dinh dưỡng và điều khiển chu kỳ ra hoa trái vụ."
+      },
+      {
+        id: 15,
+        level: "Vận dụng",
+        q: "Vào những ngày hè nắng gắt giữa trưa, tại sao cây xanh thường tạm thời giảm hoặc ngừng quang hợp?",
+        options: [
+          "Diệp lục bị phân hủy vĩnh viễn",
+          "Khí khổng chủ động đóng lại chống mất nước, khiến khí CO₂ không vào được lá",
+          "Cây không thể hấp thụ ánh sáng mạnh",
+          "Cây chuyển sang chế độ ngủ đông"
+        ],
+        ans: 1,
+        explain: "Để tránh mất nước, khí khổng khép lại làm thiếu hụt nguồn nguyên liệu CO₂."
+      },
+      {
+        id: 16,
+        level: "Vận dụng cao",
+        q: "Các loài cây lá màu đỏ tím (như huyết dụ, tía tô cảnh) có thực hiện quang hợp không? Vì sao?",
+        options: [
+          "Không, vì chúng hoàn toàn không có chất diệp lục",
+          "Có, vì chúng vẫn có diệp lục nhưng bị sắc tố anthocyanin đỏ lấn át màu",
+          "Không, chúng sống nhờ hút chất dinh dưỡng từ đất",
+          "Có, nhưng dùng anthocyanin thay thế hoàn toàn cho diệp lục"
+        ],
+        ans: 1,
+        explain: "Sắc tố đỏ anthocyanin che lấp màu xanh, nhưng lục lạp và diệp lục bên trong vẫn quang hợp bình thường."
+      },
+      {
+        id: 17,
+        level: "Vận dụng cao",
+        q: "Trong nông nghiệp nhà kính, người ta sục thêm khí CO₂ lên nồng độ 0.1% (cao hơn khí quyển 0.04%) nhằm:",
+        options: [
+          "Tăng nồng độ nguyên liệu để đẩy mạnh tốc độ quang hợp, nâng cao sinh khối",
+          "Giữ ẩm cho bề mặt lá cây",
+          "Tiêu diệt vi khuẩn bám trên thân cây",
+          "Ngăn chặn cây thoát hơi nước"
+        ],
+        ans: 0,
+        explain: "Tăng nồng độ CO₂ trong giới hạn sinh lý sẽ tối ưu hóa tốc độ tạo tinh bột."
+      },
+      {
+        id: 18,
+        level: "Vận dụng cao",
+        q: "Nếu một đột biến làm màng thylakoid của lục lạp bị phá vỡ, quá trình nào sẽ bị ngừng trệ đầu tiên?",
+        options: [
+          "Hấp thụ photon ánh sáng và quang phân ly nước giải phóng O₂",
+          "Hấp thụ khí CO₂ từ khí quyển",
+          "Vận chuyển đường theo mạch rây",
+          "Hút nước từ rễ lên thân"
+        ],
+        ans: 0,
+        explain: "Màng thylakoid là nơi định vị của các phức hệ sắc tố diệp lục trong pha sáng."
+      },
+      {
+        id: 19,
+        level: "Vận dụng cao",
+        q: "Tại sao đứng dưới bóng mát cây xanh mùa hè lại mát mẻ hơn nhiều so với đứng dưới mái tôn nhân tạo?",
+        options: [
+          "Cây hấp thu toàn bộ nhiệt lượng mà không tỏa ra",
+          "Cây quang hợp đón bức xạ kết hợp thoát hơi nước qua khí khổng giúp hạ nhiệt xung quanh",
+          "Lá cây giải phóng ra khí nitrogen làm lạnh",
+          "Mái tôn hấp thụ oxy gây cảm giác ngột ngạt"
+        ],
+        ans: 1,
+        explain: "Sự thoát hơi nước là cơ chế 'điều hòa sinh học' làm giảm nhiệt độ bề mặt lá và không khí."
+      },
+      {
+        id: 20,
+        level: "Vận dụng cao",
+        q: "Để chứng minh sản phẩm quang hợp có khí Oxygen, người ta đưa que đóm tàn đỏ vào ống nghiệm thu khí, hiện tượng là:",
+        options: [
+          "Que đóm bị tắt ngúm ngay lập tức",
+          "Que đóm bùng cháy sáng trở lại",
+          "Có khói đen bốc lên dày đặc",
+          "Que đóm đổi sang màu xanh lục"
+        ],
+        ans: 1,
+        explain: "Oxygen duy trì và thúc đẩy quá trình cháy, làm que đóm tàn đỏ bùng cháy trở lại."
+      }
+    ];
+
+    // Web Audio Synthesizer
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playTone(freq, type = 'sine', duration = 0.15) {
+      if (!sfxEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      sfxEnabled = !sfxEnabled;
+      document.getElementById('audio-icon').innerText = sfxEnabled ? '🔊' : '🔇';
+    }
+
+    /* -------------------------------------------------------------
+     * 2. AUTHENTICATION CONTROLLER
+     * ------------------------------------------------------------- */
+    function switchLoginRole(role) {
+      playTone(520);
+      const isStd = role === 'student';
+      document.getElementById('role-tab-student').className = isStd 
+        ? "py-3 rounded-xl font-bold text-sm transition-all bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-slate-950 shadow-lg"
+        : "py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:text-white";
+      
+      document.getElementById('role-tab-teacher').className = !isStd 
+        ? "py-3 rounded-xl font-bold text-sm transition-all bg-gradient-to-r from-purple-500 via-fuchsia-500 to-rose-500 text-white shadow-lg"
+        : "py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:text-white";
+
+      document.getElementById('form-student-login').classList.toggle('hidden', !isStd);
+      document.getElementById('form-teacher-login').classList.toggle('hidden', isStd);
+    }
+
+    function doStudentLogin(e) {
+      e.preventDefault();
+      const name = document.getElementById('input-std-name').value.trim();
+      const sClass = document.getElementById('input-std-class').value;
+      if (!name) return;
+
+      currentUser = { role: 'student', name: name, class: sClass };
+      sessionStorage.setItem('bio22_user', JSON.stringify(currentUser));
+      playTone(660);
+      initAppInterface();
+    }
+
+    function doTeacherLogin(e) {
+      e.preventDefault();
+      const name = document.getElementById('input-tch-name').value.trim();
+      const pin = document.getElementById('input-tch-pin').value.trim();
+
+      if (pin !== '123456') {
+        alert("⚠️ Mật khẩu PIN quản trị không chính xác! Vui lòng nhập đúng 123456.");
+        return;
+      }
+
+      currentUser = { role: 'teacher', name: name || "Giáo Viên Quản Trị" };
+      sessionStorage.setItem('bio22_user', JSON.stringify(currentUser));
+      playTone(880);
+      initAppInterface();
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('bio22_user');
+      currentUser = null;
+      location.reload();
+    }
+
+    function initAppInterface() {
+      if (!currentUser) {
+        document.getElementById('login-view').classList.remove('hidden');
+        document.getElementById('main-portal-view').classList.add('hidden');
+        document.getElementById('user-status-pill').classList.add('hidden');
+        return;
+      }
+
+      document.getElementById('login-view').classList.add('hidden');
+      document.getElementById('main-portal-view').classList.remove('hidden');
+      document.getElementById('main-portal-view').classList.add('flex');
+      document.getElementById('user-status-pill').classList.remove('hidden');
+      document.getElementById('user-status-pill').classList.add('flex');
+
+      if (currentUser.role === 'teacher') {
+        document.getElementById('user-display-name').innerText = `👨‍🏫 ${currentUser.name}`;
+        switchTab('dashboard');
+      } else {
+        document.getElementById('user-display-name').innerText = `🎓 ${currentUser.name} (${currentUser.class})`;
+        switchTab('theory');
+      }
+
+      setTimeout(() => {
+        if (window.renderMathInElement) {
+          renderMathInElement(document.body, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false }
+            ]
+          });
+        }
+      }, 100);
+
+      renderQuizQuestions();
+      refreshDashboardStats();
+    }
+
+    /* -------------------------------------------------------------
+     * 3. TAB CONTROLLER
+     * ------------------------------------------------------------- */
+    const TAB_STYLES = {
+      theory: {
+        active: "tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/30 transition",
+        iconBg: "bg-emerald-900/50 text-white"
+      },
+      lab3d: {
+        active: "tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 shadow-lg shadow-cyan-500/30 transition",
+        iconBg: "bg-cyan-900/50 text-white"
+      },
+      games: {
+        active: "tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 text-slate-950 shadow-lg shadow-amber-500/30 transition",
+        iconBg: "bg-amber-900/50 text-white"
+      },
+      assessment: {
+        active: "tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 bg-gradient-to-r from-violet-400 to-fuchsia-400 text-slate-950 shadow-lg shadow-violet-500/30 transition",
+        iconBg: "bg-violet-900/50 text-white"
+      },
+      dashboard: {
+        active: "tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 bg-gradient-to-r from-pink-400 to-rose-500 text-white shadow-lg shadow-rose-500/30 transition",
+        iconBg: "bg-rose-900/50 text-white"
+      }
+    };
+
+    function switchTab(tabKey) {
+      playTone(480);
+      const tabs = ['theory', 'lab3d', 'games', 'assessment', 'dashboard'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`nav-${t}`);
+        const content = document.getElementById(`tab-content-${t}`);
+        if (t === tabKey) {
+          btn.className = TAB_STYLES[t].active;
+          content.classList.remove('hidden');
+        } else {
+          btn.className = "tab-btn px-4 py-2.5 rounded-2xl text-sm font-bold flex items-center gap-2 text-slate-300 hover:text-white hover:bg-slate-800/60 transition";
+          content.classList.add('hidden');
+        }
+      });
+
+      if (tabKey === 'games') {
+        initGame1Canvas();
+      }
+      if (tabKey === 'assessment' && !quizTimeStart) {
+        startQuizTimer();
+      }
+      if (tabKey === 'dashboard') {
+        refreshDashboardStats();
+      }
+    }
+
+    /* -------------------------------------------------------------
+     * 4. TAB 1: CẤU TẠO LÁ INTERACTIVE
+     * ------------------------------------------------------------- */
+    const LEAF_PARTS = {
+      'phien-la': {
+        title: "1. Phiến Lá: Tối ưu hóa bề mặt đón sáng",
+        icon: "🌿",
+        desc: "Phiến lá có diện tích bề mặt lớn, dạng bản dẹt mỏng giúp hấp thụ tối đa quang năng mặt trời. Các lá trên cành mọc xếp so le nhau, không che khuất nhau giúp đón ánh sáng trọn vẹn nhất."
+      },
+      'gan-la': {
+        title: "2. Gân Lá: Hệ thống giao thông dẫn truyền",
+        icon: "🕸️",
+        desc: "Chứa hệ mạch dẫn liên tục: Mạch gỗ (xylem) vận chuyển nước và muối khoáng hòa tan từ rễ lên phiến lá; Mạch rây (phloem) dẫn các sản phẩm đường hữu cơ (glucose, tinh bột) đi nuôi rễ, cành, hoa quả."
+      },
+      'luc-lap': {
+        title: "3. Lục Lạp: Nhà máy năng lượng xanh",
+        icon: "🟢",
+        desc: "Bào quan quang hợp chính, tập trung dày đặc ở lớp tế bào mô giậu phía mặt trên của lá. Bên trong chứa chất diệp lục gắn trên màng thylakoid (các đĩa Grana) có khả năng bắt giữ photon ánh sáng."
+      },
+      'khi-khong': {
+        title: "4. Khí Khổng: Cánh cổng đóng mở trao đổi khí",
+        icon: "🕳️",
+        desc: "Cấu tạo gồm 2 tế bào hình hạt đậu có vách trong dày, vách ngoài mỏng. Khi tế bào no nước, lỗ khí mở rộng cho CO₂ từ không khí khuếch tán vào thịt lá và giải phóng O₂ ra ngoài môi trường."
+      }
+    };
+
+    function selectLeafPart(key) {
+      playTone(550);
+      const borderMap = {
+        'phien-la': 'border-emerald-400',
+        'gan-la': 'border-cyan-400',
+        'luc-lap': 'border-lime-400',
+        'khi-khong': 'border-purple-400'
+      };
+
+      ['phien-la', 'gan-la', 'luc-lap', 'khi-khong'].forEach(k => {
+        const card = document.getElementById(`card-${k}`);
+        card.classList.remove('border-emerald-400', 'border-cyan-400', 'border-lime-400', 'border-purple-400', 'bg-emerald-950/40', 'bg-cyan-950/40', 'bg-lime-950/40', 'bg-purple-950/40');
+        if (k === key) {
+          card.classList.add(borderMap[k], 'bg-slate-900/80');
+        } else {
+          card.classList.add('border-transparent');
+        }
+      });
+
+      const data = LEAF_PARTS[key];
+      document.getElementById('detail-icon').innerText = data.icon;
+      document.getElementById('detail-title').innerText = data.title;
+      document.getElementById('detail-desc').innerText = data.desc;
+    }
+
+    /* -------------------------------------------------------------
+     * 5. TAB 2: CHUYỂN ĐỔI 3 THÍ NGHIỆM CHUẨN XÁC SGK
+     * ------------------------------------------------------------- */
+    function switchSGKExperiment(id) {
+      playTone(600 + id * 60);
+
+      // Cập nhật tab buttons
+      for (let i = 1; i <= 3; i++) {
+        const btn = document.getElementById(`btn-sgk-${i}`);
+        const section = document.getElementById(`sgk-exp-${i}`);
+        if (i === id) {
+          btn.className = "flex-1 min-w-[240px] py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 text-slate-950 shadow-lg";
+          section.classList.remove('hidden');
+        } else {
+          btn.className = "flex-1 min-w-[240px] py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all text-slate-300 hover:text-white hover:bg-slate-800/60";
+          section.classList.add('hidden');
+        }
+      }
+    }
+
+    function animateExp1Flow() {
+      playTone(720);
+      confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+      alert("🌱 Mô phỏng Hình 22.1:\n• Ánh sáng mặt trời chiếu vào lá.\n• CO₂ từ không khí đi vào lá.\n• Rễ hút Nước & muối khoáng từ đất lên.\n• Lá giải phóng Oxygen ra ngoài và tổng hợp Glucose -> Tinh bột!");
+    }
+
+    function animateExp2Reaction() {
+      playTone(840);
+      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+      alert("🍃 Mô phỏng Hình 22.2:\n• H₂O từ cuống lá + CO₂ không khí.\n• Quang năng chiếu vào kích hoạt phản ứng: H₂O + CO₂ -> C₆H₁₂O₆ + O₂.\n• Chuyển hóa thành Hóa năng trong Tinh bột và giải phóng luồng khí O₂!");
+    }
+
+    const ANATOMY_DATA = {
+      'cuong-la': {
+        title: "1. Cuống Lá & Gân Lá (Bó Mạch Dẫn):",
+        desc: "Cuống lá chứa hệ mạch dẫn liên tục nối từ thân cành vào phiến lá. Mạch gỗ (xanh lam) dẫn nước và muối khoáng đến lục lạp; mạch rây (tím) dẫn chất hữu cơ tổng hợp được đi nuôi cơ thể cây."
+      },
+      'anh-sang': {
+        title: "2. Ánh Sáng & Phiến Lá:",
+        desc: "Phiến lá bản rộng mỏng, các tế bào biểu bì trong suốt cho phép chùm tia nắng (quang năng) chiếu xuyên vào lớp mô giậu chứa lục lạp bên trong."
+      },
+      'luc-lap': {
+        title: "3. Lục Lạp Chứa Diệp Lục:",
+        desc: "Bào quan quang hợp chính, chứa các đĩa Grana thylakoid xếp chồng. Lục lạp tiếp nhận nước từ mạch gỗ và hấp thu CO₂ qua khí khổng để tổng hợp đường và giải phóng O₂."
+      },
+      'khi-khong': {
+        title: "4. Khí Khổng Đóng Mở:",
+        desc: "Nằm ở lớp biểu bì dưới của lá. Gồm 2 tế bào hạt đậu kiểm soát sự trao đổi khí: cho Carbon dioxide (mũi tên xanh lá) đi vào và giải phóng Oxygen (mũi tên đỏ) thoát ra môi trường."
+      }
+    };
+
+    function showAnatomyDetail(key) {
+      playTone(550);
+      const keys = ['cuong-la', 'anh-sang', 'luc-lap', 'khi-khong'];
+      keys.forEach(k => {
+        const el = document.getElementById(`hotspot-${k}`);
+        if (el) {
+          if (k === key) {
+            el.classList.remove('border-white/10', 'border-amber-400/50', 'border-emerald-400/50', 'border-purple-400/50');
+            el.classList.add('border-2', 'border-emerald-400', 'bg-slate-900');
+          } else {
+            el.classList.remove('border-emerald-400', 'bg-slate-900');
+            el.classList.add('border', 'border-white/15');
+          }
+        }
+      });
+      const data = ANATOMY_DATA[key];
+      if (data) {
+        document.getElementById('anatomy-detail-title').innerHTML = `<span>🌿</span> ${data.title}`;
+        document.getElementById('anatomy-detail-desc').innerText = data.desc;
+      }
+    }
+
+    function toggleAnatomyHighlight() {
+      playTone(680);
+      confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+      const keys = ['cuong-la', 'anh-sang', 'luc-lap', 'khi-khong'];
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      showAnatomyDetail(randomKey);
+    }
+
+    /* -------------------------------------------------------------
+     * 6. TAB 3: GAME 1 - CHIẾN BINH QUANG TỬ 3D PIXAR (BÉ LÁ LEAFY)
+     * ------------------------------------------------------------- */
+    let g1Running = false;
+    let g1Score = 0;
+    let g1TimeLeft = 30;
+    let g1Interval = null;
+    let leafX = 150;
+    let leafY = 260;
+    let leafTargetX = 150;
+    let fallingPhotons = [];
+    let sparkleEffects = [];
+    let g1HighScore = 0;
+
+    function initGame1Canvas() {
+      const canvas = document.getElementById('g1-canvas');
+      if (!canvas) return;
+      canvas.width = canvas.parentElement.clientWidth || 450;
+      canvas.height = canvas.parentElement.clientHeight || 320;
+      leafX = canvas.width / 2;
+      leafTargetX = leafX;
+      leafY = canvas.height - 45;
+
+      canvas.onmousemove = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        leafTargetX = e.clientX - rect.left;
+      };
+      canvas.ontouchmove = (e) => {
+        if (e.touches.length > 0) {
+          const rect = canvas.getBoundingClientRect();
+          leafTargetX = e.touches[0].clientX - rect.left;
+        }
+      };
+    }
+
+    function startGame1() {
+      playTone(700);
+      document.getElementById('g1-overlay').classList.add('hidden');
+      g1Running = true;
+      g1Score = 0;
+      g1TimeLeft = 30;
+      fallingPhotons = [];
+      sparkleEffects = [];
+      updateG1ScoreUI();
+      document.getElementById('g1-time').innerText = "30s";
+
+      if (g1Interval) clearInterval(g1Interval);
+      g1Interval = setInterval(() => {
+        g1TimeLeft--;
+        document.getElementById('g1-time').innerText = `${g1TimeLeft}s`;
+        if (g1TimeLeft <= 0) endGame1();
+      }, 1000);
+
+      runGame1Loop();
+    }
+
+    function updateG1ScoreUI() {
+      document.getElementById('g1-score').innerText = `${g1Score}%`;
+      const bar = document.getElementById('g1-energy-bar');
+      if (bar) bar.style.width = `${g1Score}%`;
+    }
+
+    function runGame1Loop() {
+      const canvas = document.getElementById('g1-canvas');
+      const ctx = canvas.getContext('2d');
+      let animTime = 0;
+
+      function loop() {
+        if (!g1Running) return;
+        animTime += 0.05;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Smooth Leaf physics (lerp)
+        leafX += (leafTargetX - leafX) * 0.18;
+        leafX = Math.max(40, Math.min(canvas.width - 40, leafX));
+
+        // Draw animated starry sky background
+        for (let s = 0; s < 12; s++) {
+          const sx = (s * 41 + animTime * 15) % canvas.width;
+          const sy = (s * 27) % (canvas.height - 80);
+          ctx.beginPath();
+          ctx.arc(sx, sy, 1.2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+          ctx.fill();
+        }
+
+        // Spawn items
+        if (Math.random() < 0.09) {
+          const isPollutant = Math.random() < 0.28;
+          fallingPhotons.push({
+            x: Math.random() * (canvas.width - 50) + 25,
+            y: -15,
+            r: isPollutant ? 16 : 14,
+            type: isPollutant ? 'pollutant' : 'photon',
+            speed: Math.random() * 2 + 2.5,
+            rot: Math.random() * Math.PI,
+            wobble: Math.random() * 6.28
+          });
+        }
+
+        // Render falling items (Photons / Smoke Pollutants)
+        for (let i = fallingPhotons.length - 1; i >= 0; i--) {
+          const p = fallingPhotons[i];
+          p.y += p.speed;
+          p.wobble += 0.08;
+          const currentX = p.x + Math.sin(p.wobble) * 6;
+
+          ctx.save();
+          ctx.translate(currentX, p.y);
+
+          if (p.type === 'photon') {
+            // Pixar Sunny Photon Character (3D Golden Sphere with Sunrays & Cute Eyes)
+            // Outer Glow
+            const sunGlow = ctx.createRadialGradient(0, 0, 4, 0, 0, p.r * 1.8);
+            sunGlow.addColorStop(0, "rgba(255, 225, 53, 0.9)");
+            sunGlow.addColorStop(0.5, "rgba(251, 146, 60, 0.4)");
+            sunGlow.addColorStop(1, "rgba(251, 146, 60, 0)");
+            ctx.fillStyle = sunGlow;
+            ctx.beginPath();
+            ctx.arc(0, 0, p.r * 1.8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Sun body sphere
+            const sphereGrad = ctx.createRadialGradient(-3, -4, 2, 0, 0, p.r);
+            sphereGrad.addColorStop(0, "#fffbeb");
+            sphereGrad.addColorStop(0.3, "#fde047");
+            sphereGrad.addColorStop(0.8, "#f59e0b");
+            sphereGrad.addColorStop(1, "#d97706");
+            ctx.fillStyle = sphereGrad;
+            ctx.beginPath();
+            ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#fef08a";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Cute Pixar Face (Eyes & Smile)
+            ctx.fillStyle = "#1e293b";
+            ctx.beginPath();
+            ctx.arc(-4, -1, 2, 0, Math.PI * 2);
+            ctx.arc(4, -1, 2, 0, Math.PI * 2);
+            ctx.fill();
+            // Eye Highlights
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(-4.5, -1.8, 0.8, 0, Math.PI * 2);
+            ctx.arc(3.5, -1.8, 0.8, 0, Math.PI * 2);
+            ctx.fill();
+            // Rosy cheeks
+            ctx.fillStyle = "rgba(244, 63, 94, 0.6)";
+            ctx.beginPath();
+            ctx.arc(-6, 2, 1.8, 0, Math.PI * 2);
+            ctx.arc(6, 2, 1.8, 0, Math.PI * 2);
+            ctx.fill();
+            // Smile
+            ctx.strokeStyle = "#78350f";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(0, 1, 2.5, 0.1 * Math.PI, 0.9 * Math.PI);
+            ctx.stroke();
+
+          } else {
+            // Pixar Pollutant Smoke (Dark 3D Cloud with X Eyes)
+            const smokeGrad = ctx.createRadialGradient(-2, -3, 2, 0, 0, p.r);
+            smokeGrad.addColorStop(0, "#94a3b8");
+            smokeGrad.addColorStop(0.6, "#475569");
+            smokeGrad.addColorStop(1, "#1e293b");
+            ctx.fillStyle = smokeGrad;
+            ctx.beginPath();
+            ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#64748b";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // X Eyes for Pollutant
+            ctx.strokeStyle = "#f43f5e";
+            ctx.lineWidth = 1.5;
+            // Left eye X
+            ctx.beginPath();
+            ctx.moveTo(-6, -4); ctx.lineTo(-2, 0);
+            ctx.moveTo(-2, -4); ctx.lineTo(-6, 0);
+            // Right eye X
+            ctx.moveTo(2, -4); ctx.lineTo(6, 0);
+            ctx.moveTo(6, -4); ctx.lineTo(2, 0);
+            ctx.stroke();
+          }
+          ctx.restore();
+
+          // Collision detection with Leafy Character
+          const hitDistX = Math.abs(currentX - leafX);
+          const hitDistY = Math.abs(p.y - leafY);
+
+          if (hitDistX < 45 && hitDistY < 25) {
+            if (p.type === 'photon') {
+              g1Score = Math.min(100, g1Score + 5);
+              playTone(880, 'sine', 0.1);
+              // Spawn sparkles
+              for (let s = 0; s < 6; s++) {
+                sparkleEffects.push({
+                  x: currentX,
+                  y: p.y,
+                  vx: (Math.random() - 0.5) * 5,
+                  vy: (Math.random() - 0.5) * 5 - 2,
+                  color: "#fde047",
+                  life: 1
+                });
+              }
+            } else {
+              g1Score = Math.max(0, g1Score - 10);
+              playTone(200, 'sawtooth', 0.15);
+              for (let s = 0; s < 5; s++) {
+                sparkleEffects.push({
+                  x: currentX,
+                  y: p.y,
+                  vx: (Math.random() - 0.5) * 4,
+                  vy: (Math.random() - 0.5) * 4,
+                  color: "#f43f5e",
+                  life: 1
+                });
+              }
+            }
+            updateG1ScoreUI();
+            fallingPhotons.splice(i, 1);
+            continue;
+          }
+
+          if (p.y > canvas.height + 20) {
+            fallingPhotons.splice(i, 1);
+          }
+        }
+
+        // Render Sparkle Particles
+        for (let s = sparkleEffects.length - 1; s >= 0; s--) {
+          const sp = sparkleEffects[s];
+          sp.x += sp.vx;
+          sp.y += sp.vy;
+          sp.life -= 0.04;
+          if (sp.life <= 0) {
+            sparkleEffects.splice(s, 1);
+            continue;
+          }
+          ctx.fillStyle = sp.color;
+          ctx.globalAlpha = sp.life;
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, 3 * sp.life, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+        }
+
+        // Render 3D Pixar Leafy Character
+        ctx.save();
+        ctx.translate(leafX, leafY);
+
+        // Leafy aura when energetic
+        if (g1Score > 50) {
+          const auraGrad = ctx.createRadialGradient(0, 0, 20, 0, 0, 50);
+          auraGrad.addColorStop(0, "rgba(52, 211, 153, 0.45)");
+          auraGrad.addColorStop(1, "rgba(52, 211, 153, 0)");
+          ctx.fillStyle = auraGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, 50, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // 3D Pixar Leaf Body (Curved organic leaf shape)
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 42, 20, 0, 0, Math.PI * 2);
+        const leafGrad = ctx.createLinearGradient(-35, -15, 35, 15);
+        leafGrad.addColorStop(0, "#4ade80");
+        leafGrad.addColorStop(0.5, "#10b981");
+        leafGrad.addColorStop(1, "#047857");
+        ctx.fillStyle = leafGrad;
+        ctx.fill();
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = "#86efac";
+        ctx.stroke();
+
+        // Leaf veins (Gân lá Pixar)
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-35, 0); ctx.lineTo(35, 0);
+        ctx.moveTo(-10, 0); ctx.lineTo(-20, -10);
+        ctx.moveTo(-10, 0); ctx.lineTo(-20, 10);
+        ctx.moveTo(10, 0); ctx.lineTo(20, -10);
+        ctx.moveTo(10, 0); ctx.lineTo(20, 10);
+        ctx.stroke();
+
+        // Leafy Eyes (Big cute animated anime eyes)
+        const eyeOffset = Math.sin(animTime * 2) * 1.5;
+        // White sclera
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.ellipse(-12, -4 + eyeOffset, 6, 7.5, 0, 0, Math.PI * 2);
+        ctx.ellipse(12, -4 + eyeOffset, 6, 7.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Black pupil
+        ctx.fillStyle = "#0f172a";
+        ctx.beginPath();
+        ctx.arc(-11, -3 + eyeOffset, 3.8, 0, Math.PI * 2);
+        ctx.arc(13, -3 + eyeOffset, 3.8, 0, Math.PI * 2);
+        ctx.fill();
+        // Shiny eye spark highlights
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(-12.5, -4.5 + eyeOffset, 1.6, 0, Math.PI * 2);
+        ctx.arc(11.5, -4.5 + eyeOffset, 1.6, 0, Math.PI * 2);
+        ctx.arc(-9.5, -1.5 + eyeOffset, 0.9, 0, Math.PI * 2);
+        ctx.arc(14.5, -1.5 + eyeOffset, 0.9, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Rosy Pink Cheeks
+        ctx.fillStyle = "rgba(251, 113, 133, 0.7)";
+        ctx.beginPath();
+        ctx.arc(-22, 2, 4, 0, Math.PI * 2);
+        ctx.arc(22, 2, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cute Leafy Smile
+        ctx.strokeStyle = "#064e3b";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 4, 5, 0.1 * Math.PI, 0.9 * Math.PI);
+        ctx.stroke();
+
+        ctx.restore();
+
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    function endGame1() {
+      g1Running = false;
+      clearInterval(g1Interval);
+      playTone(600);
+      confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
+      if (g1Score > g1HighScore) {
+        g1HighScore = g1Score;
+        document.getElementById('g1-high-score').innerText = `Điểm cao: ${g1HighScore}%`;
+      }
+      const overlay = document.getElementById('g1-overlay');
+      overlay.classList.remove('hidden');
+      overlay.innerHTML = `
+        <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-400 to-yellow-300 p-1 mb-3 shadow-2xl shadow-amber-500/50 flex items-center justify-center text-4xl animate-bounce">
+          🏆
+        </div>
+        <h4 class="text-2xl font-display font-extrabold text-amber-300">Hoàn Thành Tuyệt Vời!</h4>
+        <p class="text-xs text-slate-200 mt-1 mb-6">Em và Bé Lá Leafy đã tích lũy: <b class="text-amber-400 text-lg font-mono">${g1Score}%</b> Năng lượng quang học!</p>
+        <button onclick="startGame1()" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-slate-950 font-black text-sm shadow-xl hover:scale-105 transition flex items-center gap-2">
+          <span>↺</span> Chơi Lại Cùng Bé Leafy
+        </button>
+      `;
+    }
+
+    /* -------------------------------------------------------------
+     * 7. TAB 3: GAME 2 - BẾP TRƯỞNG LỤC LẠP 3D PIXAR
+     * ------------------------------------------------------------- */
+    let g2H2O = 0;
+    let g2CO2 = 0;
+    let g2CookedCount = 0;
+
+    function addGame2Ingredient(type) {
+      playTone(520);
+      if (type === 'h2o') {
+        g2H2O++;
+        const badge = document.getElementById('g2-droppy-badge');
+        if (badge) badge.innerText = `${g2H2O}/6`;
+      } else {
+        g2CO2++;
+        const badge = document.getElementById('g2-carby-badge');
+        if (badge) badge.innerText = `${g2CO2}/6`;
+      }
+      updateGame2Status();
+    }
+
+    function removeGame2Ingredient(type) {
+      playTone(450);
+      if (type === 'h2o') {
+        g2H2O = Math.max(0, g2H2O - 1);
+        const badge = document.getElementById('g2-droppy-badge');
+        if (badge) badge.innerText = `${g2H2O}/6`;
+      } else {
+        g2CO2 = Math.max(0, g2CO2 - 1);
+        const badge = document.getElementById('g2-carby-badge');
+        if (badge) badge.innerText = `${g2CO2}/6`;
+      }
+      updateGame2Status();
+    }
+
+    function updateGame2Status() {
+      const status = document.getElementById('g2-reactor-status');
+      const cauldron = document.getElementById('reactor-cauldron');
+      if (status) {
+        status.innerText = `Đã nạp: ${g2H2O}/6 H₂O & ${g2CO2}/6 CO₂`;
+      }
+      if (cauldron) {
+        if (g2H2O === 6 && g2CO2 === 6) {
+          cauldron.className = "w-24 h-24 rounded-full bg-gradient-to-b from-amber-400 via-emerald-500 to-teal-800 border-4 border-amber-300 shadow-2xl shadow-amber-400/80 flex items-center justify-center text-4xl animate-bounce";
+        } else {
+          cauldron.className = "w-24 h-24 rounded-full bg-gradient-to-b from-emerald-400 via-teal-600 to-emerald-900 border-4 border-emerald-300/60 shadow-2xl shadow-emerald-500/60 flex items-center justify-center text-4xl pixar-float";
+        }
+      }
+      document.getElementById('g2-message').innerText = "";
+    }
+
+    function cookGame2Glucose() {
+      const msg = document.getElementById('g2-message');
+      if (g2H2O === 6 && g2CO2 === 6) {
+        g2CookedCount++;
+        playTone(987, 'triangle', 0.35);
+        confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
+        msg.className = "text-center text-xs text-emerald-300 font-black animate-pulse";
+        msg.innerHTML = "✨ <b>Thành công tuyệt đỉnh!</b> 6 H₂O + 6 CO₂ ➔ 1 Phân tử Glucose (C₆H₁₂O₆) + 6 Oxygen (O₂) phát nổ!";
+        document.getElementById('g2-glucose-count').innerText = `Đã tạo: ${g2CookedCount} Glucose`;
+        resetGame2Inputs();
+      } else {
+        playTone(200, 'sawtooth', 0.2);
+        msg.className = "text-center text-xs text-rose-400 font-extrabold";
+        msg.innerText = `⚠️ Chưa đúng tỉ lệ bảo toàn! Cần chuẩn 6 H₂O và 6 CO₂ (Hiện có: ${g2H2O} H₂O & ${g2CO2} CO₂).`;
+      }
+    }
+
+    function resetGame2Inputs() {
+      g2H2O = 0; g2CO2 = 0;
+      const b1 = document.getElementById('g2-droppy-badge');
+      const b2 = document.getElementById('g2-carby-badge');
+      if (b1) b1.innerText = "0/6";
+      if (b2) b2.innerText = "0/6";
+      updateGame2Status();
+    }
+
+    function resetGame2() {
+      resetGame2Inputs();
+      document.getElementById('g2-message').innerText = "Đã đặt lại nguyên liệu về 0.";
+    }
+
+    /* -------------------------------------------------------------
+     * 8. TAB 4: 20 CÂU TRẮC NGHIỆM CHẤM ĐIỂM
+     * ------------------------------------------------------------- */
+    function startQuizTimer() {
+      quizTimeStart = Date.now();
+      if (quizInterval) clearInterval(quizInterval);
+      quizInterval = setInterval(() => {
+        const sec = Math.floor((Date.now() - quizTimeStart) / 1000);
+        const m = String(Math.floor(sec / 60)).padStart(2, '0');
+        const s = String(sec % 60).padStart(2, '0');
+        document.getElementById('quiz-timer').innerText = `${m}:${s}`;
+      }, 1000);
+    }
+
+    function renderQuizQuestions() {
+      const container = document.getElementById('quiz-list-wrapper');
+      if (!container) return;
+
+      const levelColors = {
+        'Nhận biết': 'bg-cyan-500/20 text-cyan-300 border-cyan-400/40',
+        'Thông hiểu': 'bg-emerald-500/20 text-emerald-300 border-emerald-400/40',
+        'Vận dụng': 'bg-amber-500/20 text-amber-300 border-amber-400/40',
+        'Vận dụng cao': 'bg-rose-500/20 text-rose-300 border-rose-400/40'
+      };
+
+      container.innerHTML = QUIZ_QUESTIONS.map((q, idx) => `
+        <div class="glass-vivid p-6 rounded-3xl space-y-4 border border-white/10 shadow-xl" id="quiz-card-${q.id}">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-extrabold px-3 py-1 rounded-full border ${levelColors[q.level]}">Câu ${idx + 1} • ${q.level}</span>
+            <span class="text-slate-400 font-mono">0.5 điểm</span>
+          </div>
+          <p class="font-bold text-sm sm:text-base text-slate-100">${q.q}</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 text-xs sm:text-sm">
+            ${q.options.map((opt, oIdx) => `
+              <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-white/10 hover:border-emerald-400 cursor-pointer transition select-none shadow-md">
+                <input type="radio" name="ans_${q.id}" value="${oIdx}" class="accent-emerald-400 w-4 h-4">
+                <span class="text-slate-200">${String.fromCharCode(65 + oIdx)}. ${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div id="quiz-explain-${q.id}" class="hidden p-4 rounded-2xl bg-slate-950/90 text-xs sm:text-sm border border-emerald-400/30 text-emerald-300">
+            <b>💡 Giải thích chi tiết:</b> ${q.explain}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function gradeAndSubmitAssessment() {
+      if (!currentUser) return;
+      let correct = 0;
+      let userAnswers = {};
+
+      QUIZ_QUESTIONS.forEach(q => {
+        const selected = document.querySelector(`input[name="ans_${q.id}"]:checked`);
+        const card = document.getElementById(`quiz-card-${q.id}`);
+        const exp = document.getElementById(`quiz-explain-${q.id}`);
+
+        exp.classList.remove('hidden');
+
+        if (selected) {
+          const userVal = parseInt(selected.value);
+          userAnswers[q.id] = userVal;
+          if (userVal === q.ans) {
+            correct++;
+            card.classList.add('border-emerald-400', 'bg-emerald-950/20');
+            card.classList.remove('border-rose-400');
+          } else {
+            card.classList.add('border-rose-500/60', 'bg-rose-950/20');
+            card.classList.remove('border-emerald-400');
+          }
+        } else {
+          card.classList.add('border-rose-500/60');
+        }
+      });
+
+      const score = ((correct / QUIZ_QUESTIONS.length) * 10).toFixed(1);
+      const durationSec = Math.floor((Date.now() - (quizTimeStart || Date.now())) / 1000);
+      clearInterval(quizInterval);
+
+      document.getElementById('assessment-score-display').innerHTML = `
+        🎉 Kết Quả: <span class="text-emerald-400 font-black text-xl">${score}/10 Điểm</span> (${correct}/${QUIZ_QUESTIONS.length} câu đúng trong ${durationSec}s)
+      `;
+
+      if (parseFloat(score) >= 8.0) {
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        playTone(880, 'sine', 0.4);
+      } else {
+        playTone(440, 'sine', 0.3);
+      }
+
+      const record = {
+        time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        name: currentUser.name,
+        class: currentUser.class || "7A1",
+        score: parseFloat(score),
+        correctCount: correct,
+        duration: `${durationSec}s`,
+        rank: parseFloat(score) >= 8.5 ? "Xuất Sắc" : parseFloat(score) >= 6.5 ? "Khá" : "Cần Cố Gắng"
+      };
+
+      studentRecords.unshift(record);
+      localStorage.setItem('bio22_records', JSON.stringify(studentRecords));
+
+      const url = localStorage.getItem('bio22_apps_script_url') || "";
+      if (url && url.startsWith('http')) {
+        try {
+          await fetch(url, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(record)
+          });
+        } catch (e) {}
+      }
+
+      alert(`✅ Em đã nộp bài thành công!\nĐiểm số: ${score}/10 (${correct}/20 câu đúng).\nKết quả đã được ghi vào Bảng điểm Quản lý.`);
+      refreshDashboardStats();
+    }
+
+    /* -------------------------------------------------------------
+     * 9. TAB 5: TEACHER LMS DASHBOARD
+     * ------------------------------------------------------------- */
+    function refreshDashboardStats() {
+      const tbody = document.getElementById('admin-table-body');
+      if (!tbody) return;
+
+      document.getElementById('stat-total-students').innerText = studentRecords.length;
+
+      if (studentRecords.length === 0) {
+        document.getElementById('stat-avg-score').innerText = "0.0";
+        document.getElementById('stat-pass-rate').innerText = "0%";
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-500 font-semibold">
+              Chưa có học sinh nào nộp bài. Bấm "Tạo Dữ Liệu Học Sinh Mẫu" để xem thử nghiệm.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const totalScore = studentRecords.reduce((acc, r) => acc + r.score, 0);
+      const avg = (totalScore / studentRecords.length).toFixed(1);
+      const highScorers = studentRecords.filter(r => r.score >= 8.0).length;
+      const passRate = Math.round((highScorers / studentRecords.length) * 10);
+
+      document.getElementById('stat-avg-score').innerText = avg;
+      document.getElementById('stat-pass-rate').innerText = `${passRate * 10}%`;
+
+      tbody.innerHTML = studentRecords.map(r => `
+        <tr class="hover:bg-slate-900/60 transition border-b border-white/5">
+          <td class="py-3.5 px-4 font-mono text-slate-400">${r.time}</td>
+          <td class="py-3.5 px-4 font-bold text-white">${r.name}</td>
+          <td class="py-3.5 px-4 font-semibold text-emerald-300">${r.class}</td>
+          <td class="py-3.5 px-4 font-black ${r.score >= 8 ? 'text-amber-400' : 'text-slate-200'}">${r.score}</td>
+          <td class="py-3.5 px-4 text-slate-300 font-mono">${r.correctCount}/20</td>
+          <td class="py-3.5 px-4 font-mono text-slate-400">${r.duration}</td>
+          <td class="py-3.5 px-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold ${
+              r.rank === 'Xuất Sắc' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40' :
+              r.rank === 'Khá' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40' :
+              'bg-amber-500/20 text-amber-300 border border-amber-400/40'
+            }">
+              ${r.rank}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function addDemoStudentData() {
+      const demoList = [
+        { time: "08:15:30", name: "Nguyễn Hoàng Nam", class: "7A1", score: 9.5, correctCount: 19, duration: "320s", rank: "Xuất Sắc" },
+        { time: "08:18:45", name: "Trần Thùy Linh", class: "7A1", score: 8.5, correctCount: 17, duration: "295s", rank: "Xuất Sắc" },
+        { time: "08:21:10", name: "Lê Quốc Bảo", class: "7A2", score: 7.0, correctCount: 14, duration: "360s", rank: "Khá" },
+        { time: "08:25:00", name: "Phạm Thảo Vy", class: "7A2", score: 10.0, correctCount: 20, duration: "240s", rank: "Xuất Sắc" },
+        { time: "08:30:15", name: "Vũ Tuấn Kiệt", class: "7A3", score: 6.0, correctCount: 12, duration: "410s", rank: "Khá" }
+      ];
+      studentRecords = [...demoList, ...studentRecords];
+      localStorage.setItem('bio22_records', JSON.stringify(studentRecords));
+      playTone(750);
+      refreshDashboardStats();
+    }
+
+    function clearAllData() {
+      if (confirm("Thầy/Cô có chắc chắn muốn xóa toàn bộ bảng điểm hiện tại?")) {
+        studentRecords = [];
+        localStorage.removeItem('bio22_records');
+        playTone(300);
+        refreshDashboardStats();
+      }
+    }
+
+    function exportToCSV() {
+      if (studentRecords.length === 0) {
+        alert("Bảng điểm đang trống, chưa có dữ liệu để xuất!");
+        return;
+      }
+      let csvContent = "\uFEFFThời Gian,Họ và Tên,Lớp,Điểm Số,Số Câu Đúng,Thời Gian Làm,Xếp Loại\n";
+      studentRecords.forEach(r => {
+        csvContent += `"${r.time}","${r.name}","${r.class}",${r.score},"${r.correctCount}/20","${r.duration}","${r.rank}"\n`;
+      });
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `BangDiem_QuangHop_Bai22_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    function saveAppsScriptUrl() {
+      const url = document.getElementById('input-apps-script-url').value.trim();
+      localStorage.setItem('bio22_apps_script_url', url);
+      alert("Đã lưu URL Web App Google Apps Script!");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedUrl = localStorage.getItem('bio22_apps_script_url');
+      if (savedUrl) {
+        const input = document.getElementById('input-apps-script-url');
+        if (input) input.value = savedUrl;
+      }
+      if (currentUser) {
+        initAppInterface();
+      }
+    });
+  </script>
+</body>
+</html>
